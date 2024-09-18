@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="KseF.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:KseF.Pages"
+    Shell.FlyoutBehavior="Flyout"
+    BackgroundColor="#502bd4"
+    Title="KseF">
+
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="LightGray" Padding="10">
+            <Label Text="Nagłówek"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   TextColor="Black" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="InvoKseF"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   Padding="10"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate pages:MainPage }"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="My Company"
+        ContentTemplate="{DataTemplate pages:MyBusinessEntitiesPage }"
+        Route="MyCompanyPage" />
+
+    <ShellContent
+        Title="Clients"
+        ContentTemplate="{DataTemplate pages:MyClientsPage}"
+        Route="MyCLientsPage" />
+
+    <ShellContent
+        Title="Products"
+        ContentTemplate="{DataTemplate pages:MyProductsPage}"
+        Route="MyProducts" />
+
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="10" BackgroundColor="LightGray">
+            <Label Text="Przemysław Przybyszewski 2024"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="8"
+                   TextColor="Black" />
+        </StackLayout>
+    </Shell.FlyoutFooter>
+
+</Shell>

@@ -1,0 +1,7 @@
+*.vsidx
+*.cache
+*.bin
+/bin
+/.vs
+/obj
+/obj/Debug

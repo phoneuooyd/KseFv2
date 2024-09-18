@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KseF.Pages.MyProductsPage"
+             Title="MyProducts">
+    <VerticalStackLayout>
+        <Frame Padding="5" 
+               BackgroundColor="#DCDCDC"  
+               HorizontalOptions="Center">
+            <HorizontalStackLayout >
+                <Button Text="Add Product" Clicked="OnAddProductButtonClicked" Margin="5" Padding="5"/>
+                <Button Text="Delete Product"  Margin="5" Padding="5"/>
+                <Button Text="Edit Product"  Margin="5" Padding="5"/>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <ListView x:Name="ProductsListView" 
+                  ItemsSource="{Binding Products}" 
+                  HasUnevenRows="False" 
+                  ItemTapped="OnProductTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout Padding="5">
+                            <Label Text="{Binding Nazwa}"  FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding Opis}" FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding Cena}" FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding Kategoria}" FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding JednostkaMiary}" FontSize="Medium" Margin="10" />
+                            <Label Text="{Binding RodzajPozycji}" FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding StawkaPodatku}" FontSize="Medium" Margin="10"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>

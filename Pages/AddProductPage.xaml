@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KseF.Pages.AddProductPage"
+             Title="AddProductPage">
+    <VerticalStackLayout>
+        <!-- Product.cs fields with labels-->
+        <Label Text="Nazwa" />
+        <Entry x:Name="ProductNameEntry" Text="{Binding Product.Nazwa} " Placeholder="Wpisz nazwę produktu" />
+
+        <Label Text="Opis" />
+        <Entry x:Name="ProductDescriptionEntry" Text="{Binding Product.Opis}" Placeholder="Wpisz opis produktu" />
+        
+        <Label Text="Cena" />
+        <Entry x:Name="ProductPriceEntry" Text="{Binding Product.Cena}" Placeholder="Wpisz cenę produktu" />
+
+        <Label Text="Kategoia" />
+        <Entry x:Name="ProductCategoryEntry" Text="{Binding Product.Kategoria}" Placeholder="Wpisz kategorię produktu"/>
+
+        <Label Text="Jednostka Miary" />
+        <Picker x:Name="ProductUnitPicker" SelectedItem="{Binding Product.StawkaPodatku}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Sztuki</x:String>
+                    <x:String>Kilogramy</x:String>
+                    <x:String>Litry</x:String>
+                    
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Label Text="Rodzaj Pozycji" />
+        <Picker x:Name="ProductTypeOfPositionPicker" SelectedItem="{Binding Product.StawkaPodatku}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Towar</x:String>
+                    <x:String>Usługa</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Label Text="Stawka Podatku" />
+        <Picker x:Name="ProductTaxRatePicker" SelectedItem="{Binding Product.StawkaPodatku}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Zwol. z opod.</x:String>
+                    <x:String>Odwrotne obciąż.</x:String>
+                    <x:String>Niepodlegające opdot.</x:String>
+                    <x:String>0%</x:String>
+                    <x:String>3%</x:String>
+                    <x:String>4%</x:String>
+                    <x:String>5%</x:String>
+                    <x:String>7%</x:String>
+                    <x:String>8%</x:String>
+                    <x:String>22%</x:String>
+                    <x:String>23%</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Button Text="Zapisz" Clicked="OnSaveButtonClicked" />
+
+    </VerticalStackLayout>
+</ContentPage>

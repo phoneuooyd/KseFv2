@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KseF.Pages.AddClientEntityPage"
+             Title="AddClientEntityPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Powrót" 
+                     IconImageSource="back_arrow_icon.png"
+                     Clicked="OnBackButtonClicked"/>
+    </ContentPage.ToolbarItems>
+    
+    <ScrollView>
+        <StackLayout Padding="20">
+            <!-- BusinessEntities Fields -->
+            <Label Text="Nazwa Skrócona" />
+            <Entry Placeholder="Wprowadź nazwę skróconą" x:Name="NazwaSkroconaEntry"/>
+
+            <Label Text="Nazwa Pełna" />
+            <Entry Placeholder="Wprowadź nazwę pełną" x:Name="NazwaPelnaEntry"/>
+
+            <Label Text="NIP" />
+            <Entry Placeholder="Wprowadź NIP" x:Name="NipEntry"/>
+
+            <Label Text="Ulica" />
+            <Entry Placeholder="Wprowadź ulicę" x:Name="UlicaEntry"/>
+
+            <Label Text="Nr Domu" />
+            <Entry Placeholder="Wprowadź nr domu" x:Name="NrDomuEntry"/>
+
+            <Label Text="Nr Lokalu" />
+            <Entry Placeholder="Wprowadź nr lokalu" x:Name="NrLokaluEntry"/>
+
+            <Label Text="Kod Pocztowy" />
+            <Entry Placeholder="Wprowadź kod pocztowy" x:Name="KodPocztowyEntry"/>
+
+            <Label Text="Miejscowość" />
+            <Entry Placeholder="Wprowadź miejscowość" x:Name="MiejscowoscEntry"/>
+
+            <Label Text="Adres Siedziby" />
+            <Entry Placeholder="Wprowadź adres siedziby" x:Name="AdresSiedzibyEntry"/>
+
+            <Label Text="Adres Korespondencyjny" />
+            <Entry Placeholder="Wprowadź adres korespondencyjny" x:Name="AdresKorespondencyjnyEntry"/>
+
+            <Label Text="Nr Rachunku" />
+            <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
+
+            <Label Text="Nr Telefonu" />
+            <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
+
+            <Label Text="Adres Email" />
+            <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+
+            <Label Text="Notatki" />
+            <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+
+            <!-- ClientEntities Specific Fields -->
+            <Label Text="Nr Klienta" />
+            <Entry Placeholder="Wprowadź nr klienta" x:Name="NrKlientaEntry"/>
+
+            <Label Text="Imię" />
+            <Entry Placeholder="Wprowadź imię" x:Name="ImieEntry"/>
+
+            <Label Text="Nazwisko" />
+            <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoEntry"/>
+
+            <!-- Save Button -->
+            <Button Text="Zapisz" Clicked="OnSaveButtonClicked"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KseF.Pages.MyClientsPage"
+             Title="My Clients">
+    
+    <VerticalStackLayout>
+        <!-- Button to navigate to AddClientEntityPage -->
+        <Button Text="Dodaj Klienta"
+                FontSize="Large"
+                Clicked="OnAddClientEntityButtonClicked"
+                Padding="10"
+                Margin="10"/>
+
+
+        <ListView x:Name="ClientsListView"
+              ItemsSource="{Binding ClientEntities}"
+              HasUnevenRows="False"
+              ItemTapped="OnClientTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout Padding="5">
+                            <Label Text="{Binding NazwaSkrocona}" FontSize="Medium" Margin="10"/>
+                            <Label Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </VerticalStackLayout>
+    <!-- ListView to display all clients -->
+    
+
+
+
+</ContentPage>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KseF.Pages.MyBusinessEntitiesPage"
+             Title="MyBusinessEntitiesPage">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Powrót" 
+                 IconImageSource="back_arrow_icon.png"
+                 Clicked="OnBackButtonClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout>
+        <!-- Button to navigate to AddMyBusinessEntityPage -->
+        <Button Text="Dodaj Własną Firmę"
+                FontSize="Large"
+                Clicked="OnAddMyBusinessEntityButtonClicked"
+                Padding="10"
+                Margin="10"/>
+
+        <ListView x:Name="MyBusinessEntitiesListView"
+                  ItemsSource="{Binding MyBusinessEntities}"
+                  HasUnevenRows="False"
+                  ItemTapped="OnMyBusinessEntityTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <HorizontalStackLayout Padding="5">
+                            <Label Text="{Binding NazwaSkrcona}" FontSize="Medium" Margin="10" />
+                            <Label Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
+                        </HorizontalStackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+</ContentPage>
