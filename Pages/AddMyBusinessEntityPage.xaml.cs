@@ -72,7 +72,7 @@ namespace KseF.Pages
 		private async void OnSaveButtonClicked(object sender, EventArgs e)
 		{
 			var check = _dbService.GetItemAsyncById<MyBusinessEntities>(BusinessEntity.Id);
-			if (check.Equals(BusinessEntity))
+			if (!check.Equals(BusinessEntity))
 			{
 				var newBusinessEntity = new MyBusinessEntities
 				{
@@ -110,7 +110,7 @@ namespace KseF.Pages
 				try { await _dbService.SaveItemAsync(newBusinessEntity);  }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
 
-				await DisplayAlert("", "Added", "OK");
+				await DisplayAlert("Adding company", "Added" + newBusinessEntity.Id, "OK");
 			}
 			else
 			{
@@ -145,8 +145,8 @@ namespace KseF.Pages
 				try { await _dbService.SaveItemAsync<MyBusinessEntities>(BusinessEntity); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
 
-				await DisplayAlert("", "Added", "OK");
-			}
+                await DisplayAlert("Editing company", "Added" + BusinessEntity.Id, "OK");
+            }
 			await Navigation.PopAsync();
 		}
 	}

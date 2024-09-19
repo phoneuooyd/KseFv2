@@ -61,7 +61,7 @@ namespace KseF.Pages
 		private async void OnSaveButtonClicked(object sender, EventArgs e)
 		{
 			var check = _dbService.GetItemAsyncById<ClientEntities>(Client.Id);
-			if (check.Equals(Client))
+			if (!check.Equals(Client))
 			{
 				var newClient = new ClientEntities
 				{

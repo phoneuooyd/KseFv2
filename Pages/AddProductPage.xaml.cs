@@ -48,7 +48,7 @@ public partial class AddProductPage : ContentPage
 	private async void OnSaveButtonClicked(object sender, EventArgs e)
 	{
 		var check = _dbService.GetItemAsyncById<Product>(Product.Id);
-		if (check.Equals(Product))
+		if (!check.Equals(Product))
 		{
 			var newProduct = new Product
 			{

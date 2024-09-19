@@ -25,7 +25,7 @@ namespace KseF.Pages
 			_viewModel = new MainPageViewModel(_dbService);
 			SQLiteConnection = _dbService.GetDbConnection().Result;
 			DatabaseName = SQLiteConnection.DatabasePath;
-			DbNameLabel.Text = HasConnection();
+			DbNameLabel.Text = DatabaseName;
 			MyBusinessEntities = _dbService.GetItemsAsync<MyBusinessEntities>().Result;
 			BindingContext = _viewModel;
 		}

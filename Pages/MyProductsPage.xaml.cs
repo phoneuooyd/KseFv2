@@ -19,7 +19,7 @@ public partial class MyProductsPage : ContentPage
 		_dbService = dbService;
 		_viewModel = new MyProductsViewModel(_dbService);
 		products = _dbService.GetItemsAsync<Product>().Result;
-		BindingContext = _viewModel;
+        BindingContext = _viewModel;
 	}
 
 	private async void OnAddProductButtonClicked(object sender, EventArgs e)
