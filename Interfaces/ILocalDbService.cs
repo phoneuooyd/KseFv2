@@ -15,7 +15,8 @@ namespace KseF.Interfaces
 
 		Task<List<T>> GetItemsAsync<T>() where T : DbRecord,  new();
 		Task SaveItemAsync<T>(T item) where T : DbRecord, new();
-		Task<T> GetItemAsyncById<T>(Guid id) where T : DbRecord, new();
+		Task EditItemAsync<T>(T item) where T : DbRecord, new();
+        Task<T> GetItemAsyncById<T>(Guid id) where T : DbRecord, new();
 		Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new();
 		Task<MyBusinessEntities> SetBusinessEntityToContext(MyBusinessEntities myBusinessEntitity);
 		Task<MyBusinessEntities> GetBusinessEntityFromContext();

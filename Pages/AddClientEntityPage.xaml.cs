@@ -1,9 +1,11 @@
+using KseF.Models.Invoice_FA_2;
+using CommunityToolkit.Mvvm.ComponentModel;
 using KseF.Interfaces;
 using KseF.Models;
 using KseF.Models.ViewModels;
 using KseF.Services;
-using Microsoft.Maui.Controls;
-using System;
+using Microsoft.Maui;
+using Models;
 using System.Net;
 
 namespace KseF.Pages
@@ -12,7 +14,6 @@ namespace KseF.Pages
 	{
 		private readonly ILocalDbService _dbService;
 		private MyClientsViewModel _viewModel;
-
 		public event EventHandler<ClientEntities> ClientAdded;
 
 		public ClientEntities Client { get; set; }
@@ -23,7 +24,7 @@ namespace KseF.Pages
 			_dbService = dbService;
 			_viewModel = viewModel;
 
-			Client = new ClientEntities();
+			Client = new();
 		}
 
 		public AddClientEntityPage(ILocalDbService dbService, MyClientsViewModel viewModel, ClientEntities client)
@@ -60,10 +61,12 @@ namespace KseF.Pages
 
 		private async void OnSaveButtonClicked(object sender, EventArgs e)
 		{
-			var check = _dbService.GetItemAsyncById<ClientEntities>(Client.Id);
-			if (check.Equals(Client))
+			var check = await _dbService.GetItemAsyncById<ClientEntities>(Client.Id);
+           
+            if (check is null)
 			{
-				var newClient = new ClientEntities
+                await DisplayAlert(Title, $"typ {check} dupa ", "OK");
+                var newClient = new ClientEntities
 				{
 					NazwaSkrocona = NazwaSkroconaEntry.Text,
 					NazwaPelna = NazwaPelnaEntry.Text,
@@ -84,16 +87,14 @@ namespace KseF.Pages
 					Nazwisko = NazwiskoEntry.Text
 				};
 
-				ClientAdded?.Invoke(this, newClient);
-
-				try { await _dbService.SaveItemAsync<ClientEntities>(newClient); }
+				try { await _dbService.SaveItemAsync<ClientEntities>(newClient); ClientAdded?.Invoke(this, newClient); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
-
-				await DisplayAlert("", "Added", "OK");
+				await DisplayAlert("Success", $"Dodano firmê {newClient.NazwaSkrocona}", "OK");
 			}
 			else
 			{
-				Client.NazwaSkrocona = NazwaSkroconaEntry.Text;
+                await DisplayAlert(Title, $"typ {check.GetType()} dupa ", "OK");
+                Client.NazwaSkrocona = NazwaSkroconaEntry.Text;
 				Client.NazwaPelna = NazwaPelnaEntry.Text;
 				Client.Nip = NipEntry.Text;
 				Client.Ulica = UlicaEntry.Text;
@@ -111,10 +112,9 @@ namespace KseF.Pages
 				Client.Imie = ImieEntry.Text;
 				Client.Nazwisko = NazwiskoEntry.Text;
 
-				try { await _dbService.SaveItemAsync<ClientEntities>(Client); }
+				try { await _dbService.EditItemAsync<ClientEntities>(Client); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
-
-				await DisplayAlert("", "Added", "OK");
+				await DisplayAlert($"Sukces", $"Edytowano firmê {Client.NazwaSkrocona}", "OK");
 			}
 			await Navigation.PopAsync();
 		}
