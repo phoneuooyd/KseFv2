@@ -15,7 +15,7 @@ namespace KseF.Services
     {
         private const string DB_NAME = "KseF.db3";
         private readonly SQLiteAsyncConnection _dbConnection;
-		private MyBusinessEntities MyBusinessEntitityInContext { get; set; }
+		public MyBusinessEntities MyBusinessEntitityInContext { get; set; }
 
 		public LocalDbService()
 		{

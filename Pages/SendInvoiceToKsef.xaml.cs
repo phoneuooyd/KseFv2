@@ -25,14 +25,15 @@ namespace KseF
         private Dictionary<Guid, int> rowGuidMap = new Dictionary<Guid, int>();
         private Dictionary<Guid, List<View>> rowElementsMap = new Dictionary<Guid, List<View>>();
 
-        public SendInvoiceToKsef()
+        public SendInvoiceToKsef(ILocalDbService dbService)
         {
             InitializeComponent();
             AddInitialData();
+            _dbService = dbService;
             Invoice = new BaseFaktura();
             DateTime dataWystawienia = DateTime.Now;
             MyBusinessEntity = new();
-            MyBusinessEntity = _dbService.GetBusinessEntityFromContext().Result;
+            MyBusinessEntity =  _dbService.GetBusinessEntityFromContext().Result;
 			//TODO 
 			//LoadEnumValues<CountryCodes>(krajSprzedawcaPicker, "Polska");
 			//LoadEnumValues<CountryCodes>(krajNabywcaPicker, "Polska");

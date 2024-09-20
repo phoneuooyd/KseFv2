@@ -26,8 +26,10 @@ namespace KseF.Pages
 			SQLiteConnection = _dbService.GetDbConnection().Result;
 			DatabaseName = SQLiteConnection.DatabasePath;
 			DbNameLabel.Text = DatabaseName;
-			MyBusinessEntities = _dbService.GetItemsAsync<MyBusinessEntities>().Result;
-			BindingContext = _viewModel;
+			var loadingMBE = _dbService.GetItemsAsync<MyBusinessEntities>().Result;
+			MyBusinessEntities = loadingMBE;
+            BindingContext = _viewModel;
+			MyBusinessEntityContextPicker.SelectedIndex = 0;
 		}
 
 		public string HasConnection()
@@ -55,14 +57,14 @@ namespace KseF.Pages
 
 		private async void OnPickerTapped(object sender, EventArgs e)
 		{
-			await _viewModel.ReloadDataAsync();
+			//await _viewModel.ReloadDataAsync();
 			
 		}
 
 		// Navigate to SendInvoiceToKsef page
 		private async void OnSendInvoiceButtonClicked(object sender, EventArgs e)
 		{
-			await Navigation.PushAsync(new SendInvoiceToKsef());
+			await Navigation.PushAsync(new SendInvoiceToKsef(_dbService));
 		}
 
 
