@@ -3,12 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KseF.Pages.MyBusinessEntitiesPage"
              Title="MyBusinessEntitiesPage">
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Powrót" 
-                 IconImageSource="back_arrow_icon.png"
-                 Clicked="OnBackButtonClicked"/>
-    </ContentPage.ToolbarItems>
+ 
 
     <VerticalStackLayout>
         <!-- Button to navigate to AddMyBusinessEntityPage -->

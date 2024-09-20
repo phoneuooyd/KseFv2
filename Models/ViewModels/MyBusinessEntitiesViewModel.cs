@@ -34,8 +34,8 @@ namespace KseF.Models.ViewModels
 
 		private async void LoadClients()
 		{
-			var clients = await _dbService.GetItemsAsync<MyBusinessEntities>();
-			MyBusinessEntities = new ObservableCollection<MyBusinessEntities>(clients);
+			var businessEntities = await _dbService.GetItemsAsync<MyBusinessEntities>();
+			MyBusinessEntities = new ObservableCollection<MyBusinessEntities>(businessEntities);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

@@ -43,9 +43,4 @@ public partial class MyBusinessEntitiesPage : ContentPage
 			await Navigation.PushAsync(editBusinessEntityPage);
 		}
 	}
-
-	private async void OnBackButtonClicked(object sender, EventArgs e)
-	{
-		await Shell.Current.GoToAsync("//MainPage");
-	}
 }

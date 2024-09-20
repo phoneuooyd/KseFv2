@@ -60,18 +60,15 @@ namespace KseF.Services
 
 		public async Task SaveItemAsync<T>(T item) where T : DbRecord, new()
 		{
-			if(item.Id == Guid.Empty)
-			{
-				item.Id = Guid.NewGuid();
-				await _dbConnection.InsertAsync(item);
-			}
-			else
-			{
-				await _dbConnection.UpdateAsync(item);
-			}
+			await _dbConnection.InsertAsync(item);
 		}
 
-		public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
+		public async Task EditItemAsync<T>(T item) where T : DbRecord, new()
+        {
+            await _dbConnection.UpdateAsync(item);
+        }
+
+        public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
 		{
 			return await _dbConnection.DeleteAsync(item);
 		}
