@@ -6,6 +6,7 @@ using KseF.Models.ViewModels;
 using KseF.Services;
 using Microsoft.Maui;
 using Models;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace KseF.Pages
 {
@@ -107,6 +108,8 @@ namespace KseF.Pages
 
                 try { await _dbService.SaveItemAsync<MyBusinessEntities>(newBusinessEntitiy); BusinessEntityAdded?.Invoke(this, newBusinessEntitiy); }
                 catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
+
+                WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(newBusinessEntitiy));
                 await DisplayAlert("Sukces", $"Dodano firmê {newBusinessEntitiy.NazwaSkrocona}", "OK");
             }
             else
@@ -141,8 +144,11 @@ namespace KseF.Pages
 
                 try { await _dbService.EditItemAsync<MyBusinessEntities>(BusinessEntity); }
                 catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
+                WeakReferenceMessenger.Default.Send(new EntityUpdatedMessage<MyBusinessEntities>(BusinessEntity));
+
                 await DisplayAlert($"Sukces", $"Edytowano firmê {BusinessEntity.NazwaSkrocona}", "OK");
             }
+            
             await Navigation.PopAsync();
 		}
 	}

@@ -1,5 +1,7 @@
-﻿using KseF.Interfaces;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using KseF.Interfaces;
 using KseF.Models;
+using KseF.Models.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -35,7 +37,25 @@ public class MainPageViewModel : INotifyPropertyChanged
 	{
 		_dbService = dbService;
 		LoadClients();
-	}
+
+        WeakReferenceMessenger.Default.Register<MessageSender<MyBusinessEntities>>(this, (r, message) =>
+        {
+            MyBusinessEntities.Add(message.Value); // Dodaj nową firmę do listy
+        });
+
+        WeakReferenceMessenger.Default.Register<EntityUpdatedMessage<MyBusinessEntities>>(this, (r, message) =>
+        {
+            var updatedEntity = message.Value;
+
+            // Znajdź encję w kolekcji i zaktualizuj jej dane
+            var entityToUpdate = MyBusinessEntities.FirstOrDefault(e => e.Id == updatedEntity.Id);
+            if (entityToUpdate != null)
+            {
+                var index = MyBusinessEntities.IndexOf(entityToUpdate);
+                MyBusinessEntities[index] = updatedEntity;
+            }
+        });
+    }
 
 	private async void LoadClients()
 	{
