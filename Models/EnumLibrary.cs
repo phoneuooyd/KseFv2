@@ -49,29 +49,29 @@ namespace Models
             L = 2,
         }
         public enum StawkiPodatkuPL
-        {
-            [EnumDisplayName("Zwol. z opod.")]
-            zw = 31,
-            [EnumDisplayName("Odwrotne obciąż.")]
-            oo = 32,
-            [EnumDisplayName("Niepodlegające opdot.")]
-            np = 33,
+        {           
             [EnumDisplayName("0%")]
             Item0 = 0,
             [EnumDisplayName("3%")]
             Item3 = 3,
             [EnumDisplayName("4%")]
             Item4 = 4,
-            [EnumDisplayName("7%")]
-            Item7 = 7,
             [EnumDisplayName("5%")]
             Item5 = 5,
+            [EnumDisplayName("7%")]
+            Item7 = 7,
             [EnumDisplayName("8%")]
             Item8 = 8,
             [EnumDisplayName("22%")]
             Item22 = 22,
             [EnumDisplayName("23%")]
             Item23 = 23,
+            [EnumDisplayName("Zwol. z opod.")]
+            zw = 31,
+            [EnumDisplayName("Odwrotne obciąż.")]
+            oo = 32,
+            [EnumDisplayName("Niepodlegające opdot.")]
+            np = 33,
 
         }
         public enum KodyWalut

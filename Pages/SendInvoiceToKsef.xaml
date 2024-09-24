@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:KseF="clr-namespace:KseF"
-             xmlns:Models="clr-namespace:Models"    
+             xmlns:Models="clr-namespace:Models"  
+             xmlns:local="clr-namespace:KseF.Controls"
              x:Class="KseF.SendInvoiceToKsef">
 
     <ContentPage.Resources>
@@ -27,19 +28,14 @@
             
             <!-- <Entry x:Name="systemInfo" Placeholder="System Informacyjny"/> -->
 
-            <Frame BackgroundColor="#E8E8E8" 
+            <Frame 
                    Padding="5"
                    Margin="10">
                 <VerticalStackLayout Margin="10">
                     <!-- Sekcja Podmiot1 (Sprzedawca) -->
                     <Label Text="Dane Sprzedawcy" FontAttributes="Bold" FontSize="Medium" Margin="0,0,0,15"/>
 
-                    <Picker Title="Select a client"
-                            ItemsSource="{Binding Clients}"
-                            ItemDisplayBinding="{Binding NazwaSkrocona}"
-                            SelectedItem="{Binding SelectedClient}" />
-
-                        <Label Text="Nip"/>
+                    <Label Text="Nip"/>
                     <Entry x:Name="NipSprzedawcy" Placeholder="NIP Sprzedawcy" Margin="5"/>
 
                     <Label Text="Nazwa sprzedawcy"/>
@@ -74,12 +70,22 @@
             </Frame>
 
 
-            <Frame BackgroundColor="#E8E8E8" 
+            <Frame 
                    Padding="5"
                    Margin="10"> 
                 <VerticalStackLayout Margin="10">
+
                     <!-- Sekcja Podmiot2 (Nabywca) -->
                     <Label Text="Dane Nabywcy" FontAttributes="Bold" FontSize="Medium" Margin="0,0,0,15"/>
+
+                    <Picker 
+                        Title="Wybierz klienta"
+                        x:Name="ClientPicker"
+                        ItemsSource="{Binding Clients}"
+                        ItemDisplayBinding="{Binding NazwaSkrocona}"
+                        SelectedItem="{Binding SelectedClient}" 
+                        SelectedIndexChanged="OnClientChanged"
+                        Margin="0,0,0,15"/>  
 
                     <Label Text="Nip"/>
                     <Entry x:Name="NipNabywcy" Placeholder="NIP Nabywcy" Margin="5"/>
@@ -119,7 +125,7 @@
 
             <!-- Sekcja Faktury (Fa) -->
             <Frame
-                BackgroundColor="#E8E8E8" 
+               
                 Padding="5"
                 Margin="10">
                 <VerticalStackLayout Padding="10">
@@ -128,12 +134,10 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30*"/>
                             <ColumnDefinition Width="40*"/>
-                            <ColumnDefinition Width="30*"/>
                         </Grid.ColumnDefinitions>
                         <Label Text="Data wyst." FontSize="Micro" 
                             Grid.Row="0" 
@@ -141,47 +145,43 @@
                         <Label Text="Numer faktury"  FontSize="Micro" 
                             Grid.Row="0" 
                             Grid.Column="1"/>
-                        <DatePicker x:Name="DataWystawienia" WidthRequest="100"
+                        <local:KseFDatePicker x:Name="DataWystawienia" PickerWidthPercentage="42" 
                             Grid.Row="1" 
                             Grid.Column="0" MinimumWidthRequest="100"/>
                         <Entry x:Name="NrFaktury" Placeholder="Numer Faktury" 
                             Grid.Row="1" 
                             Grid.Column="1"/>
-                        <Label Text="Waluta"  FontSize="Micro" 
-                             Grid.Row="0" 
-                             Grid.Column="2" />
-                        <Picker x:Name="currencyPicker" SelectedIndexChanged="OnCurrencySelected" 
-                             Grid.Row="1" 
-                             Grid.Column="2"/>
                     </Grid>
 
                     <!-- Informacje o transakcji -->
                     <Grid x:Name="transakcjaGrid" Margin="0,20,0,0">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- Nagłówki -->
-                        <Label Text="Towar/Usługa"  FontSize="Micro"  Grid.Row="0" Grid.Column="0"/>
-                        <Label Text="Ilość" Grid.Row="0"  FontSize="Micro" Grid.Column="1"/>
-                        <Label Text="Cena netto"  FontSize="Micro"  Grid.Row="0" Grid.Column="2"/>
-                        <Label Text="Stawka VAT"  FontSize="Micro"  Grid.Row="0" Grid.Column="3"/>
-                        <Label Text="Cena brutto" FontSize="Micro" Grid.Row="0" Grid.Column="4"/>
+                        <Label Text="Towar/Usługa" FontSize="Micro"  Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="Ilość"        FontSize="Micro" Grid.Row="0"   Grid.Column="1"/>
+                        <Label Text="Cena netto"   FontSize="Micro"   Grid.Row="0" Grid.Column="2"/>
+                        <Label Text="Stawka VAT"   FontSize="Micro"  Grid.Row="0" Grid.Column="3"/>
+                        <Label Text="Cena brutto"  FontSize="Micro" Grid.Row="0" Grid.Column="4"/>
 
                         <!-- Dane -->
-                        <Entry x:Name="NazwaTowaruUslugi" Grid.Row="1" Grid.Column="0"/>
-                        <Entry x:Name="IloscTowaruUslugi" Grid.Row="1" Grid.Column="1" Keyboard="Numeric"/>
-                        <Entry x:Name="CenaJednostkowaNetto" Grid.Row="1" Grid.Column="2" Keyboard="Numeric"/>
-                        <Picker x:Name="stawkaVatPicker" Grid.Row="1" Grid.Column="3"/>
-                        <Entry x:Name="CenaJednostkowaBrutto" Grid.Row="1" Grid.Column="4" />
+                        <Picker x:Name="ProductPicker" Grid.Row="1" Grid.Column="0"/>
+                        <local:KseFNumericUpDown x:Name="IloscTowaruUslugi" Grid.Row="1" Grid.Column="1" 
+                                             />
+                        <Entry x:Name="CenaJednostkowaNetto" Text ="" Grid.Row="1" Grid.Column="2" Keyboard="Numeric"/>
+                        <Picker x:Name="stawkaVatPicker" SelectedIndex="0" Grid.Row="1" Grid.Column="3"/>
+                        <Entry x:Name="CenaJednostkowaBrutto" Text="" Grid.Row="1" Grid.Column="4" />
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
