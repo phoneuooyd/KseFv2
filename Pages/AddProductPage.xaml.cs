@@ -5,6 +5,7 @@ using KseF.Models;
 using KseF.Models.ViewModels;
 using KseF.Services;
 using Microsoft.Maui;
+using KseF.Services;
 using Models;
 
 namespace KseF.Pages
@@ -23,6 +24,7 @@ namespace KseF.Pages
             _dbService = dbService;
             _viewModel = viewModel;
             Product = new();
+            DataLoadingService.LoadEnumValues<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker);
         }
 
         public AddProductPage(ILocalDbService dbService, MyProductsViewModel viewModel, Product product)
@@ -31,13 +33,15 @@ namespace KseF.Pages
             _dbService = dbService;
             _viewModel = viewModel;
             Product = product;
+            DataLoadingService.LoadEnumValues<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker);
 
             ProductNameEntry.Text = product.Nazwa;
             ProductDescriptionEntry.Text = product.Opis;
             ProductPriceEntry.Text = product.Cena.ToString();
             ProductCategoryEntry.Text = product.Kategoria;
             ProductUnitPicker.SelectedIndex = (int)product.JednostkaMiary;
-            ProductTaxRatePicker.SelectedIndex = (int)product.StawkaPodatku;
+            var vatDisplayName = DataLoadingService.GetEnumDisplayName(product.StawkaPodatku);
+            ProductTaxRatePicker.SelectedItem = vatDisplayName;
             ProductTypeOfPositionPicker.SelectedIndex = (int)product.RodzajPozycji;
         }
 
@@ -58,7 +62,7 @@ namespace KseF.Pages
                     Cena = Decimal.Parse(ProductPriceEntry.Text),
                     Kategoria = ProductCategoryEntry.Text,
                     JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex,
-                    StawkaPodatku = (EnumLibrary.StawkiPodatkuPL)ProductTaxRatePicker.SelectedIndex,
+                    StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value,
                     RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex
                 };
 
@@ -73,7 +77,7 @@ namespace KseF.Pages
                 Product.Cena = Decimal.Parse(ProductPriceEntry.Text);
                 Product.Kategoria = ProductCategoryEntry.Text;
                 Product.JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex;
-                Product.StawkaPodatku = (EnumLibrary.StawkiPodatkuPL)ProductTaxRatePicker.SelectedIndex;
+                Product.StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value;
                 Product.RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex;
 
                 try { await _dbService.EditItemAsync<Product>(Product); }

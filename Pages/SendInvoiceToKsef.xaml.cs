@@ -11,64 +11,224 @@ using KseF.Models.Invoice_FA_2;
 using KseF.Services;
 using KseF.Models;
 using KseF.Interfaces;
+using KseF.Models.ViewModels;
+using KseF.Controls;
 
 namespace KseF
 {
     public partial class SendInvoiceToKsef : ContentPage
     {
 		private readonly ILocalDbService _dbService;
-		MyBusinessEntities MyBusinessEntity { get; set; }
-		public KodyWalut currencyCode { get; set; }
-        public CountryCodes countryCode { get; set; }
-		public BaseFaktura Invoice { get; set; }
-        private static int rowCount = 1;
         private Dictionary<Guid, int> rowGuidMap = new Dictionary<Guid, int>();
         private Dictionary<Guid, List<View>> rowElementsMap = new Dictionary<Guid, List<View>>();
+        
+        MyBusinessEntities MyBusinessEntity { get; set; }
+        public KodyWalut currencyCode { get; set; }
+        public BaseFaktura Invoice { get; set; }
+        public List<ClientEntities> Clients { get; set; }
+        public List<Product> Products { get; set; }
+        public ClientEntities SelectedClient { get; set; }
+        public Product SelectedProduct { get; set; }
+
+        private SendInvioceViewModel _viewModel;
+
+        private static int rowCount = 1;
 
         public SendInvoiceToKsef(ILocalDbService dbService)
         {
             InitializeComponent();
-            AddInitialData();
+            
             _dbService = dbService;
+            _viewModel = new SendInvioceViewModel(_dbService);
             Invoice = new BaseFaktura();
-            DateTime dataWystawienia = DateTime.Now;
-            MyBusinessEntity = new();
             MyBusinessEntity =  _dbService.GetBusinessEntityFromContext().Result;
-			//TODO 
-			//LoadEnumValues<CountryCodes>(krajSprzedawcaPicker, "Polska");
-			//LoadEnumValues<CountryCodes>(krajNabywcaPicker, "Polska");
-		}
+            Clients = _dbService.GetItemsAsync<ClientEntities>().Result;
+            Products = _dbService.GetItemsAsync<Product>().Result;
+            DateTime dataWystawienia = DateTime.Now;
+
+            if (Clients != null)
+            {
+                SelectedClient = Clients[0];
+            }
+            else
+            {
+                SelectedClient = new ClientEntities();
+            }
+            AddInitialData();
+            BindingContext = _viewModel;
+            ClientPicker.SelectedIndex = 0;
+            ProductPicker.ItemsSource = Products;
+        }
 
 		private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
 			await Shell.Current.GoToAsync("//MainPage");
-		}
+		}	
 
-		private void AddInitialData()
+        private void OnAddButtonClicked(object sender, EventArgs e)
         {
-            //var krajSprzedawcaPicker = new Picker();
-            //var krajNabywcaPicker = new Picker();
+            AddNewRow();
+        }
 
-            if(MyBusinessEntity != null)
+        private void OnClientChanged(object sender, EventArgs e)
+        {
+            SelectedClient = ClientPicker.SelectedItem as ClientEntities;
+            UpdateCLientRows();
+        }
+        private void OnTapped(object sender, EventArgs e)
+        {
+            Guid rowGuidToDelete = (Guid)((KseFSmallButton)sender).BindingContext;
+            RemoveRow(rowGuidToDelete);
+        }
+
+        private void OnVatRateChanged(object sender, EventArgs e)
+        {
+            // Sprawdzamy, który picker wywołał zmianę
+            var picker = sender as Picker;
+            if (picker == null || picker.SelectedItem == null)
+                return;
+
+            // Znajdujemy indeks wiersza w transakcjaGrid, w którym znajduje się picker
+            int rowIndex = -1;
+            for (int i = 0; i < transakcjaGrid.Children.Count; i++)
             {
-				NipSprzedawcy.Text = MyBusinessEntity.Nip;
-				NazwaSprzedawcy.Text = MyBusinessEntity.NazwaPelna;
-				ulicaSprzedawcy.Text = MyBusinessEntity.Ulica;
-				nrDomuSprzedawcy.Text = MyBusinessEntity.NrDomu;
-				nrLokaluSprzedawcy.Text = MyBusinessEntity.NrLokalu;
-				kodPocztowySprzedawcy.Text = MyBusinessEntity.KodPocztowy;
-				miejscowoscSprzedawcy.Text = MyBusinessEntity.Miejscowosc;
-				EmailSprzedawcy.Text = MyBusinessEntity.AdresEmail;
-				TelefonSprzedawcy.Text = MyBusinessEntity.NrTelefonu;
-			}
+                var child = transakcjaGrid.Children[i];
+                if (child == picker)
+                {
+                    rowIndex = transakcjaGrid.GetRow(child);
+                    break;
+                }
+            }
 
+            if (rowIndex == -1)
+                return;
 
+            // Znajdujemy pola, które są powiązane z wierszem (cena netto, cena brutto)
+            var priceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 2) as Entry;
+            var grossPriceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 4) as Entry;
 
-			var nameEntry = new Entry { Placeholder = "Nazwa towaru/usługi" };
-            var quantityEntry = new Entry { Placeholder = "Ilość", Keyboard = Keyboard.Numeric };
-            var priceEntry = new Entry { Placeholder = "Cena netto", Keyboard = Keyboard.Numeric };
+            if (priceEntry == null || grossPriceEntry == null || string.IsNullOrWhiteSpace(priceEntry.Text))
+                return;
+
+            // Pobieramy cenę netto
+            if (!decimal.TryParse(priceEntry.Text, out decimal cenaNetto))
+                return;
+
+            // Pobieramy wybraną stawkę VAT
+            var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(picker);
+            if (!selectedVatRate.HasValue)
+                return;
+
+            // Obliczamy cenę brutto
+            decimal stawkaVAT = DataLoadingService.VatRateToDecimal(selectedVatRate.Value);
+            decimal cenaBrutto = cenaNetto * (1 + stawkaVAT);
+
+            // Ustawiamy cenę brutto w odpowiednim polu
+            grossPriceEntry.Text = cenaBrutto.ToString("F2");
+        }
+
+        private async void OnProductChanged(object sender, EventArgs e)
+        {
+            // Sprawdzamy, który picker wywołał zmianę
+            var picker = sender as Picker;
+            if (picker == null || picker.SelectedItem == null)
+                return;
+
+            var selectedProduct = picker.SelectedItem as Product;
+            if (selectedProduct == null)
+                return;
+
+            // Znajdujemy indeks wiersza w transakcjaGrid, w którym znajduje się picker
+            int rowIndex = -1;
+            for (int i = 0; i < transakcjaGrid.Children.Count; i++)
+            {
+                var child = transakcjaGrid.Children[i];
+                if (child == picker)
+                {
+                    rowIndex = transakcjaGrid.GetRow(child);
+                    break;
+                }
+            }
+
+            if (rowIndex == -1)
+                return;
+
+            var priceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 2) as Entry;
+            var vatPicker = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 3) as Picker;
+            var grossPriceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 4) as Entry;
+
+            if (priceEntry != null)
+            {
+                priceEntry.Text = selectedProduct.Cena.ToString("F2"); // Ustawiamy cenę netto
+            }
+
+            if (vatPicker != null)
+            {
+                LoadEnumValues<StawkiPodatkuPL>(vatPicker);   
+                //vatPicker.SelectedItem = selectedProduct.StawkaPodatku;
+
+                var enumDisplayNameMap = vatPicker.BindingContext as Dictionary<string, StawkiPodatkuPL>;
+                if (enumDisplayNameMap != null)
+                {
+                    var displayName = enumDisplayNameMap.FirstOrDefault(x => x.Value == selectedProduct.StawkaPodatku).Key;
+                    if (!string.IsNullOrEmpty(displayName))
+                    {
+                        vatPicker.SelectedItem = displayName;
+                    }
+                }
+            }
+
+            // Obliczamy i ustawiamy cenę brutto
+            if (grossPriceEntry != null && selectedProduct.StawkaPodatku != null)
+            {
+                var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(vatPicker);
+                if (selectedVatRate.HasValue)
+                {
+                    decimal stawkaVAT = DataLoadingService.VatRateToDecimal(selectedVatRate.Value);
+                    decimal cenaBrutto = selectedProduct.Cena * (1 + stawkaVAT);
+                    grossPriceEntry.Text = cenaBrutto.ToString("F2");
+                }
+            }
+            await DisplayAlert("Produkt", $"Wybrano produkt: {selectedProduct.Nazwa}", "OK");
+        }
+
+        private void UpdateCLientRows()
+        {
+            if (MyBusinessEntity != null)
+            {
+                NipSprzedawcy.Text = MyBusinessEntity.Nip;
+                NazwaSprzedawcy.Text = MyBusinessEntity.NazwaPelna;
+                ulicaSprzedawcy.Text = MyBusinessEntity.Ulica;
+                nrDomuSprzedawcy.Text = MyBusinessEntity.NrDomu;
+                nrLokaluSprzedawcy.Text = MyBusinessEntity.NrLokalu;
+                kodPocztowySprzedawcy.Text = MyBusinessEntity.KodPocztowy;
+                miejscowoscSprzedawcy.Text = MyBusinessEntity.Miejscowosc;
+                EmailSprzedawcy.Text = MyBusinessEntity.AdresEmail;
+                TelefonSprzedawcy.Text = MyBusinessEntity.NrTelefonu;
+            }
+
+            if (Clients != null)
+            {
+                NipNabywcy.Text = SelectedClient.Nip;
+                NazwaNabywcy.Text = SelectedClient.NazwaPelna;
+                ulicaNabywcy.Text = SelectedClient.Ulica;
+                nrDomuNabywcy.Text = SelectedClient.NrDomu;
+                nrLokaluNabywcy.Text = SelectedClient.NrLokalu;
+                kodPocztowyNabywcy.Text = SelectedClient.KodPocztowy;
+                miejscowoscNabywcy.Text = SelectedClient.Miejscowosc;
+                EmailNabywcy.Text = SelectedClient.AdresEmail;
+                TelefonNabywcy.Text = SelectedClient.NrTelefonu;
+            }
+        }
+        private void AddInitialData()
+        {
+            UpdateCLientRows();
+
+            var nameEntry = new Picker();
+            var quantityEntry = new KseFNumericUpDown();
+            var priceEntry = new Entry { Text = "", Keyboard = Keyboard.Numeric };
             var vatPicker = new Picker();
-			var grossPriceEntry = new Entry { Placeholder = "Cena brutto" };
+            var grossPriceEntry = new Entry { Text = "", Keyboard = Keyboard.Numeric };
 
             Guid rowGuid = Guid.NewGuid();
 
@@ -76,42 +236,16 @@ namespace KseF
             Grid.SetRow(nameEntry, 1);
             Grid.SetColumn(nameEntry, 0);
 
-            transakcjaGrid.Children.Add(quantityEntry);
-            Grid.SetRow(quantityEntry, 1);
-            Grid.SetColumn(quantityEntry, 1);
-
-            transakcjaGrid.Children.Add(priceEntry);
-            Grid.SetRow(priceEntry, 1);
-            Grid.SetColumn(priceEntry, 2);
-
-            transakcjaGrid.Children.Add(vatPicker);
-            Grid.SetRow(vatPicker, 1);
-            Grid.SetColumn(vatPicker, 3);
-
-            transakcjaGrid.Children.Add(grossPriceEntry);
-            Grid.SetRow(grossPriceEntry, 1);
-            Grid.SetColumn(grossPriceEntry, 4);
-
             rowGuidMap.Add(rowGuid, rowCount);
-            rowElementsMap.Add(rowGuid, new List<View> { nameEntry, quantityEntry, priceEntry, vatPicker, grossPriceEntry });
+            rowElementsMap.Add(rowGuid, new List<View> { nameEntry });
             rowCount++;
 
-            LoadEnumValues<KodyWalut>(currencyPicker, "Złoty polski");
-            LoadEnumValues<StawkiPodatkuPL>(vatPicker, "23%");
-		}
-
-		void OnCurrencySelected(object sender, EventArgs e)
-        {
-            var selectedCurrencyIndex = currencyPicker.SelectedIndex;
-            if (selectedCurrencyIndex >= 0)
-            {
-                currencyCode = (KodyWalut)selectedCurrencyIndex;
-            }
-        }
-
-        private void OnAddButtonClicked(object sender, EventArgs e)
-        {
-            AddNewRow();
+            //LoadEnumValues<KodyWalut>(currencyPicker, "Złoty polski");
+            LoadEnumValues<StawkiPodatkuPL>(vatPicker);
+            nameEntry.ItemsSource = Products;
+            nameEntry.ItemDisplayBinding = new Binding("Nazwa");
+            nameEntry.SelectedIndexChanged += OnProductChanged!;
+            vatPicker.SelectedIndexChanged += OnVatRateChanged!;
         }
 
         private void AddNewRow()
@@ -123,7 +257,7 @@ namespace KseF
                 if (lastRowGuid != Guid.Empty)
                 {
                     var lastRowElements = rowElementsMap[lastRowGuid];
-                    var lastDeleteButton = lastRowElements.OfType<Button>().FirstOrDefault();
+                    var lastDeleteButton = lastRowElements.OfType<KseFSmallButton>().FirstOrDefault();
                     if (lastDeleteButton != null)
                     {
                         transakcjaGrid.Children.Remove(lastDeleteButton);
@@ -136,24 +270,19 @@ namespace KseF
 
             Guid rowGuid = Guid.NewGuid();
 
-            var nameEntry = new Entry
+            var nameEntry = new Picker
             {
-                Placeholder = "Nazwa towaru/usługi",
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            var quantityEntry = new Entry
+            var quantityEntry = new KseFNumericUpDown
             {
-                Placeholder = "Ilość",
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                Keyboard = Keyboard.Numeric
+              
             };
 
             var priceEntry = new Entry
             {
-                Placeholder = "Cena netto",
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 Keyboard = Keyboard.Numeric
@@ -167,14 +296,12 @@ namespace KseF
 
             var grossPriceEntry = new Entry
             {
-                Placeholder = "Cena brutto",
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            var deleteButton = new Button
+            var deleteButton = new KseFSmallButton("----")
             {
-                Text = "Usuń",
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.End
             };
@@ -211,55 +338,47 @@ namespace KseF
             rowElementsMap.Add(rowGuid, new List<View> { nameEntry, quantityEntry, priceEntry, vatPicker, grossPriceEntry, deleteButton });
             rowCount++;
 
-            LoadEnumValues<StawkiPodatkuPL>(vatPicker, "23%");
-            deleteButton.Clicked += (s, e) =>
-            {
-                // Pobranie rzeczywistego rowGuid z BindingContext i przekazanie go do RemoveRow
-                Guid rowGuidToDelete = (Guid)((Button)s).BindingContext;
-                RemoveRow(rowGuidToDelete);
-            };
+            LoadEnumValues<StawkiPodatkuPL>(vatPicker);
+            nameEntry.ItemsSource = Products;
+            nameEntry.ItemDisplayBinding = new Binding("Nazwa");
+            nameEntry.SelectedIndexChanged += OnProductChanged!;
+            deleteButton.Clicked += (s, e) => OnTapped(s,e);
+            vatPicker.SelectedIndexChanged += OnVatRateChanged!;
         }
 
         public void RemoveRow(Guid rowGuid)
         {
-            if (transakcjaGrid.Children.Count != 16)
+            if (transakcjaGrid.Children.Count >= 17)
             {
                 if (!rowGuidMap.ContainsKey(rowGuid))
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowGuid), "Invalid GUID");
                 }
 
-
                 // Pobierz elementy wiersza do usunięcia
                 var childrenToRemove = rowElementsMap[rowGuid];
 
-                // Usuń wszystkie elementy z Grid
                 foreach (var child in childrenToRemove)
                 {
                     transakcjaGrid.Children.Remove(child);
                 }
 
-                // Usuń definicję wiersza
                 int rowIndex = rowGuidMap[rowGuid];
                 transakcjaGrid.RowDefinitions.RemoveAt(rowIndex);
 
-                // Usuń GUID z map
                 rowGuidMap.Remove(rowGuid);
                 rowElementsMap.Remove(rowGuid);
-
-                // Aktualizacja rowCount
                 rowCount--;
 
                 // Dodaj przycisk "Usuń" do nowego ostatniego wiersza (jeśli istnieje)
-                if (rowCount > 0)
+                if (transakcjaGrid.Children.Count >= 16) //Ilosc elementow w gridzie
                 {
                     var lastRowGuid = rowGuidMap.FirstOrDefault(x => x.Value == rowCount - 1).Key;
                     if (lastRowGuid != Guid.Empty)
                     {
                         var lastRowElements = rowElementsMap[lastRowGuid];
-                        var lastDeleteButton = new Button
+                        var lastDeleteButton = new KseFSmallButton("----")
                         {
-                            Text = "Usuń",
                             VerticalOptions = LayoutOptions.Center,
                             HorizontalOptions = LayoutOptions.End,
                             BindingContext = lastRowGuid
@@ -267,7 +386,7 @@ namespace KseF
 
                         lastDeleteButton.Clicked += (s, e) =>
                         {
-                            Guid rowGuidToDelete = (Guid)((Button)s).BindingContext;
+                            Guid rowGuidToDelete = (Guid)((KseFSmallButton)s!).BindingContext;
                             RemoveRow(rowGuidToDelete);
                         };
 
@@ -277,7 +396,7 @@ namespace KseF
                         Grid.SetColumn(lastDeleteButton, 6);
                     }
                 }
-            } 
+            }
         }
 
         public List<PozycjeFaktury> GetPozycjeFaktury()
@@ -291,7 +410,7 @@ namespace KseF
                 var rowElements = rowPair.Value;
 
                 var nameEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 0);
-                var quantityEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 1);
+                var quantityEntry = rowElements.OfType<KseFNumericUpDown>().FirstOrDefault(e => Grid.GetColumn(e) == 1);
                 var priceEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 2);
                 var vatPicker = rowElements.OfType<Picker>().FirstOrDefault(p => Grid.GetColumn(p) == 3);
                 var grossPriceEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 4);
@@ -304,14 +423,14 @@ namespace KseF
                     NazwaTowaruUslugi = nameEntry.Text,
                     Opis = nameEntry.Text,
                     TowarId = nrPozycji + 10000,
-					IloscTowaruUslugi = decimal.TryParse(quantityEntry.Text, out decimal quantity) ? quantity : 0,
+					IloscTowaruUslugi = (decimal)quantityEntry.Value,
                     CenaJednostkowaNetto = decimal.TryParse(priceEntry.Text, out decimal priceNetto) ? priceNetto : 0,
                     Vat = MapujPodatekVat((int)vatPicker.SelectedIndex),
                     CenaJednostkowaBrutto = decimal.TryParse(grossPriceEntry.Text, out decimal priceBrutto) ? priceBrutto : 0,
                     CenaJednostkowaVat = priceBrutto - priceNetto,
-                    WartoscNetto = priceNetto * quantity,
+                    WartoscNetto = priceNetto * (decimal)quantityEntry.Value,
                     WartoscVat = priceBrutto - priceNetto,
-                    WartoscBrutto = priceBrutto * quantity,
+                    WartoscBrutto = priceBrutto * (decimal)quantityEntry.Value,
                     NrPozycji = nrPozycji
                 };
 
@@ -321,6 +440,7 @@ namespace KseF
 
             return pozycjeFakturyList;
         }
+
         public List<Rata> GetRaty()
         {
             var ratyList = new List<Rata>();
@@ -384,7 +504,6 @@ namespace KseF
 
 			await DisplayAlert("Eksport XML", $"Plik XML został zapisany", "OK");
         }
-
         public PodatekVat MapujPodatekVat(int stawka)
         {
             int wysokoscPodatku;
@@ -408,7 +527,7 @@ namespace KseF
             };
         }
 
-		/* TO DO LATER
+        /* TO DO LATER
 	  private void OnCountrySelected(object sender, EventArgs e)
 	  {
 		  var selectedCountryIndex = krajSprzedawcaPicker.SelectedIndex;
@@ -420,7 +539,14 @@ namespace KseF
 		  DisplayAlert("Kraj", $"Wybrano kraj: {countryCode}", "OK");
 	  }
 
-	  */
-
-	}
+        
+        void OnCurrencySelected(object sender, EventArgs e)
+        {
+            var selectedCurrencyIndex = currencyPicker.SelectedIndex;
+            if (selectedCurrencyIndex >= 0)
+            {
+                currencyCode = (KodyWalut)selectedCurrencyIndex;
+            }
+        }*/
+    }
 }
