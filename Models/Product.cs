@@ -17,5 +17,7 @@ namespace KseF.Models.Invoice_FA_2
 		public EnumLibrary.JednostkaMiary JednostkaMiary { get; set; }
 		public EnumLibrary.RodzajPozycji RodzajPozycji { get; set; }
 		public EnumLibrary.StawkiPodatkuPL StawkaPodatku { get; set; }
-	}
+		public Invoice_FA_2.TGTU GTU { get; set; }
+
+    }
 }

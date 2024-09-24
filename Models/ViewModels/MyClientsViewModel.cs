@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using KseF.Services;
 using KseF.Interfaces;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace KseF.Models.ViewModels
 {
@@ -25,11 +27,12 @@ namespace KseF.Models.ViewModels
 				OnPropertyChanged();
 			}
 		}
-
-		public MyClientsViewModel(ILocalDbService dbService)
+        public ICommand DeleteCommand { get; }
+        public MyClientsViewModel(ILocalDbService dbService)
 		{
 			_dbService = dbService;
-			LoadClients();
+            DeleteCommand = new Command<ClientEntities>(async (entity) => await DeleteEntity(entity));
+            LoadClients();
 		}
 
 		private async void LoadClients()
@@ -38,7 +41,21 @@ namespace KseF.Models.ViewModels
 			ClientEntities = new ObservableCollection<ClientEntities>(clients);
 		}
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        // Metoda do usuwania elementów
+        private async Task DeleteEntity(ClientEntities entity)
+        {
+            if (entity == null) return;
+
+			// Usuwamy z ObservableCollection (aby odświeżyć ListView)
+			ClientEntities.Remove(entity);
+
+            // Usuwamy z bazy danych
+            await _dbService.DeleteItemAsync(entity);
+
+            WeakReferenceMessenger.Default.Send(new EntityDeletedMessage<ClientEntities>(entity));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
 		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
