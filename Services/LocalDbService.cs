@@ -8,13 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using KseF.Interfaces;
 using KseF.Models.Invoice_FA_2;
+using Models;
+using CommunityToolkit.Mvvm.Messaging;
+using KseF.Models.ViewModels;
 
 namespace KseF.Services
 {
-    public class LocalDbService : ILocalDbService
-    {
-        private const string DB_NAME = "KseF.db3";
-        private readonly SQLiteAsyncConnection _dbConnection;
+	public class LocalDbService : ILocalDbService
+	{
+		private const string DB_NAME = "KseF.db3";
+		private readonly SQLiteAsyncConnection _dbConnection;
 		public MyBusinessEntities MyBusinessEntitityInContext { get; set; }
 
 		public LocalDbService()
@@ -24,9 +27,12 @@ namespace KseF.Services
 			_dbConnection.CreateTableAsync<ClientEntities>();
 			_dbConnection.CreateTableAsync<BaseFaktura>();
 			_dbConnection.CreateTableAsync<Product>();
-		}
+#if DEBUG
+            AddTestData();
+#endif
+        }
 
-		public async Task<string> GetDbName()
+        public async Task<string> GetDbName()
 		{
 			return DB_NAME;
 		}
@@ -48,7 +54,7 @@ namespace KseF.Services
 			return _dbConnection;
 		}
 
-		public async Task<List<T>> GetItemsAsync<T>() where T :DbRecord,  new()
+		public async Task<List<T>> GetItemsAsync<T>() where T : DbRecord, new()
 		{
 			return _dbConnection.Table<T>().ToListAsync().Result;
 		}
@@ -64,13 +70,128 @@ namespace KseF.Services
 		}
 
 		public async Task EditItemAsync<T>(T item) where T : DbRecord, new()
-        {
-            await _dbConnection.UpdateAsync(item);
-        }
+		{
+			await _dbConnection.UpdateAsync(item);
+		}
 
-        public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
+		public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
 		{
 			return await _dbConnection.DeleteAsync(item);
 		}
+
+#if DEBUG
+
+		public async Task AddTestData()
+		{
+
+            var MBECount = await _dbConnection.Table<MyBusinessEntities>().CountAsync();
+            var ClientCount = await _dbConnection.Table<ClientEntities>().CountAsync();
+            var ProductCount = await _dbConnection.Table<Product>().CountAsync();
+
+			if (MBECount <= 0)
+			{
+                var myBusinessEntity1 = new MyBusinessEntities
+                {
+                    NazwaSkrocona = "Test1",
+                    NazwaPelna = "Test1",
+                    Nip = "1234567890",
+                    Ulica = "Test",
+                    NrDomu = "1",
+                    KodPocztowy = "00-000",
+                    Miejscowosc = "Test",
+                    AdresSiedziby = "Test",
+                    AdresKorespondencyjny = "Test",
+                    NrRachunku = "1234567890",
+                    NrTelefonu = "123456789",
+                    AdresEmail = "",
+                    Notatki = "Test",
+                    Regon = "123456789",
+                    Krs = "123456789",
+                    Bdo = "123456789",
+                    IsPodmiot = true,
+                    IsTP = true,
+                    IsDrukujStopke = true,
+                    KodUS = "123456789",
+                    ImieOsFiz = "Test",
+                    NazwiskoOsFiz = "Test",
+                    DataUrodzeniaOF = DateTime.Now,
+                    FormaOpodatkowania = EnumLibrary.FormaOpodatkowania.ZasadyOgole,
+                    StopkaFaktury = "Test",
+                };
+
+                var myBusinessEntity2 = new MyBusinessEntities
+                {
+                    NazwaSkrocona = "Test2",
+                    NazwaPelna = "Test2",
+                    Nip = "9876543210",
+                    Ulica = "Test",
+                    NrDomu = "1",
+                    KodPocztowy = "00-000",
+                    Miejscowosc = "Test",
+                    AdresSiedziby = "Test",
+                    AdresKorespondencyjny = "Test",
+                    NrRachunku = "1234567890",
+                    NrTelefonu = "123456789",
+                    AdresEmail = "",
+                    Notatki = "Test",
+                    Regon = "123456789",
+                    Krs = "123456789",
+                    Bdo = "123456789",
+                    IsPodmiot = true,
+                    IsTP = true,
+                    IsDrukujStopke = true,
+                    KodUS = "123456789",
+                    ImieOsFiz = "Test",
+                    NazwiskoOsFiz = "Test",
+                    DataUrodzeniaOF = DateTime.Now,
+                    FormaOpodatkowania = EnumLibrary.FormaOpodatkowania.PodatekLiniowy,
+                    StopkaFaktury = "Test",
+                };
+                WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity1));
+                WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity2));
+                if (ClientCount <= 0)
+                {
+                    var testClient = new ClientEntities
+                    {
+                        MyBusinessEntityId = myBusinessEntity1.Id,
+                        NazwaPelna = "Test",
+                        NazwaSkrocona = "Test",
+                        NrKlienta = "123456789",
+                        Imie = "Test",
+                        Nazwisko = "Test",
+                        Nip = "1234567890",
+                        Ulica = "Test",
+                        NrDomu = "1",
+                        KodPocztowy = "00-000",
+                        Miejscowosc = "Test",
+                        AdresSiedziby = "Test",
+                        AdresKorespondencyjny = "Test",
+                        NrRachunku = "1234567890",
+                        NrTelefonu = "123456789",
+                        AdresEmail = "",
+                        Notatki = "Test",
+                    };
+                    await SaveItemAsync<ClientEntities>(testClient);
+                }
+                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity1);
+                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity2);
+            }
+            
+            if(ProductCount <= 0)
+            {
+                var testProduct = new Product
+                {
+                    Nazwa = "Test",
+                    Opis = "Test",
+                    Cena = 1,
+                    Kategoria = "Test",
+                    JednostkaMiary = EnumLibrary.JednostkaMiary.Szt,
+                    RodzajPozycji = EnumLibrary.RodzajPozycji.Towar,
+                    StawkaPodatku = EnumLibrary.StawkiPodatkuPL.Item23,
+                };
+                await SaveItemAsync<Product>(testProduct);
+            }
+#endif
+        }
 	}
 }

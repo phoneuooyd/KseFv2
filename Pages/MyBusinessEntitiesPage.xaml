@@ -7,18 +7,20 @@
 
     <VerticalStackLayout>
         <!-- Button to navigate to AddMyBusinessEntityPage -->
-        <Button Text="Dodaj Własną Firmę"
-                FontSize="Large"
-                Clicked="OnAddMyBusinessEntityButtonClicked"
-                Padding="10"
-                Margin="10"/>
+        <HorizontalStackLayout>
+            <Button Text="Dodaj Własną Firmę"
+                    FontSize="Large"
+                    Clicked="OnAddMyBusinessEntityButtonClicked"
+                    Padding="10"
+                    Margin="10"/>
+        </HorizontalStackLayout>
 
         <Grid  BackgroundColor="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
-
+            
             <Label Grid.Column="0" Text="Nazwa skrócona" FontSize="Small" Margin="10"/>
             <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
         </Grid>
@@ -30,18 +32,33 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Padding="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem
+                                        Text="Usuń"
+                                        BackgroundColor="Red"
+                                        Invoked="OnDeleteSwipeItemInvoked"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
 
-                            <Label Grid.Column="0" Text="{Binding NazwaSkrocona}"  FontSize="Medium" Margin="10"/>
-                            <Label Grid.Column="1" Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
-                        </Grid>
+                            <!-- Content of the cell -->
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+
+                                <Label Grid.Column="0" Text="{Binding NazwaSkrocona}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="1" Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
+                            </Grid>
+                        </SwipeView>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

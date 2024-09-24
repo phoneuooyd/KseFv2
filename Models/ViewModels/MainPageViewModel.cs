@@ -55,6 +55,18 @@ public class MainPageViewModel : INotifyPropertyChanged
                 MyBusinessEntities[index] = updatedEntity;
             }
         });
+
+		WeakReferenceMessenger.Default.Register<EntityDeletedMessage<MyBusinessEntities>>(this, (r, message) =>
+		{
+            var deletedEntity = message.Value;
+
+            // Znajdź encję w kolekcji i usuń ją
+            var entityToDelete = MyBusinessEntities.FirstOrDefault(e => e.Id == deletedEntity.Id);
+            if (entityToDelete != null)
+            {
+                MyBusinessEntities.Remove(entityToDelete);
+            }
+        });
     }
 
 	private async void LoadClients()

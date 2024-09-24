@@ -38,7 +38,6 @@ namespace Models
             [EnumDisplayName("Proforma")]
             Proforma = 4
         }
-
         public enum JednostkaMiary
         {
             [EnumDisplayName("Sztuki")]
@@ -48,6 +47,7 @@ namespace Models
             [EnumDisplayName("Litry")]
             L = 2,
         }
+
         public enum StawkiPodatkuPL
         {           
             [EnumDisplayName("0%")]
@@ -74,6 +74,7 @@ namespace Models
             np = 33,
 
         }
+
         public enum KodyWalut
         {
             [EnumDisplayName("Zjednoczone Emiraty Arabskie")]

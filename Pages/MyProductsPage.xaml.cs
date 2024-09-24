@@ -44,4 +44,21 @@ public partial class MyProductsPage : ContentPage
 			await Navigation.PushAsync(editProductPage);
 		}
 	}
+
+    private async void OnDeleteSwipeItemInvoked(object sender, EventArgs e)
+    {
+        var swipeItem = sender as SwipeItem;
+        var product = swipeItem?.CommandParameter as Product;
+
+        if (product != null)
+        {
+            bool isConfirmed = await DisplayAlert("Potwierdzenie",
+                "Czy na pewno chcesz usun¹æ ten rekord?", "Tak", "Nie");
+
+            if (isConfirmed)
+            {
+                _viewModel.DeleteCommand.Execute(product);
+            }
+        }
+    }
 }

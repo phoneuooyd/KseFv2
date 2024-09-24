@@ -4,13 +4,15 @@
              x:Class="KseF.Pages.MyProductsPage"
              Title="MyProducts">
     <VerticalStackLayout>
-        <Frame Padding="5" 
-               BackgroundColor="#DCDCDC"  
-               HorizontalOptions="Center">
-            <HorizontalStackLayout >
-                <Button Text="Add Product" Clicked="OnAddProductButtonClicked" Margin="5" Padding="5"/>
-            </HorizontalStackLayout>
-        </Frame>
+
+        <HorizontalStackLayout >
+            <Button Text="Dodaj Produkt" 
+                    FontSize="Large"
+                    Clicked="OnAddProductButtonClicked" 
+                    Padding="10"
+                    Margin="10"/>
+        </HorizontalStackLayout>
+
 
         <Grid  BackgroundColor="LightGray">
             <Grid.ColumnDefinitions>
@@ -33,22 +35,35 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Padding="5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem
+                                        Text="Usuń"
+                                        BackgroundColor="Red"
+                                        Invoked="OnDeleteSwipeItemInvoked"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
 
-                            <Label Grid.Column="0" Text="{Binding Nazwa}"  FontSize="Medium" Margin="10"/>
-                            <Label Grid.Column="1" Text="{Binding Opis}" FontSize="Medium" Margin="10"/>
-                            <Label Grid.Column="2" Text="{Binding Kategoria}" FontSize="Medium" Margin="10"/>
-                            <Label Grid.Column="3" Text="{Binding Cena}" FontSize="Medium" Margin="10"/>
-                        </Grid>
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Column="0" Text="{Binding Nazwa}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="1" Text="{Binding Opis}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="2" Text="{Binding Kategoria}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="3" Text="{Binding Cena}" FontSize="Medium" Margin="10"/>
+                            </Grid>
+                        </SwipeView>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

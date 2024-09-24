@@ -43,4 +43,24 @@ public partial class MyBusinessEntitiesPage : ContentPage
 			await Navigation.PushAsync(editBusinessEntityPage);
 		}
 	}
+
+    private async void OnDeleteSwipeItemInvoked(object sender, EventArgs e)
+    {
+        // Pobranie produktu z CommandParameter
+        var swipeItem = sender as SwipeItem;
+        var myBusinessEntitity = swipeItem?.CommandParameter as MyBusinessEntities;
+
+        if (myBusinessEntitity != null)
+        {
+            // Wyœwietlenie okna dialogowego z potwierdzeniem
+            bool isConfirmed = await DisplayAlert("Potwierdzenie",
+                "Czy na pewno chcesz usun¹æ ten rekord?", "Tak", "Nie");
+
+            // Jeœli u¿ytkownik potwierdzi, usuwamy produkt
+            if (isConfirmed)
+            {
+                _viewModel.DeleteCommand.Execute(myBusinessEntitity);
+            }
+        }
+    }
 }

@@ -43,4 +43,21 @@ public partial class MyClientsPage : ContentPage
 			await Navigation.PushAsync(editProductPage);
 		}
 	}
+
+    private async void OnDeleteSwipeItemInvoked(object sender, EventArgs e)
+    {
+        var swipeItem = sender as SwipeItem;
+        var client = swipeItem?.CommandParameter as ClientEntities;
+
+        if (client != null)
+        {
+            bool isConfirmed = await DisplayAlert("Potwierdzenie",
+                "Czy na pewno chcesz usun¹æ ten rekord?", "Tak", "Nie");
+
+            if (isConfirmed)
+            {
+                _viewModel.DeleteCommand.Execute(client);
+            }
+        }
+    }
 }
