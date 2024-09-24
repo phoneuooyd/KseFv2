@@ -75,10 +75,56 @@ namespace KseF
             SelectedClient = ClientPicker.SelectedItem as ClientEntities;
             UpdateCLientRows();
         }
-        private void OnTapped(object s, EventArgs e)
+        private void OnTapped(object sender, EventArgs e)
         {
-            Guid rowGuidToDelete = (Guid)((KseFSmallButton)s).BindingContext;
+            Guid rowGuidToDelete = (Guid)((KseFSmallButton)sender).BindingContext;
             RemoveRow(rowGuidToDelete);
+        }
+
+        private void OnVatRateChanged(object sender, EventArgs e)
+        {
+            // Sprawdzamy, który picker wywołał zmianę
+            var picker = sender as Picker;
+            if (picker == null || picker.SelectedItem == null)
+                return;
+
+            // Znajdujemy indeks wiersza w transakcjaGrid, w którym znajduje się picker
+            int rowIndex = -1;
+            for (int i = 0; i < transakcjaGrid.Children.Count; i++)
+            {
+                var child = transakcjaGrid.Children[i];
+                if (child == picker)
+                {
+                    rowIndex = transakcjaGrid.GetRow(child);
+                    break;
+                }
+            }
+
+            if (rowIndex == -1)
+                return;
+
+            // Znajdujemy pola, które są powiązane z wierszem (cena netto, cena brutto)
+            var priceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 2) as Entry;
+            var grossPriceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 4) as Entry;
+
+            if (priceEntry == null || grossPriceEntry == null || string.IsNullOrWhiteSpace(priceEntry.Text))
+                return;
+
+            // Pobieramy cenę netto
+            if (!decimal.TryParse(priceEntry.Text, out decimal cenaNetto))
+                return;
+
+            // Pobieramy wybraną stawkę VAT
+            var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(picker);
+            if (!selectedVatRate.HasValue)
+                return;
+
+            // Obliczamy cenę brutto
+            decimal stawkaVAT = DataLoadingService.VatRateToDecimal(selectedVatRate.Value);
+            decimal cenaBrutto = cenaNetto * (1 + stawkaVAT);
+
+            // Ustawiamy cenę brutto w odpowiednim polu
+            grossPriceEntry.Text = cenaBrutto.ToString("F2");
         }
 
         private async void OnProductChanged(object sender, EventArgs e)
@@ -199,6 +245,7 @@ namespace KseF
             nameEntry.ItemsSource = Products;
             nameEntry.ItemDisplayBinding = new Binding("Nazwa");
             nameEntry.SelectedIndexChanged += OnProductChanged!;
+            vatPicker.SelectedIndexChanged += OnVatRateChanged!;
         }
 
         private void AddNewRow()
@@ -296,7 +343,7 @@ namespace KseF
             nameEntry.ItemDisplayBinding = new Binding("Nazwa");
             nameEntry.SelectedIndexChanged += OnProductChanged!;
             deleteButton.Clicked += (s, e) => OnTapped(s,e);
-           
+            vatPicker.SelectedIndexChanged += OnVatRateChanged!;
         }
 
         public void RemoveRow(Guid rowGuid)
