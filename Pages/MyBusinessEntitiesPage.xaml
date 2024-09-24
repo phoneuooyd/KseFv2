@@ -13,6 +13,16 @@
                 Padding="10"
                 Margin="10"/>
 
+        <Grid  BackgroundColor="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Text="Nazwa skrócona" FontSize="Small" Margin="10"/>
+            <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
+        </Grid>
+
         <ListView x:Name="MyBusinessEntitiesListView"
                   ItemsSource="{Binding MyBusinessEntities}"
                   HasUnevenRows="False"
@@ -20,10 +30,18 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <HorizontalStackLayout Padding="5">
-                            <Label Text="{Binding NazwaSkrcona}" FontSize="Medium" Margin="10" />
-                            <Label Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
-                        </HorizontalStackLayout>
+                        <Grid Padding="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Column="0" Text="{Binding NazwaSkrocona}"  FontSize="Medium" Margin="10"/>
+                            <Label Grid.Column="1" Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
