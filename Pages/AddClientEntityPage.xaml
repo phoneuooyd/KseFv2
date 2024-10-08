@@ -11,62 +11,91 @@
     </ContentPage.ToolbarItems>
     
     <ScrollView>
-        <StackLayout Padding="20">
-            <!-- BusinessEntities Fields -->
-            <Label Text="Nazwa Skrócona" />
-            <Entry Placeholder="Wprowadź nazwę skróconą" x:Name="NazwaSkroconaEntry"/>
+        <VerticalStackLayout 
+            Margin="10" 
+            Padding="10">
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Nazwa Pełna" />
-            <Entry Placeholder="Wprowadź nazwę pełną" x:Name="NazwaPelnaEntry"/>
+                    <Label Text="Informacje ogólne" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="NIP" />
-            <Entry Placeholder="Wprowadź NIP" x:Name="NipEntry"/>
+                    <Label Text="Nazwa Skrócona" />
+                    <Entry Placeholder="Wprowadź nazwę skróconą" x:Name="NazwaSkroconaEntry"/>
 
-            <Label Text="Ulica" />
-            <Entry Placeholder="Wprowadź ulicę" x:Name="UlicaEntry"/>
+                    <Label Text="Nazwa Pełna" />
+                    <Entry Placeholder="Wprowadź nazwę pełną" x:Name="NazwaPelnaEntry"/>
 
-            <Label Text="Nr Domu" />
-            <Entry Placeholder="Wprowadź nr domu" x:Name="NrDomuEntry"/>
+                    <Label Text="NIP" />
+                    <Entry Placeholder="Wprowadź NIP" x:Name="NipEntry"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                 Padding="5" 
+                 Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Nr Lokalu" />
-            <Entry Placeholder="Wprowadź nr lokalu" x:Name="NrLokaluEntry"/>
+                    <Label Text="Informacje adresowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="Kod Pocztowy" />
-            <Entry Placeholder="Wprowadź kod pocztowy" x:Name="KodPocztowyEntry"/>
+                    <Label Text="Ulica" />
+                    <Entry Placeholder="Wprowadź ulicę" x:Name="UlicaEntry"/>
 
-            <Label Text="Miejscowość" />
-            <Entry Placeholder="Wprowadź miejscowość" x:Name="MiejscowoscEntry"/>
+                    <Label Text="Nr Domu" />
+                    <Entry Placeholder="Wprowadź nr domu" x:Name="NrDomuEntry"/>
 
-            <Label Text="Adres Siedziby" />
-            <Entry Placeholder="Wprowadź adres siedziby" x:Name="AdresSiedzibyEntry"/>
+                    <Label Text="Nr Lokalu" />
+                    <Entry Placeholder="Wprowadź nr lokalu" x:Name="NrLokaluEntry"/>
 
-            <Label Text="Adres Korespondencyjny" />
-            <Entry Placeholder="Wprowadź adres korespondencyjny" x:Name="AdresKorespondencyjnyEntry"/>
+                    <Label Text="Kod Pocztowy" />
+                    <Entry Placeholder="Wprowadź kod pocztowy" x:Name="KodPocztowyEntry"/>
 
-            <Label Text="Nr Rachunku" />
-            <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
+                    <Label Text="Miejscowość" />
+                    <Entry Placeholder="Wprowadź miejscowość" x:Name="MiejscowoscEntry"/>
 
-            <Label Text="Nr Telefonu" />
-            <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
+                    <Label Text="Adres Siedziby" />
+                    <Entry Placeholder="Wprowadź adres siedziby" x:Name="AdresSiedzibyEntry"/>
 
-            <Label Text="Adres Email" />
-            <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+                    <Label Text="Adres Korespondencyjny" />
+                    <Entry Placeholder="Wprowadź adres korespondencyjny" x:Name="AdresKorespondencyjnyEntry"/>
 
-            <Label Text="Notatki" />
-            <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+                    <Label Text="Nr Rachunku" />
+                    <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
 
-            <!-- ClientEntities Specific Fields -->
-            <Label Text="Nr Klienta" />
-            <Entry Placeholder="Wprowadź nr klienta" x:Name="NrKlientaEntry"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                 Padding="5" 
+                 Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Imię" />
-            <Entry Placeholder="Wprowadź imię" x:Name="ImieEntry"/>
+                    <Label Text="Informacje kontaktowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="Nazwisko" />
-            <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoEntry"/>
+                    <Label Text="Nr Klienta" />
+                    <Entry Placeholder="Wprowadź nr klienta" x:Name="NrKlientaEntry"/>
 
-            <!-- Save Button -->
-            <Button Text="Zapisz" Clicked="OnSaveButtonClicked"/>
-        </StackLayout>
+                    <Label Text="Imię" />
+                    <Entry Placeholder="Wprowadź imię" x:Name="ImieEntry"/>
+
+                    <Label Text="Nazwisko" />
+                    <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoEntry"/>
+
+                    <Label Text="Nr Telefonu" />
+                    <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
+
+                    <Label Text="Adres Email" />
+                    <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+
+                    <Label Text="Notatki" />
+                    <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+
+                    <Button Text="Zapisz" Clicked="OnSaveButtonClicked" Margin="10"/>
+                    
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

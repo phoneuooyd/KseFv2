@@ -3,48 +3,68 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KseF.Pages.AddProductPage"
              Title="AddProductPage">
-    <VerticalStackLayout>
-        <!-- Product.cs fields with labels-->
-        <Label Text="Nazwa" />
-        <Entry x:Name="ProductNameEntry" Text="{Binding Product.Nazwa} " Placeholder="Wpisz nazwę produktu" />
+    <VerticalStackLayout 
+            Margin="10" 
+            Padding="10">
+            <Frame 
+                Padding="5" 
+                Margin="10">
+            <VerticalStackLayout 
+                    Margin="10">
 
-        <Label Text="Opis" />
-        <Entry x:Name="ProductDescriptionEntry" Text="{Binding Product.Opis}" Placeholder="Wpisz opis produktu" />
-        
-        <Label Text="Cena" />
-        <Entry x:Name="ProductPriceEntry" Text="{Binding Product.Cena}" Placeholder="Wpisz cenę produktu" />
+                <Label Text="Informacje ogólne" FontAttributes="Bold"   FontSize="Medium" Padding="0,0,0,20"/>
 
-        <Label Text="Kategoia" />
-        <Entry x:Name="ProductCategoryEntry" Text="{Binding Product.Kategoria}" Placeholder="Wpisz kategorię produktu"/>
+                <!-- Product.cs fields with labels-->
+                <Label Text="Nazwa" />
+                <Entry x:Name="ProductNameEntry" Text="{Binding Product.Nazwa} " Placeholder="Wpisz nazwę produktu" />
 
-        <Label Text="Jednostka Miary" />
-        <Picker x:Name="ProductUnitPicker" SelectedItem="{Binding Product.StawkaPodatku}">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Sztuki</x:String>
-                    <x:String>Kilogramy</x:String>
-                    <x:String>Litry</x:String>
-                    
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+                <Label Text="Opis" />
+                <Entry x:Name="ProductDescriptionEntry" Text="{Binding Product.Opis}" Placeholder="Wpisz opis produktu" />
 
-        <Label Text="Rodzaj Pozycji" />
-        <Picker x:Name="ProductTypeOfPositionPicker" SelectedItem="{Binding Product.StawkaPodatku}">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Towar</x:String>
-                    <x:String>Usługa</x:String>
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+                <Label Text="Cena" />
+                <Entry x:Name="ProductPriceEntry" Text="{Binding Product.Cena}" Placeholder="Wpisz cenę produktu" />
 
-        <Label Text="Stawka Podatku" />
-        <Picker x:Name="ProductTaxRatePicker" SelectedItem="{Binding Product.StawkaPodatku}">
-           
-        </Picker>
+                <Label Text="Kategoia" />
+                <Entry x:Name="ProductCategoryEntry" Text="{Binding Product.Kategoria}" Placeholder="Wpisz kategorię produktu"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-        <Button Text="Zapisz" Clicked="OnSaveButtonClicked" />
+                    <Label Text="Informacje szczegółowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-    </VerticalStackLayout>
+                    <Label Text="Jednostka Miary" />
+                    <Picker x:Name="ProductUnitPicker" SelectedItem="{Binding Product.StawkaPodatku}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Sztuki</x:String>
+                                <x:String>Kilogramy</x:String>
+                                <x:String>Litry</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <Label Text="Rodzaj Pozycji" />
+                    <Picker x:Name="ProductTypeOfPositionPicker" SelectedItem="{Binding Product.StawkaPodatku}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Towar</x:String>
+                                <x:String>Usługa</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <Label Text="Stawka Podatku" />
+                    <Picker x:Name="ProductTaxRatePicker" SelectedItem="{Binding Product.StawkaPodatku}">
+
+                    </Picker>
+
+                    <Button Text="Zapisz" Clicked="OnSaveButtonClicked" />
+
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
 </ContentPage>
