@@ -5,23 +5,25 @@
              xmlns:Models="clr-namespace:Models"
              x:Class="KseF.Pages.MainPage"
              Title="Ekran Główny">
-    <StackLayout Padding="30" VerticalOptions="Center">
+    <StackLayout Padding="20" VerticalOptions="Center">
 
+        <Frame>
+            <StackLayout>
+                <Label Text="Wybierz firmę" FontSize="Header" FontAttributes="Bold" Margin="0,0,0,15"/>
+                <Picker x:Name="MyBusinessEntityContextPicker"
+                        ItemDisplayBinding="{Binding NazwaSkrocona}"
+                        ItemsSource="{Binding MyBusinessEntities}"
+                        SelectedItem="{Binding SelectedBusinessEntity}"
+                        Focused="OnPickerTapped"
+                        SelectedIndexChanged="OnMyBusinessEntityContextPickerSelectedIndexChanged" />
 
-        <Picker x:Name="MyBusinessEntityContextPicker"
-                ItemDisplayBinding="{Binding NazwaSkrocona}"
-                ItemsSource="{Binding MyBusinessEntities}"
-                SelectedItem="{Binding SelectedBusinessEntity}"
-                Focused="OnPickerTapped"
-                SelectedIndexChanged="OnMyBusinessEntityContextPickerSelectedIndexChanged" />   
+                <Button Text="Wyślij Fakturę"
+                         FontSize="Medium"
+                         Clicked="OnSendInvoiceButtonClicked"
+                         Margin="0,10,0,0"/>
+            </StackLayout>
+        </Frame>
 
-        <!-- Button to send invoice -->
-        <Button Text="Wyślij Fakturę"
-         FontSize="Large"
-         Clicked="OnSendInvoiceButtonClicked"
-         Margin="0,10"/>
-
-        <!-- Label to display DatabaseName -->
         <Label Text="{Binding DatabaseName}" 
            x:Name="DbNameLabel"
            FontSize="Medium"

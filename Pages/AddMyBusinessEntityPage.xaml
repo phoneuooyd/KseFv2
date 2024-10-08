@@ -11,101 +11,147 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <StackLayout Padding="20">
-            <!-- BusinessEntities Fields -->
-            <Label Text="Nazwa Skrócona" />
-            <Entry Placeholder="Wprowadź nazwę skróconą" Text="{Binding BusinessEntity.NazwaSkrocona}" x:Name="NazwaSkroconaEntry"/>
+        <VerticalStackLayout 
+            Margin="10" 
+            Padding="10">
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Nazwa Pełna" />
-            <Entry Placeholder="Wprowadź nazwę pełną" Text="{Binding BusinessEntity.PelnaNazwa}" x:Name="NazwaPelnaEntry"/>
+                    <Label Text="Informacje ogólne" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="NIP" />
-            <Entry Placeholder="Wprowadź NIP" Text="{Binding BusinessEntity.Nip}" x:Name="NipEntry"/>
+                    <Label Text="Nazwa Skrócona" />
+                    <Entry Placeholder="Wprowadź nazwę skróconą" Text="{Binding BusinessEntity.NazwaSkrocona}" x:Name="NazwaSkroconaEntry"/>
 
-            <Label Text="Ulica" />
-            <Entry Placeholder="Wprowadź ulicę" Text="{Binding BusinessEntity.Ulica}" x:Name="UlicaEntry"/>
+                    <Label Text="Nazwa Pełna" />
+                    <Entry Placeholder="Wprowadź nazwę pełną" Text="{Binding BusinessEntity.PelnaNazwa}" x:Name="NazwaPelnaEntry"/>
 
-            <Label Text="Nr Domu" />
-            <Entry Placeholder="Wprowadź nr domu" x:Name="NrDomuEntry"/>
+                    <Label Text="NIP" />
+                    <Entry Placeholder="Wprowadź NIP" Text="{Binding BusinessEntity.Nip}" x:Name="NipEntry"/>
 
-            <Label Text="Nr Lokalu" />
-            <Entry Placeholder="Wprowadź nr lokalu" x:Name="NrLokaluEntry"/>
+                    <Label Text="REGON" />
+                    <Entry Placeholder="Wprowadź REGON" x:Name="RegonEntry"/>
 
-            <Label Text="Kod Pocztowy" />
-            <Entry Placeholder="Wprowadź kod pocztowy" x:Name="KodPocztowyEntry"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Miejscowość" />
-            <Entry Placeholder="Wprowadź miejscowość" x:Name="MiejscowoscEntry"/>
+                    <Label Text="Informacje adresowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="Adres Siedziby" />
-            <Entry Placeholder="Wprowadź adres siedziby" x:Name="AdresSiedzibyEntry"/>
+                    <Label Text="Ulica" />
+                    <Entry Placeholder="Wprowadź ulicę" Text="{Binding BusinessEntity.Ulica}" x:Name="UlicaEntry"/>
 
-            <Label Text="Adres Korespondencyjny" />
-            <Entry Placeholder="Wprowadź adres korespondencyjny" x:Name="AdresKorespondencyjnyEntry"/>
+                    <Label Text="Nr Domu" />
+                    <Entry Placeholder="Wprowadź nr domu" x:Name="NrDomuEntry"/>
 
-            <Label Text="Nr Rachunku" />
-            <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
+                    <Label Text="Nr Lokalu" />
+                    <Entry Placeholder="Wprowadź nr lokalu" x:Name="NrLokaluEntry"/>
 
-            <Label Text="Nr Telefonu" />
-            <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
+                    <Label Text="Kod Pocztowy" />
+                    <Entry Placeholder="Wprowadź kod pocztowy" x:Name="KodPocztowyEntry"/>
 
-            <Label Text="Adres Email" />
-            <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+                    <Label Text="Miejscowość" />
+                    <Entry Placeholder="Wprowadź miejscowość" x:Name="MiejscowoscEntry"/>
 
-            <Label Text="Notatki" />
-            <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+                    <Label Text="Adres Siedziby" />
+                    <Entry Placeholder="Wprowadź adres siedziby" x:Name="AdresSiedzibyEntry"/>
 
-            <!-- MyBusinessEntities Specific Fields -->
-            <Label Text="REGON" />
-            <Entry Placeholder="Wprowadź REGON" x:Name="RegonEntry"/>
+                    <Label Text="Adres Korespondencyjny" />
+                    <Entry Placeholder="Wprowadź adres korespondencyjny" x:Name="AdresKorespondencyjnyEntry"/>
 
-            <Label Text="KRS" />
-            <Entry Placeholder="Wprowadź KRS" x:Name="KrsEntry"/>
+                    <Label Text="Nr Rachunku" />
+                    <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="BDO" />
-            <Entry Placeholder="Wprowadź BDO" x:Name="BdoEntry"/>
+                    <Label Text="Dane osobowe i kontaktowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="Czy Podmiot?" />
-            <Switch x:Name="IsPodmiotSwitch" />
+                    <Label Text="Imię osoby fizycznej" />
+                    <Entry Placeholder="Wprowadź imię OF" x:Name="ImieOFEntry"/>
 
-            <Label Text="Czy TP?" />
-            <Switch x:Name="IsTPSwitch" />
+                    <Label Text="Nazwisko osoby fizycznej" />
+                    <Entry Placeholder="Wprowadź nazwisko OF" x:Name="NazwiskoOFEntry"/>
 
-            <Label Text="Drukuj Stopkę?" />
-            <Switch x:Name="IsDrukujStopkeSwitch" IsToggled="True"/>
+                    <Label Text="Data Urodzenia osoby fizycznej" />
+                    <DatePicker x:Name="DataUrodzeniaOFPicker"/>
 
-            <Label Text="Kod US" />
-            <Entry Placeholder="Wprowadź kod US" x:Name="KodUSEntry"/>
+                    <Label Text="Nr Telefonu" />
+                    <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
 
-            <Label Text="Imię OF" />
-            <Entry Placeholder="Wprowadź imię OF" x:Name="ImieOFEntry"/>
+                    <Label Text="Adres Email" />
+                    <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
 
-            <Label Text="Nazwisko OF" />
-            <Entry Placeholder="Wprowadź nazwisko OF" x:Name="NazwiskoOFEntry"/>
+                    <Label Text="Informacje podatkowe" FontAttributes="Bold"   FontSize="Medium" Padding="0,0,0,20"/>
 
-            <Label Text="Data Urodzenia OF" />
-            <DatePicker x:Name="DataUrodzeniaOFPicker"/>
+                    <Label Text="Forma Opodatkowania" />
+                    <Picker x:Name="FormaOpodatkowaniaPicker">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Zasady Ogólne</x:String>
+                                <x:String>Liniowy</x:String>
+                                <x:String>Ryczałt</x:String>
+                                <x:String>Karta Podatkowa</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
 
-            <Label Text="Forma Opodatkowania" />
-            <Picker x:Name="FormaOpodatkowaniaPicker">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Zasady Ogólne</x:String>
-                        <x:String>Liniowy</x:String>
-                        <x:String>Ryczałt</x:String>
-                        <x:String>Karta Podatkowa</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+                    <Label Text="Kod US" />
+                    <Entry Placeholder="Wprowadź kod US" x:Name="KodUSEntry"/>
 
-            <Label Text="Stopka Faktury" />
-            <Editor Placeholder="Wprowadź stopkę faktury" x:Name="StopkaFakturyEditor"/>
+                    <Label Text="KRS" />
+                    <Entry Placeholder="Wprowadź KRS" x:Name="KrsEntry"/>
 
-            <Label Text="Token KSeF" />
-            <Entry Placeholder="Wprowadź token KSeF" x:Name="TokenKSeFEntry" IsReadOnly="True" Text="D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29"/>
+                    <Label Text="BDO" />
+                    <Entry Placeholder="Wprowadź BDO" x:Name="BdoEntry"/>
 
-            <!-- Save Button -->
-            <Button Text="Zapisz" Clicked="OnSaveButtonClicked"/>
-        </StackLayout>
+                    <Label Text="Czy Podmiot?" />
+                    <Switch x:Name="IsPodmiotSwitch" />
+
+                    <Label Text="Czy TP?" />
+                    <Switch x:Name="IsTPSwitch" />
+                </VerticalStackLayout>
+            </Frame>
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
+
+                    <Label Text="Inne"  FontAttributes="Bold" FontSize="Medium" Padding="0,0,0,20"/>
+
+                    <Label Text="Drukuj Stopkę?" />
+                    <Switch x:Name="IsDrukujStopkeSwitch" IsToggled="True"/>
+
+                    <Label Text="Stopka Faktury" />
+                    <Editor Placeholder="Wprowadź stopkę faktury" x:Name="StopkaFakturyEditor"/>
+
+                    <Label Text="Notatki" />
+                    <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+
+                    <Label Text="Token KSeF" />
+                    <Entry Placeholder="Wprowadź token KSeF" x:Name="TokenKSeFEntry" IsReadOnly="True" Text="D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29"/>
+
+                    <Button Text="Zapisz" Clicked="OnSaveButtonClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
