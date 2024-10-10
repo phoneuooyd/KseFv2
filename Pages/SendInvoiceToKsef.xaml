@@ -183,7 +183,7 @@
             </Frame>
             <Button Text="Dodaj wiersz" Clicked="OnAddButtonClicked"/>
             
-            <Button Text="Eksportuj do XML" Clicked="OnCreateDocumentClicked"/>
+            <Button x:Name ="exportButton" Text="Wyślij do KseF" Clicked="OnCreateDocumentClicked" />
         </VerticalStackLayout>
     </ScrollView>
 

@@ -13,6 +13,7 @@ using KseF.Models;
 using KseF.Interfaces;
 using KseF.Models.ViewModels;
 using KseF.Controls;
+using System.Globalization;
 
 namespace KseF
 {
@@ -83,12 +84,10 @@ namespace KseF
 
         private void OnVatRateChanged(object sender, EventArgs e)
         {
-            // Sprawdzamy, który picker wywołał zmianę
             var picker = sender as Picker;
             if (picker == null || picker.SelectedItem == null)
                 return;
 
-            // Znajdujemy indeks wiersza w transakcjaGrid, w którym znajduje się picker
             int rowIndex = -1;
             for (int i = 0; i < transakcjaGrid.Children.Count; i++)
             {
@@ -103,33 +102,26 @@ namespace KseF
             if (rowIndex == -1)
                 return;
 
-            // Znajdujemy pola, które są powiązane z wierszem (cena netto, cena brutto)
             var priceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 2) as Entry;
             var grossPriceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 4) as Entry;
 
             if (priceEntry == null || grossPriceEntry == null || string.IsNullOrWhiteSpace(priceEntry.Text))
                 return;
 
-            // Pobieramy cenę netto
             if (!decimal.TryParse(priceEntry.Text, out decimal cenaNetto))
                 return;
 
-            // Pobieramy wybraną stawkę VAT
             var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(picker);
             if (!selectedVatRate.HasValue)
                 return;
 
-            // Obliczamy cenę brutto
             decimal stawkaVAT = DataLoadingService.VatRateToDecimal(selectedVatRate.Value);
             decimal cenaBrutto = cenaNetto * (1 + stawkaVAT);
-
-            // Ustawiamy cenę brutto w odpowiednim polu
             grossPriceEntry.Text = cenaBrutto.ToString("F2");
         }
 
         private async void OnProductChanged(object sender, EventArgs e)
         {
-            // Sprawdzamy, który picker wywołał zmianę
             var picker = sender as Picker;
             if (picker == null || picker.SelectedItem == null)
                 return;
@@ -138,7 +130,6 @@ namespace KseF
             if (selectedProduct == null)
                 return;
 
-            // Znajdujemy indeks wiersza w transakcjaGrid, w którym znajduje się picker
             int rowIndex = -1;
             for (int i = 0; i < transakcjaGrid.Children.Count; i++)
             {
@@ -159,7 +150,7 @@ namespace KseF
 
             if (priceEntry != null)
             {
-                priceEntry.Text = selectedProduct.Cena.ToString("F2"); // Ustawiamy cenę netto
+                priceEntry.Text = selectedProduct.Cena.ToString("F2"); 
             }
 
             if (vatPicker != null)
@@ -178,10 +169,9 @@ namespace KseF
                 }
             }
 
-            // Obliczamy i ustawiamy cenę brutto
             if (grossPriceEntry != null && selectedProduct.StawkaPodatku != null)
             {
-                var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(vatPicker);
+                var selectedVatRate = DataLoadingService.GetEnumValueFromPicker<StawkiPodatkuPL>(vatPicker!);
                 if (selectedVatRate.HasValue)
                 {
                     decimal stawkaVAT = DataLoadingService.VatRateToDecimal(selectedVatRate.Value);
@@ -224,20 +214,17 @@ namespace KseF
         {
             UpdateCLientRows();
 
-            var nameEntry = new Picker();
-            var quantityEntry = new KseFNumericUpDown();
-            var priceEntry = new Entry { Text = "", Keyboard = Keyboard.Numeric };
-            var vatPicker = new Picker();
-            var grossPriceEntry = new Entry { Text = "", Keyboard = Keyboard.Numeric };
+            var nameEntry = ProductPicker;
+            var quantityEntry = IloscTowaruUslugi;
+            var priceEntry = CenaJednostkowaNetto;
+            var vatPicker = stawkaVatPicker;
+            var grossPriceEntry = CenaJednostkowaBrutto;
 
             Guid rowGuid = Guid.NewGuid();
 
-            transakcjaGrid.Children.Add(nameEntry);
-            Grid.SetRow(nameEntry, 1);
-            Grid.SetColumn(nameEntry, 0);
-
             rowGuidMap.Add(rowGuid, rowCount);
-            rowElementsMap.Add(rowGuid, new List<View> { nameEntry });
+            rowElementsMap.Add(rowGuid, new List<View> { nameEntry, quantityEntry, priceEntry, vatPicker, grossPriceEntry });
+
             rowCount++;
 
             //LoadEnumValues<KodyWalut>(currencyPicker, "Złoty polski");
@@ -348,7 +335,7 @@ namespace KseF
 
         public void RemoveRow(Guid rowGuid)
         {
-            if (transakcjaGrid.Children.Count >= 17)
+            if (transakcjaGrid.Children.Count >= 13)
             {
                 if (!rowGuidMap.ContainsKey(rowGuid))
                 {
@@ -371,7 +358,7 @@ namespace KseF
                 rowCount--;
 
                 // Dodaj przycisk "Usuń" do nowego ostatniego wiersza (jeśli istnieje)
-                if (transakcjaGrid.Children.Count >= 16) //Ilosc elementow w gridzie
+                if (transakcjaGrid.Children.Count >= 13) //Ilosc elementow w gridzie
                 {
                     var lastRowGuid = rowGuidMap.FirstOrDefault(x => x.Value == rowCount - 1).Key;
                     if (lastRowGuid != Guid.Empty)
@@ -409,7 +396,7 @@ namespace KseF
                 var rowGuid = rowPair.Key;
                 var rowElements = rowPair.Value;
 
-                var nameEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 0);
+                var nameEntry = rowElements.OfType<Picker>().FirstOrDefault(e => Grid.GetColumn(e) == 0)!;
                 var quantityEntry = rowElements.OfType<KseFNumericUpDown>().FirstOrDefault(e => Grid.GetColumn(e) == 1);
                 var priceEntry = rowElements.OfType<Entry>().FirstOrDefault(e => Grid.GetColumn(e) == 2);
                 var vatPicker = rowElements.OfType<Picker>().FirstOrDefault(p => Grid.GetColumn(p) == 3);
@@ -418,14 +405,18 @@ namespace KseF
                 if (nameEntry == null || quantityEntry == null || priceEntry == null ||  vatPicker == null || grossPriceEntry == null)
                     continue;
 
+                var pozycjaItem = nameEntry.SelectedItem as Product;
+                var culture = CultureInfo.GetCultureInfo("en-US"); // Kultura, która używa kropki jako separatora dziesiętnego
+
+
                 var pozycja = new PozycjeFaktury
                 {
-                    NazwaTowaruUslugi = nameEntry.Text,
-                    Opis = nameEntry.Text,
+                    NazwaTowaruUslugi = pozycjaItem.Nazwa,
+                    Opis = pozycjaItem.Opis!,
                     TowarId = nrPozycji + 10000,
 					IloscTowaruUslugi = (decimal)quantityEntry.Value,
-                    CenaJednostkowaNetto = decimal.TryParse(priceEntry.Text, out decimal priceNetto) ? priceNetto : 0,
-                    Vat = MapujPodatekVat((int)vatPicker.SelectedIndex),
+                    CenaJednostkowaNetto = decimal.TryParse(priceEntry.Text, NumberStyles.Any, culture, out decimal priceNetto) ? priceNetto : 0,
+                    Vat = MapujPodatekVat(vatPicker.SelectedItem),
                     CenaJednostkowaBrutto = decimal.TryParse(grossPriceEntry.Text, out decimal priceBrutto) ? priceBrutto : 0,
                     CenaJednostkowaVat = priceBrutto - priceNetto,
                     WartoscNetto = priceNetto * (decimal)quantityEntry.Value,
@@ -450,79 +441,115 @@ namespace KseF
         }
         public async void OnCreateDocumentClicked(object sender, EventArgs e)
         {
-            var selectedVatRate = stawkaVatPicker.SelectedIndex >= 0 ? stawkaVatPicker.Items[stawkaVatPicker.SelectedIndex] : null;
-            MyBusinessEntities myCompany = new MyBusinessEntities();
-            ClientEntities myClinet = new ClientEntities();
+            try
+            {
+                exportButton.IsEnabled = false;
 
-            myCompany.Nip = "9513128170";
-			myClinet.Nip = "5278733163";
+                var selectedVatRate = stawkaVatPicker.SelectedIndex >= 0 ? stawkaVatPicker.Items[stawkaVatPicker.SelectedIndex] : null;
+                MyBusinessEntities myCompany = new MyBusinessEntities();
+                ClientEntities myClient = new ClientEntities();
 
-			Invoice.DataWystawienia = DateTime.Now.Date;
-			//Sprzedawca
-			Invoice.SprzedawcaAdresL1 = ulicaSprzedawcy.Text + " " + nrDomuSprzedawcy.Text + " " + nrLokaluSprzedawcy.Text;
-			Invoice.SprzedawcaAdresL2 = kodPocztowySprzedawcy.Text + " " + miejscowoscSprzedawcy.Text;
-			Invoice.UlicaSprzedawcy = ulicaSprzedawcy.Text;
-			Invoice.NrDomuSprzedawcy = nrDomuSprzedawcy.Text;
-			Invoice.NrLokaluSprzedawcy = nrLokaluSprzedawcy.Text;
-			Invoice.KodPocztowySprzedawcy = kodPocztowySprzedawcy.Text;
-			Invoice.MiejscowoscSprzedawcy = miejscowoscSprzedawcy.Text;
-            Invoice.NipSprzedawcy = NipSprzedawcy.Text;
-            Invoice.NazwaSprzedawcy = NazwaSprzedawcy.Text;
-			Invoice.DaneSprzedawcy = Invoice.NipSprzedawcy + " " + Invoice.NazwaSprzedawcy + " " + Invoice.SprzedawcaAdresL1 + " " + Invoice.SprzedawcaAdresL2;
-            Invoice.EmailSprzedawcy = EmailSprzedawcy.Text;
-            Invoice.TelefonSprzedawcy = TelefonSprzedawcy.Text;
+                myCompany.Nip = "9513128170";
+                myClient.Nip = "5278733163";
 
+                Invoice.DataWystawienia = DateTime.Now.Date;
 
-            //Nabywca
-            Invoice.NipNabywcy = "5278733163";//NipNabywcy.Text;
-			Invoice.NazwaNabywcy = NazwaNabywcy.Text;
-			Invoice.NabywcaAdresL1 = ulicaNabywcy.Text + " " + nrDomuNabywcy.Text + " " + nrLokaluNabywcy.Text;
-            Invoice.NabywcaAdresL2 = kodPocztowyNabywcy.Text + " " + miejscowoscNabywcy.Text;
-            Invoice.UlicaNabywcy = ulicaNabywcy.Text;
-            Invoice.NrDomuNabywcy = nrDomuNabywcy.Text;
-            Invoice.NrLokaluNabywcy = nrLokaluNabywcy.Text;
-            Invoice.KodPocztowyNabywcy = kodPocztowyNabywcy.Text;
-            Invoice.MiejscowoscNabywcy = miejscowoscNabywcy.Text;
-            Invoice.DaneNabywcy = Invoice.NipNabywcy + " " + Invoice.NazwaNabywcy + " " + Invoice.NabywcaAdresL1 + " " + Invoice.NabywcaAdresL2;
-            Invoice.EmailNabywcy = EmailNabywcy.Text;
-			Invoice.TelefonNabywcy = TelefonNabywcy.Text;
+                // Sprzedawca
+                Invoice.SprzedawcaAdresL1 = ulicaSprzedawcy.Text + " " + nrDomuSprzedawcy.Text + " " + nrLokaluSprzedawcy.Text;
+                Invoice.SprzedawcaAdresL2 = kodPocztowySprzedawcy.Text + " " + miejscowoscSprzedawcy.Text;
+                Invoice.UlicaSprzedawcy = ulicaSprzedawcy.Text;
+                Invoice.NrDomuSprzedawcy = nrDomuSprzedawcy.Text;
+                Invoice.NrLokaluSprzedawcy = nrLokaluSprzedawcy.Text;
+                Invoice.KodPocztowySprzedawcy = kodPocztowySprzedawcy.Text;
+                Invoice.MiejscowoscSprzedawcy = miejscowoscSprzedawcy.Text;
+                Invoice.NipSprzedawcy = NipSprzedawcy.Text;
+                Invoice.NazwaSprzedawcy = NazwaSprzedawcy.Text;
+                Invoice.DaneSprzedawcy = Invoice.NipSprzedawcy + " " + Invoice.NazwaSprzedawcy + " " + Invoice.SprzedawcaAdresL1 + " " + Invoice.SprzedawcaAdresL2;
+                Invoice.EmailSprzedawcy = EmailSprzedawcy.Text;
+                Invoice.TelefonSprzedawcy = TelefonSprzedawcy.Text;
 
-			//Dane FV
-			Invoice.NrKlienta = "1";
-			Invoice.KodWaluty = currencyCode.ToString();
-			Invoice.PozycjeFaktury = GetPozycjeFaktury();
-			Invoice.ZaplaconeRaty = GetRaty();
-			Invoice.DoZapłatyPozostało = 0;
-			Invoice.TypFaktury = EnumLibrary.TypFaktury.Sprzedaz;
-            Invoice.FormaPlatnosci = "Przelew";
-			Invoice.NumerFaktury = NrFaktury.Text;
+                // Nabywca
+                Invoice.NipNabywcy = "5278733163";
+                Invoice.NazwaNabywcy = NazwaNabywcy.Text;
+                Invoice.NabywcaAdresL1 = ulicaNabywcy.Text + " " + nrDomuNabywcy.Text + " " + nrLokaluNabywcy.Text;
+                Invoice.NabywcaAdresL2 = kodPocztowyNabywcy.Text + " " + miejscowoscNabywcy.Text;
+                Invoice.UlicaNabywcy = ulicaNabywcy.Text;
+                Invoice.NrDomuNabywcy = nrDomuNabywcy.Text;
+                Invoice.NrLokaluNabywcy = nrLokaluNabywcy.Text;
+                Invoice.KodPocztowyNabywcy = kodPocztowyNabywcy.Text;
+                Invoice.MiejscowoscNabywcy = miejscowoscNabywcy.Text;
+                Invoice.DaneNabywcy = Invoice.NipNabywcy + " " + Invoice.NazwaNabywcy + " " + Invoice.NabywcaAdresL1 + " " + Invoice.NabywcaAdresL2;
+                Invoice.EmailNabywcy = EmailNabywcy.Text;
+                Invoice.TelefonNabywcy = TelefonNabywcy.Text;
 
-			XmlCreationService xmlCreationService = new XmlCreationService();
+                // Dane FV
+                Invoice.NrKlienta = "1";
+                Invoice.KodWaluty = "PLN";
+                Invoice.PozycjeFaktury = GetPozycjeFaktury();
+                Invoice.ZaplaconeRaty = GetRaty();
+                Invoice.DoZapłatyPozostało = 0;
+                Invoice.TypFaktury = EnumLibrary.TypFaktury.Sprzedaz;
+                Invoice.FormaPlatnosci = "Przelew";
+                Invoice.NumerFaktury = NrFaktury.Text;
 
-            
-			await xmlCreationService.CreateDocument_FA2(Invoice, myCompany);
+                XmlCreationService xmlCreationService = new XmlCreationService();
 
-			await DisplayAlert("Eksport XML", $"Plik XML został zapisany", "OK");
+                await xmlCreationService.CreateDocument_FA2(Invoice, myCompany);
+                await DisplayAlert("Eksport XML", "Plik XML został zapisany", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Błąd", $"Wystąpił błąd podczas eksportu: {ex.Message}", "OK");
+            }
+            finally
+            {
+                exportButton.IsEnabled = true;
+            }
         }
-        public PodatekVat MapujPodatekVat(int stawka)
+        public PodatekVat MapujPodatekVat(object stawka)
         {
             int wysokoscPodatku;
+            string stawkaString = stawka.ToString()!;
 
-            switch (stawka)
+            if (stawkaString.Contains("%"))
             {
-                case 33:
-                case 32:
-                case 31:
+                stawkaString = stawkaString.Substring(0, stawkaString.Length - 1);
+            }
+            if (stawkaString.Contains("zw"))
+            {
+                stawkaString = "31";
+            }
+            if (stawkaString.Contains("np"))
+            {
+                stawkaString = "32";
+            }
+            if (stawkaString.Contains("oo"))
+            {
+                stawkaString = "33";
+            }
+
+            switch (stawkaString)
+            {
+                case "33":
+                    wysokoscPodatku = 0;
+                    break;
+                case "32":
+                    wysokoscPodatku = 0;
+                    break;
+                case "31":
                     wysokoscPodatku = 0;
                     break;
                 default:
-                    wysokoscPodatku = stawka;
+                    if (!int.TryParse(stawkaString, out wysokoscPodatku))
+                    {
+                        wysokoscPodatku = 0;
+                    }
                     break;
             }
 
             return new PodatekVat
             {
-                NazwaStawki = stawka.ToString(),
+                NazwaStawki = stawka.ToString()!,
                 WysokośćPodatku = wysokoscPodatku
             };
         }

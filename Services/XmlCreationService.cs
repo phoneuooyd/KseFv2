@@ -40,7 +40,7 @@ namespace KseF.Services
 			FakturaKsef.Podmiot2.DaneIdentyfikacyjne = new TPodmiot2();
 			if (String.IsNullOrEmpty(Faktura.NipNabywcy))
 			{
-				FakturaKsef.Podmiot2.DaneIdentyfikacyjne.Items = new[] { (object)(sbyte)0 };
+				FakturaKsef.Podmiot2.DaneIdentyfikacyjne.Items = new[] { (object)(sbyte) 0 };
 				FakturaKsef.Podmiot2.DaneIdentyfikacyjne.ItemsElementName = new[] { ItemsChoiceType.BrakID };
 			}
 			else
@@ -55,10 +55,10 @@ namespace KseF.Services
 			FakturaKsef.Podmiot2.Adres.AdresL2 = Faktura.NabywcaAdresL2;
 			if(!String.IsNullOrEmpty(FakturaKsef.Podmiot2.IDNabywcy))
 			{
-				FakturaKsef.Podmiot2.IDNabywcy = Faktura.IdNabywcy.ToString();
+				FakturaKsef.Podmiot2.IDNabywcy = Faktura.IdNabywcy!.ToString();
 			}
 			FakturaKsef.Fa = new FakturaFA();
-			FakturaKsef.Fa.KodWaluty = Enum.Parse<TKodWaluty>(Faktura.KodWaluty);
+			FakturaKsef.Fa.KodWaluty = Enum.Parse<TKodWaluty>(Faktura.KodWaluty!);
 			FakturaKsef.Fa.P_1 = Faktura.DataWystawienia;
 			FakturaKsef.Fa.P_2 = Faktura.NumerFaktury;
 			FakturaKsef.Fa.Item = Faktura.DataSprzedazy; // P_6
@@ -81,9 +81,15 @@ namespace KseF.Services
 			FakturaKsef.Fa.RodzajFaktury = Faktura.TypFaktury == EnumLibrary.TypFaktury.Sprzedaz ? TRodzajFaktury.VAT : Faktura.TypFaktury == EnumLibrary.TypFaktury.SprzedazKor ? TRodzajFaktury.KOR : throw new ApplicationException("Nieobsługiwany rodzaj faktury: " + Faktura.TypFaktury);
 			if (Faktura.IsTP)
 			{
-				FakturaKsef.Fa.TP = 1; FakturaKsef.Fa.TPSpecified = true;
+				FakturaKsef.Fa.TP = 1; 
+				FakturaKsef.Fa.TPSpecified = true;
 			}
-			if (!String.IsNullOrEmpty(Faktura.Notatki)) FakturaKsef.Fa.DodatkowyOpis = new[] { new TKluczWartosc() { Klucz = "Uwagi", Wartosc = Faktura.Notatki } };
+
+			if (!String.IsNullOrEmpty(Faktura.Notatki)) FakturaKsef.Fa.DodatkowyOpis = new[] 
+			{ 
+				new TKluczWartosc() { Klucz = "Uwagi", Wartosc = Faktura.Notatki } 
+			};
+			
 			FakturaKsef.Fa.Platnosc = new FakturaFAPlatnosc();
 			if (Faktura.DoZapłatyPozostało == 0)
 			{
@@ -160,15 +166,22 @@ namespace KseF.Services
 				fa2Wiersz.P_8A = pozycja.JednostkaMiary.ToString();
 				fa2Wiersz.P_8B = Math.Abs(pozycja.IloscTowaruUslugi);
 				fa2Wiersz.P_8BSpecified = true;
-				/*
+                fa2Wiersz.P_9B = pozycja.CenaJednostkowaBrutto;
+                fa2Wiersz.P_9BSpecified = true;
+                fa2Wiersz.P_11A = Math.Abs(pozycja.WartoscBrutto);
+                fa2Wiersz.P_11ASpecified = true;
+                fa2Wiersz.P_11Vat = Math.Abs(pozycja.WartoscVat);
+                fa2Wiersz.P_11VatSpecified = true;
+
+                /*
                 if (pozycja.CzyWedlugCenBrutto)
                 {
-                    fa2Wiersz.P_9B = pozycja.CenaBrutto;
+                    fa2Wiersz.P_9B = pozycja.CenaJednostkowaBrutto;
                     fa2Wiersz.P_9BSpecified = true;
                     fa2Wiersz.P_11A = Math.Abs(pozycja.WartoscBrutto);
-                    fa2Wiersz.P_11ASpecified = true;
+                    fa2Wiersz.P_11ASpecified = true; 
                 }
-                else                                                           do pozniejszej implementacji
+                else            do pozniejszej implementacji
                 {
                     fa2Wiersz.P_9A = pozycja.CenaNetto;
                     fa2Wiersz.P_9ASpecified = true;
@@ -177,14 +190,7 @@ namespace KseF.Services
                 }
                 */
 
-				fa2Wiersz.P_9B = pozycja.CenaJednostkowaBrutto;
-				fa2Wiersz.P_9BSpecified = true;
-				fa2Wiersz.P_11A = Math.Abs(pozycja.WartoscBrutto);
-				fa2Wiersz.P_11ASpecified = true;
-				fa2Wiersz.P_11Vat = Math.Abs(pozycja.WartoscVat);
-				fa2Wiersz.P_11VatSpecified = true;
-
-				if (pozycja.GTU > 0)
+                if (pozycja.GTU > 0)
 				{
 					fa2Wiersz.GTU = Enum.Parse<TGTU>("GTU_" + pozycja.GTU.ToString("00"));
 					fa2Wiersz.GTUSpecified = true;
@@ -242,13 +248,13 @@ namespace KseF.Services
 				{
 					FakturaKsef.Fa.P_13_6_1 += pozycja.WartoscNetto;
 					FakturaKsef.Fa.P_13_6_1Specified = true;
-					fa2Wiersz.P_12 = TStawkaPodatku.Item0;
+					fa2Wiersz.P_12 = TStawkaPodatku.Item7;
 				}
-				else if (pozycja.Vat.WysokośćPodatku == 7)
+				else if (pozycja.Vat.WysokośćPodatku == 8)
 				{
 					FakturaKsef.Fa.P_13_2 += pozycja.WartoscNetto;
 					FakturaKsef.Fa.P_14_2 += pozycja.WartoscVat;
-					fa2Wiersz.P_12 = TStawkaPodatku.Item8;
+                    fa2Wiersz.P_12 = TStawkaPodatku.Item8;
 				}
 				else if (pozycja.Vat.WysokośćPodatku == 22)
 				{
@@ -268,12 +274,12 @@ namespace KseF.Services
 				{
 					fa2Wiersz.StanPrzed = 1; fa2Wiersz.StanPrzedSpecified = true;
 				}
-				
-				faWiersze.Add(fa2Wiersz);
+                FakturaKsef.Fa.P_15 += pozycja.WartoscBrutto;
+                faWiersze.Add(fa2Wiersz);
 			}
-			FakturaKsef.Fa.FaWiersz = faWiersze.ToArray();
 			
-			FakturaKsef.Stopka = new FakturaStopka();
+			FakturaKsef.Fa.FaWiersz = faWiersze.ToArray();
+            FakturaKsef.Stopka = new FakturaStopka();
 			
 			if(entities.IsDrukujStopke)
 			{
@@ -299,24 +305,25 @@ namespace KseF.Services
 				}
 			}
 
-
+			
 			string FakturaKsefXML = await CreateReadyXml(FakturaKsef);
+            /*
 			string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "faktura.xml");
 			using (StreamWriter sw = new StreamWriter(filePath))
 			{
 				await sw.WriteAsync(FakturaKsefXML);
-			}
+			} 
+			*/
 
-			/*
-			try
-			{
+            try
+            {
 				await XmlCreationService.SendInvoiceToKsef(FakturaKsefXML, Faktura, entities);
 			}
 			catch (Exception ex)
 			{
 				// Logowanie błędu
 				throw new ApplicationException("Błąd podczas wysyłania faktury do KSeF w XmlCreatinService", ex);
-			} */
+			} 
 		}
 
 		public async Task<string> CreateReadyXml(Faktura FakturaKsef)
