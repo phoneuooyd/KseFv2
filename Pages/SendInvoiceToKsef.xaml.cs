@@ -238,7 +238,7 @@ namespace KseF
         private void AddNewRow()
         {
             // Usunięcie przycisku "Usuń" z poprzedniego ostatniego wiersza (jeśli istnieje)
-            if (rowCount > 0)
+            if (rowCount > 1)
             {
                 var lastRowGuid = rowGuidMap.FirstOrDefault(x => x.Value == rowCount - 1).Key;
                 if (lastRowGuid != Guid.Empty)

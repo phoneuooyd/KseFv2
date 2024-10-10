@@ -179,11 +179,19 @@
                         <Picker x:Name="stawkaVatPicker" SelectedIndex="0" SelectedIndexChanged="OnVatRateChanged" Grid.Row="1" Grid.Column="3"/>
                         <Entry x:Name="CenaJednostkowaBrutto" Text="" Grid.Row="1" Grid.Column="4" />
                     </Grid>
+                    <Grid>
+                        <Button Text="Dodaj wiersz" 
+                                Clicked="OnAddButtonClicked" 
+                                HeightRequest="45" 
+                                WidthRequest="100" 
+                                FontSize="12"
+                                Margin="0,10,0,0"/>
+                    </Grid>
                 </VerticalStackLayout>
             </Frame>
-            <Button Text="Dodaj wiersz" Clicked="OnAddButtonClicked"/>
             
-            <Button x:Name ="exportButton" Text="Wyślij do KseF" Clicked="OnCreateDocumentClicked" />
+            <Button x:Name ="exportButton" Text="Wyślij do KseF" Clicked="OnCreateDocumentClicked"/>
+            
         </VerticalStackLayout>
     </ScrollView>
 

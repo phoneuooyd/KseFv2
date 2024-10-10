@@ -32,6 +32,7 @@ namespace KseF.Controls
             Content = new Label
             {
                 Text = text,
+                TextColor = Color.FromHex("#FFFFFF"),
                 FontAttributes = FontAttributes.Bold,
                 FontSize = (ButtonHeight+ButtonWidth)/2,
                 HorizontalOptions = LayoutOptions.Start,
@@ -42,7 +43,7 @@ namespace KseF.Controls
 
             // Ustawienia Frame
             CornerRadius = 5; // Zaokrąglenie rogów
-            BackgroundColor = Color.FromHex("#A084CA"); // Kolor tła
+            BackgroundColor = Color.FromHex("#512BD4"); // Kolor tła
             Padding = 0; // Bez wypełnienia wewnętrznego
             HasShadow = false;
 
@@ -61,7 +62,7 @@ namespace KseF.Controls
         {
             // Logika po tapnięciu (możesz dostosować tę metodę)
             // Przykład: wysłać zdarzenie lub zmienić kolor
-            BackgroundColor = BackgroundColor == Color.FromHex("#A084CA") ? Color.FromHex("#9C6BA0") : Color.FromHex("#A084CA");
+            BackgroundColor = BackgroundColor == Color.FromHex("#512BD4") ? Color.FromHex("#9C6BA0") : Color.FromHex("#A084CA");
 
             // Wywołaj zdarzenie Clicked
             Clicked?.Invoke(this, EventArgs.Empty);
