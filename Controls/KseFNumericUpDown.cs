@@ -87,9 +87,16 @@ namespace KseF.Controls
             // Frame dla przycisku "+"
             _increaseButton = new Frame
             {
-                Content = new Label { Text = "+", FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center },
+                Content = new Label 
+                { 
+                    Text = "+", 
+                    TextColor = Color.FromHex("#FFFFFF"), 
+                    FontAttributes = FontAttributes.Bold, 
+                    HorizontalOptions = LayoutOptions.Center, 
+                    VerticalOptions = LayoutOptions.Center 
+                },
                 CornerRadius = 5, // Zaokrąglenie rogów
-                BackgroundColor = Color.FromHex("#A084CA"), // Kolor tła
+                BackgroundColor = Color.FromHex("#512BD4"), // Kolor tła
                 WidthRequest = ButtonWidth / 2,
                 HeightRequest = ButtonHeight / 2,
                 Padding = -7, // Bez wypełnienia wewnętrznego
@@ -102,9 +109,15 @@ namespace KseF.Controls
             // Frame dla przycisku "-"
             _decreaseButton = new Frame
             {
-                Content = new Label { Text = "-", FontAttributes = FontAttributes.Bold, FontSize = 15,HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center },
+                Content = new Label 
+                { Text = "-", 
+                    TextColor=Color.FromHex("#FFFFFF"), 
+                    FontAttributes = FontAttributes.Bold, 
+                    FontSize = 15,HorizontalOptions = LayoutOptions.Center, 
+                    VerticalOptions = LayoutOptions.Center 
+                },
                 CornerRadius = 5, // Zaokrąglenie rogów
-                BackgroundColor = Color.FromHex("#A084CA"), // Kolor tła
+                BackgroundColor = Color.FromHex("#512BD4"), // Kolor tła
                 WidthRequest = ButtonWidth / 2,
                 HeightRequest = ButtonHeight / 2,
                 Padding = -8, // Bez wypełnienia wewnętrznego
