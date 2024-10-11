@@ -27,6 +27,7 @@ namespace KseF.Services
 			_dbConnection.CreateTableAsync<ClientEntities>();
 			_dbConnection.CreateTableAsync<BaseFaktura>();
 			_dbConnection.CreateTableAsync<Product>();
+            _dbConnection.CreateTableAsync<BaseFaktura>();
 #if DEBUG
             AddTestData();
 #endif
@@ -108,8 +109,6 @@ namespace KseF.Services
                     Regon = "123456789",
                     Krs = "123456789",
                     Bdo = "123456789",
-                    IsPodmiot = true,
-                    IsTP = true,
                     IsDrukujStopke = true,
                     KodUS = "123456789",
                     ImieOsFiz = "Test",
@@ -137,8 +136,6 @@ namespace KseF.Services
                     Regon = "123456789",
                     Krs = "123456789",
                     Bdo = "123456789",
-                    IsPodmiot = true,
-                    IsTP = true,
                     IsDrukujStopke = true,
                     KodUS = "123456789",
                     ImieOsFiz = "Test",
@@ -154,6 +151,7 @@ namespace KseF.Services
                     var testClient = new ClientEntities
                     {
                         MyBusinessEntityId = myBusinessEntity1.Id,
+                        IsPodmiot = true,
                         NazwaPelna = "Test",
                         NazwaSkrocona = "Test",
                         NrKlienta = "123456789",

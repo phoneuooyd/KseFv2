@@ -24,6 +24,7 @@ namespace KseF.Pages
             _dbService = dbService;
             _viewModel = viewModel;
             Product = new();
+            ProductGtuPicker.SelectedIndex = 0;
             DataLoadingService.LoadEnumValues<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker);
         }
 
@@ -40,7 +41,7 @@ namespace KseF.Pages
             ProductPriceEntry.Text = product.Cena.ToString();
             ProductCategoryEntry.Text = product.Kategoria;
             ProductUnitPicker.SelectedIndex = (int)product.JednostkaMiary;
-            var vatDisplayName = DataLoadingService.GetEnumDisplayName(product.StawkaPodatku);
+            var vatDisplayName = DataLoadingService.     GetEnumDisplayName(product.StawkaPodatku);
             ProductTaxRatePicker.SelectedItem = vatDisplayName;
             ProductTypeOfPositionPicker.SelectedIndex = (int)product.RodzajPozycji;
         }
@@ -63,7 +64,8 @@ namespace KseF.Pages
                     Kategoria = ProductCategoryEntry.Text,
                     JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex,
                     StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value,
-                    RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex
+                    RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex,
+                    GTU = ProductGtuPicker.SelectedIndex
                 };
 
                 try { await _dbService.SaveItemAsync<Product>(newProduct); ProductAdded?.Invoke(this, newProduct); }
@@ -79,6 +81,7 @@ namespace KseF.Pages
                 Product.JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex;
                 Product.StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value;
                 Product.RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex;
+                Product.GTU = ProductGtuPicker.SelectedIndex;
 
                 try { await _dbService.EditItemAsync<Product>(Product); }
                 catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }

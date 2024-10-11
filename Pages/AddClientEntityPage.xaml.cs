@@ -35,7 +35,8 @@ namespace KseF.Pages
 
 			Client = client;
 
-			NazwaSkroconaEntry.Text = client.NazwaSkrocona;
+            IsPodmiotSwitch.IsToggled = client.IsPodmiot;
+            NazwaSkroconaEntry.Text = client.NazwaSkrocona;
 			NazwaPelnaEntry.Text = client.NazwaPelna;
 			NipEntry.Text = client.Nip;
 			UlicaEntry.Text = client.Ulica;
@@ -54,7 +55,17 @@ namespace KseF.Pages
 			NazwiskoEntry.Text = client.Nazwisko;
 		}
 
-		private async void OnBackButtonClicked(object sender, EventArgs e)
+        private void OnIsPodmiotSwitchToggled(object sender, ToggledEventArgs e)
+        {
+            bool isPodmiot = e.Value;
+
+            // Ustawienie w³aœciwoœci IsEnabled dla kontrolek na podstawie stanu Switch
+            NazwaSkroconaEntry.IsEnabled = isPodmiot;
+            NazwaPelnaEntry.IsEnabled = isPodmiot;
+            NipEntry.IsEnabled = isPodmiot;
+        }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
 			await Shell.Current.GoToAsync("//MainPage");
 		}
@@ -65,10 +76,11 @@ namespace KseF.Pages
            
             if (check is null)
 			{
-                await DisplayAlert(Title, $"typ {check} dupa ", "OK");
                 var newClient = new ClientEntities
-				{
-					NazwaSkrocona = NazwaSkroconaEntry.Text,
+                {
+
+                    IsPodmiot = IsPodmiotSwitch.IsToggled,
+                    NazwaSkrocona = NazwaSkroconaEntry.Text,
 					NazwaPelna = NazwaPelnaEntry.Text,
 					Nip = NipEntry.Text,
 					Ulica = UlicaEntry.Text,
@@ -93,7 +105,7 @@ namespace KseF.Pages
 			}
 			else
 			{
-                await DisplayAlert(Title, $"typ {check.GetType()} dupa ", "OK");
+				Client.IsPodmiot = IsPodmiotSwitch.IsToggled;
                 Client.NazwaSkrocona = NazwaSkroconaEntry.Text;
 				Client.NazwaPelna = NazwaPelnaEntry.Text;
 				Client.Nip = NipEntry.Text;

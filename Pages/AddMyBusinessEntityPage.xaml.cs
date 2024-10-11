@@ -55,8 +55,7 @@ namespace KseF.Pages
 			RegonEntry.Text = businessEntitity.Regon;
 			KrsEntry.Text = businessEntitity.Krs;
 			BdoEntry.Text = businessEntitity.Bdo;
-			IsPodmiotSwitch.IsToggled = businessEntitity.IsPodmiot;
-			IsTPSwitch.IsToggled = businessEntitity.IsTP;
+			//IsTPSwitch.IsToggled = businessEntitity.IsTP;
 			IsDrukujStopkeSwitch.IsToggled = businessEntitity.IsDrukujStopke;
 			KodUSEntry.Text = businessEntitity.KodUS;
 			ImieOFEntry.Text = businessEntitity.ImieOsFiz;
@@ -94,8 +93,8 @@ namespace KseF.Pages
                     Regon = RegonEntry.Text,
                     Krs = KrsEntry.Text,
                     Bdo = BdoEntry.Text,
-                    IsPodmiot = IsPodmiotSwitch.IsToggled,
-                    IsTP = IsTPSwitch.IsToggled,
+                   //IsPodmiot = IsPodmiotSwitch.IsToggled,
+                    //IsTP = IsTPSwitch.IsToggled,
                     IsDrukujStopke = IsDrukujStopkeSwitch.IsToggled,
                     KodUS = KodUSEntry.Text,
                     ImieOsFiz = ImieOFEntry.Text,
@@ -131,8 +130,8 @@ namespace KseF.Pages
                 BusinessEntity.Regon = RegonEntry.Text;
                 BusinessEntity.Krs = KrsEntry.Text;
                 BusinessEntity.Bdo = BdoEntry.Text;
-                BusinessEntity.IsPodmiot = IsPodmiotSwitch.IsToggled;
-                BusinessEntity.IsTP = IsTPSwitch.IsToggled;
+                //BusinessEntity.IsPodmiot = IsPodmiotSwitch.IsToggled;
+                //BusinessEntity.IsTP = IsTPSwitch.IsToggled;
                 BusinessEntity.IsDrukujStopke = IsDrukujStopkeSwitch.IsToggled;
                 BusinessEntity.KodUS = KodUSEntry.Text;
                 BusinessEntity.ImieOsFiz = ImieOFEntry.Text;

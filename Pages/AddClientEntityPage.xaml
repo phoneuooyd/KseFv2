@@ -22,16 +22,49 @@
 
                     <Label Text="Informacje ogólne" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-                    <Label Text="Nazwa Skrócona" />
+                    <Label Text="Klient jest podmiotem?" />
+                    <Switch x:Name="IsPodmiotSwitch" Toggled="OnIsPodmiotSwitchToggled"/>
+
+                    <Label Text="Nazwa Skrócona" x:Name="NazwaSkroconaLabel"/>
                     <Entry Placeholder="Wprowadź nazwę skróconą" x:Name="NazwaSkroconaEntry"/>
 
-                    <Label Text="Nazwa Pełna" />
+                    <Label Text="Nazwa Pełna"  x:Name="NazwaPelnaLabel"/>
                     <Entry Placeholder="Wprowadź nazwę pełną" x:Name="NazwaPelnaEntry"/>
 
-                    <Label Text="NIP" />
+                    <Label Text="NIP"  x:Name="NipLabel"/>
                     <Entry Placeholder="Wprowadź NIP" x:Name="NipEntry"/>
                 </VerticalStackLayout>
             </Frame>
+
+            <Frame 
+                Padding="5" 
+                Margin="10">
+                <VerticalStackLayout 
+                    Margin="10">
+
+                    <Label Text="Informacje kontaktowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
+
+                    <Label Text="Nr Klienta" />
+                    <Entry Placeholder="Wprowadź nr klienta" x:Name="NrKlientaEntry"/>
+
+                    <Label Text="Imię" />
+                    <Entry Placeholder="Wprowadź imię" x:Name="ImieEntry"/>
+
+                    <Label Text="Nazwisko" />
+                    <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoEntry"/>
+
+                    <Label Text="Nr Telefonu" />
+                    <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
+
+                    <Label Text="Adres Email" />
+                    <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
+
+                    <Label Text="Notatki" />
+                    <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
+                    
+                </VerticalStackLayout>
+            </Frame>
+
             <Frame 
                  Padding="5" 
                  Margin="10">
@@ -64,38 +97,11 @@
                     <Label Text="Nr Rachunku" />
                     <Entry Placeholder="Wprowadź nr rachunku" x:Name="NrRachunkuEntry"/>
 
-                </VerticalStackLayout>
-            </Frame>
-            <Frame 
-                 Padding="5" 
-                 Margin="10">
-                <VerticalStackLayout 
-                    Margin="10">
-
-                    <Label Text="Informacje kontaktowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
-
-                    <Label Text="Nr Klienta" />
-                    <Entry Placeholder="Wprowadź nr klienta" x:Name="NrKlientaEntry"/>
-
-                    <Label Text="Imię" />
-                    <Entry Placeholder="Wprowadź imię" x:Name="ImieEntry"/>
-
-                    <Label Text="Nazwisko" />
-                    <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoEntry"/>
-
-                    <Label Text="Nr Telefonu" />
-                    <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
-
-                    <Label Text="Adres Email" />
-                    <Entry Placeholder="Wprowadź adres email" x:Name="AdresEmailEntry"/>
-
-                    <Label Text="Notatki" />
-                    <Editor Placeholder="Wprowadź notatki" x:Name="NotatkiEditor"/>
-
                     <Button Text="Zapisz" Clicked="OnSaveButtonClicked" Margin="10"/>
-                    
+
                 </VerticalStackLayout>
             </Frame>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

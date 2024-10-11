@@ -20,7 +20,7 @@
 
     <Shell.TitleView>
         <Grid>
-            <Label Text="InvoKseF"
+            <Label Text="PpInzKsef_v0.9"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="White"
@@ -47,6 +47,12 @@
         Title="Products"
         ContentTemplate="{DataTemplate pages:MyProductsPage}"
         Route="MyProducts" />
+
+    <ShellContent
+        Title="Sent Invoices"
+        ContentTemplate="{DataTemplate pages:InvoicesSent}"
+        Route="InvoicesSentPage" />
+
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="10" BackgroundColor="LightGray">
