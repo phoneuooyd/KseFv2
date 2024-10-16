@@ -8,6 +8,7 @@ using Microsoft.Maui;
 using Models;
 using System.Net;
 
+
 namespace KseF.Pages
 {
 	public partial class AddClientEntityPage : ContentPage
@@ -96,8 +97,9 @@ namespace KseF.Pages
 					Notatki = NotatkiEditor.Text,
 					NrKlienta = NrKlientaEntry.Text,
 					Imie = ImieEntry.Text,
-					Nazwisko = NazwiskoEntry.Text
-				};
+					Nazwisko = NazwiskoEntry.Text,
+					MyBusinessEntityId = _dbService.GetBusinessEntityFromContext().Result.Id
+                };
 
 				try { await _dbService.SaveItemAsync<ClientEntities>(newClient); ClientAdded?.Invoke(this, newClient); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
@@ -123,8 +125,9 @@ namespace KseF.Pages
 				Client.NrKlienta = NrKlientaEntry.Text;
 				Client.Imie = ImieEntry.Text;
 				Client.Nazwisko = NazwiskoEntry.Text;
+				Client.MyBusinessEntityId = _dbService.GetBusinessEntityFromContext().Result.Id;
 
-				try { await _dbService.EditItemAsync<ClientEntities>(Client); }
+                try { await _dbService.EditItemAsync<ClientEntities>(Client); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
 				await DisplayAlert($"Sukces", $"Edytowano firmê {Client.NazwaSkrocona}", "OK");
 			}

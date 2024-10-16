@@ -13,41 +13,62 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace KseF.Models.ViewModels
 {
-	public class MyClientsViewModel
-	{
-		private readonly ILocalDbService _dbService;
-		public ObservableCollection<ClientEntities> _clientEntities;
+    public class MyClientsViewModel : INotifyPropertyChanged
+    {
+        private readonly ILocalDbService _dbService;
+        private MyBusinessEntities _currentMyBusinessEntity;
+        public ObservableCollection<ClientEntities> _clientEntities;
 
-		public ObservableCollection<ClientEntities> ClientEntities
-		{
-			get => _clientEntities;
-			set
-			{
-				_clientEntities = value;
-				OnPropertyChanged();
-			}
-		}
+        public ObservableCollection<ClientEntities> ClientEntities
+        {
+            get => _clientEntities;
+            set
+            {
+                _clientEntities = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand DeleteCommand { get; }
-        public MyClientsViewModel(ILocalDbService dbService)
-		{
-			_dbService = dbService;
-            DeleteCommand = new Command<ClientEntities>(async (entity) => await DeleteEntity(entity));
-            LoadClients();
-		}
 
-		private async void LoadClients()
-		{
-			var clients = await _dbService.GetItemsAsync<ClientEntities>();
-			ClientEntities = new ObservableCollection<ClientEntities>(clients);
-		}
+        public MyClientsViewModel(ILocalDbService dbService)
+        {
+            _dbService = dbService;
+            DeleteCommand = new Command<ClientEntities>(async (entity) => await DeleteEntity(entity));
+
+            // Inicjalizuj _currentMyBusinessEntity w ViewModelu
+            _currentMyBusinessEntity = _dbService.GetBusinessEntityFromContext().Result;
+
+            WeakReferenceMessenger.Default.Register<MyBusinessEntityChangedMessage>(this, (r, message) =>
+            {
+                _currentMyBusinessEntity = message.Value;
+                LoadClients(); // Ponownie załaduj klientów po zmianie firmy
+            });
+
+            // Ładuj klientów powiązanych z aktualną firmą
+            LoadClients();
+        }
+
+        private async void LoadClients()
+        {
+            if (_currentMyBusinessEntity != null)
+            {
+                var filteredClients = await _dbService.GetClientsByBusinessEntityIdAsync(_currentMyBusinessEntity.Id);
+                ClientEntities = new ObservableCollection<ClientEntities>(filteredClients);
+            }
+            else
+            {
+                ClientEntities = new ObservableCollection<ClientEntities>();
+            }
+        }
 
         // Metoda do usuwania elementów
         private async Task DeleteEntity(ClientEntities entity)
         {
             if (entity == null) return;
 
-			// Usuwamy z ObservableCollection (aby odświeżyć ListView)
-			ClientEntities.Remove(entity);
+            // Usuwamy z ObservableCollection (aby odświeżyć ListView)
+            ClientEntities.Remove(entity);
 
             // Usuwamy z bazy danych
             await _dbService.DeleteItemAsync(entity);
@@ -57,9 +78,9 @@ namespace KseF.Models.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

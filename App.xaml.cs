@@ -1,6 +1,5 @@
 ﻿using KseF.Pages;
 using KseF.Services;
-
 namespace KseF
 {
     public partial class App : Application
@@ -10,5 +9,6 @@ namespace KseF
             InitializeComponent();
             MainPage = appShell;
         }
+
     }
 }

@@ -6,6 +6,7 @@ using KseF.Models.ViewModels;
 using SQLite;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace KseF.Pages
 {
@@ -50,8 +51,10 @@ namespace KseF.Pages
 			{
 				await _dbService.SetBusinessEntityToContext(selectedEntity);
 				var test = _dbService.GetBusinessEntityFromContext().Result;
-				
-				await DisplayAlert("Business Entity", "Business Entity in Context: " + test.Nip, "OK");
+
+                WeakReferenceMessenger.Default.Send(new MyBusinessEntityChangedMessage(selectedEntity));
+
+                await DisplayAlert("Business Entity", "Business Entity in Context: " + test.Nip, "OK");
 			}
 		}
 

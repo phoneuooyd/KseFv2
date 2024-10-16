@@ -61,10 +61,24 @@ namespace KseF
             ProductPicker.ItemsSource = Products;
         }
 
+        private async void SetFvNumber()
+        {
+            var invoicesSent = await _dbService.GetItemsAsync<BaseFaktura>();
+            var currentYear = DateTime.Now.Year.ToString();
+            var invoicesSentThisYear = invoicesSent.Where(i => i.DataWystawienia.Year == DateTime.Now.Year).ToList().Count();
+
+            NrFaktury.Text = $"FV/{currentYear}/{invoicesSentThisYear + 1}";
+        }
+
 		private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
 			await Shell.Current.GoToAsync("//MainPage");
 		}	
+
+        private async void OnDataWystawieniaChanged(object sender, DateChangedEventArgs e)
+        {
+            SetFvNumber();
+        }
 
         private void OnAddButtonClicked(object sender, EventArgs e)
         {
@@ -144,6 +158,7 @@ namespace KseF
             if (rowIndex == -1)
                 return;
 
+            var quantityEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c)== rowIndex && transakcjaGrid.GetColumn(c) == 1) as KseFNumericUpDown; 
             var priceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 2) as Entry;
             var vatPicker = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 3) as Picker;
             var grossPriceEntry = transakcjaGrid.Children.FirstOrDefault(c => transakcjaGrid.GetRow(c) == rowIndex && transakcjaGrid.GetColumn(c) == 4) as Entry;
@@ -151,6 +166,11 @@ namespace KseF
             if (priceEntry != null)
             {
                 priceEntry.Text = selectedProduct.Cena.ToString("F2"); 
+            }
+
+            if (quantityEntry != null)
+            {
+                quantityEntry.Value = 1;
             }
 
             if (vatPicker != null)
@@ -233,6 +253,7 @@ namespace KseF
             nameEntry.ItemDisplayBinding = new Binding("Nazwa");
             nameEntry.SelectedIndexChanged += OnProductChanged!;
             vatPicker.SelectedIndexChanged += OnVatRateChanged!;
+            SetFvNumber();
         }
 
         private void AddNewRow()
@@ -494,8 +515,12 @@ namespace KseF
 
                 XmlCreationService xmlCreationService = new XmlCreationService();
 
-                await xmlCreationService.CreateDocument_FA2(Invoice, myCompany);
+                BaseFaktura FakturaZapis = await xmlCreationService.CreateDocument_FA2(Invoice, myCompany);
+
+                //save FakturaZapis to db
+                await _dbService.SaveItemAsync(FakturaZapis);
                 await DisplayAlert("Eksport XML", "Plik XML został zapisany", "OK");
+
             }
             catch (Exception ex)
             {

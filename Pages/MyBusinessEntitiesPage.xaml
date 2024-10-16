@@ -4,7 +4,6 @@
              x:Class="KseF.Pages.MyBusinessEntitiesPage"
              Title="MyBusinessEntitiesPage">
  
-
     <VerticalStackLayout>
         <!-- Button to navigate to AddMyBusinessEntityPage -->
         <HorizontalStackLayout>
@@ -25,10 +24,11 @@
             <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
         </Grid>
 
-        <ListView x:Name="MyBusinessEntitiesListView"
-                  ItemsSource="{Binding MyBusinessEntities}"
-                  HasUnevenRows="False"
-                  ItemTapped="OnMyBusinessEntityTapped">
+        <ListView 
+            x:Name="MyBusinessEntitiesListView"
+            ItemsSource="{Binding MyBusinessEntities}"
+            HasUnevenRows="True"
+            ItemTapped="OnMyBusinessEntityTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -43,7 +43,6 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
 
-                            <!-- Content of the cell -->
                             <Grid Padding="5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*"/>
@@ -51,7 +50,7 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
 

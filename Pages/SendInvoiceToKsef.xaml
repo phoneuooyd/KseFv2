@@ -142,7 +142,7 @@
                         <Label Text="Numer faktury"  FontSize="Micro" 
                             Grid.Row="0" 
                             Grid.Column="1"/>
-                        <local:KseFDatePicker x:Name="DataWystawienia" PickerWidthPercentage="42" 
+                        <local:KseFDatePicker x:Name="DataWystawienia" PickerWidthPercentage="42" DateSelected="OnDataWystawieniaChanged"
                             Grid.Row="1" 
                             Grid.Column="0" MinimumWidthRequest="100"/>
                         <Entry x:Name="NrFaktury" Placeholder="Numer Faktury" 

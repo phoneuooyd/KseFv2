@@ -24,10 +24,11 @@
             <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
         </Grid>
 
-        <ListView x:Name="ClientsListView"
-              ItemsSource="{Binding ClientEntities}"
-              HasUnevenRows="True"
-              ItemTapped="OnClientTapped">
+        <ListView 
+            x:Name="ClientsListView"
+            ItemsSource="{Binding ClientEntities}"
+            HasUnevenRows="True"
+            ItemTapped="OnClientTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -47,6 +48,7 @@
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
+                                
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>

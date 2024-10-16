@@ -38,6 +38,9 @@
     <MauiXaml Update="Pages\MyProductsPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Resources\Styles\Colors.Dark.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
   </ItemGroup>
   <ItemGroup>
     <None Update="AppShell.xaml">

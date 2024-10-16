@@ -14,15 +14,51 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" Text="Invoice Number" FontSize="Small" Margin="10"/>
             <Label Grid.Column="1" Text="Date" FontSize="Small" Margin="10"/>
             <Label Grid.Column="2" Text="Client" FontSize="Small" Margin="10"/>
-            <Label Grid.Column="3" Text="Amount" FontSize="Small" Margin="10"/>
         </Grid>
+        <ListView 
+            x:Name="InvoicesSentListView" 
+            ItemsSource="{Binding Invoices}" 
+            HasUnevenRows="True" >  
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <SwipeItem
+                                        Text="Usuń"
+                                        BackgroundColor="Red"
+                                        Invoked="OnDeleteSwipeItemInvoked"
+                                        CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
 
-        
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Column="0" Text="{Binding NumerFaktury}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="1" Text="{Binding DataWystawienia}" FontSize="Medium" Margin="10"/>
+                                <Label Grid.Column="2" Text="{Binding NazwaNabywcy}" FontSize="Medium" Margin="10"/>
+                            </Grid>
+                        </SwipeView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
     </VerticalStackLayout>
 </ContentPage>
