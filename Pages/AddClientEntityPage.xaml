@@ -5,7 +5,7 @@
              Title="AddClientEntityPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Powrót" 
+        <ToolbarItem Text="&lt;-" 
                      IconImageSource="back_arrow_icon.png"
                      Clicked="OnBackButtonClicked"/>
     </ContentPage.ToolbarItems>

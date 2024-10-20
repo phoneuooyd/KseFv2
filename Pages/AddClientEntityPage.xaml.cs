@@ -26,6 +26,7 @@ namespace KseF.Pages
 			_viewModel = viewModel;
 
 			Client = new();
+			IsPodmiotSwitch.IsToggled = true;
 		}
 
 		public AddClientEntityPage(ILocalDbService dbService, MyClientsViewModel viewModel, ClientEntities client)
@@ -68,7 +69,7 @@ namespace KseF.Pages
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
-			await Shell.Current.GoToAsync("//MainPage");
+			await Shell.Current.GoToAsync("//MyClientsPage");
 		}
 
 		private async void OnSaveButtonClicked(object sender, EventArgs e)

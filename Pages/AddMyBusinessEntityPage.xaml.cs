@@ -60,13 +60,13 @@ namespace KseF.Pages
 			KodUSEntry.Text = businessEntitity.KodUS;
 			ImieOFEntry.Text = businessEntitity.ImieOsFiz;
 			NazwiskoOFEntry.Text = businessEntitity.NazwiskoOsFiz;
-			DataUrodzeniaOFPicker.Date = (DateTime)businessEntitity.DataUrodzeniaOF;
-			FormaOpodatkowaniaPicker.SelectedIndex = (int)businessEntitity.FormaOpodatkowania;
+			DataUrodzeniaOFPicker.Date = (DateTime)businessEntitity!.DataUrodzeniaOF!;
+			FormaOpodatkowaniaPicker.SelectedIndex = (int)businessEntitity!.FormaOpodatkowania!;
 		}
 
 		private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
-			await Shell.Current.GoToAsync("//MainPage");
+			await Shell.Current.GoToAsync("//MyBusinessEntitiesPage");
 		}
 
 		private async void OnSaveButtonClicked(object sender, EventArgs e)

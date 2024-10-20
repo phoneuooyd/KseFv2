@@ -5,7 +5,6 @@ using KseF.Models;
 using KseF.Models.ViewModels;
 using KseF.Services;
 using Microsoft.Maui;
-using KseF.Services;
 using Models;
 
 namespace KseF.Pages
@@ -26,6 +25,10 @@ namespace KseF.Pages
             Product = new();
             ProductGtuPicker.SelectedIndex = 0;
             DataLoadingService.LoadEnumValues<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker);
+            ProductGtuPicker.SelectedIndex = 0;
+            ProductUnitPicker.SelectedIndex = 0;
+            ProductTypeOfPositionPicker.SelectedIndex = 0;
+            ProductTaxRatePicker.SelectedIndex = 7;
         }
 
         public AddProductPage(ILocalDbService dbService, MyProductsViewModel viewModel, Product product)
@@ -40,15 +43,17 @@ namespace KseF.Pages
             ProductDescriptionEntry.Text = product.Opis;
             ProductPriceEntry.Text = product.Cena.ToString();
             ProductCategoryEntry.Text = product.Kategoria;
-            ProductUnitPicker.SelectedIndex = (int)product.JednostkaMiary;
+            ProductUnitPicker.SelectedIndex = (int)product!.JednostkaMiary!;
             var vatDisplayName = DataLoadingService.     GetEnumDisplayName(product.StawkaPodatku);
             ProductTaxRatePicker.SelectedItem = vatDisplayName;
-            ProductTypeOfPositionPicker.SelectedIndex = (int)product.RodzajPozycji;
+            ProductTypeOfPositionPicker.SelectedIndex = (int)product!.RodzajPozycji!;
+            ProductGtuPicker.SelectedIndex = (int)product.GTU!;
+           
         }
 
         private async void OnBackButtonClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//MyProductsPage");
         }
 
         private async void OnSaveButtonClicked(object sender, EventArgs e)
@@ -63,7 +68,7 @@ namespace KseF.Pages
                     Cena = Decimal.Parse(ProductPriceEntry.Text),
                     Kategoria = ProductCategoryEntry.Text,
                     JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex,
-                    StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value,
+                    StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker)!.Value,
                     RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex,
                     GTU = ProductGtuPicker.SelectedIndex
                 };
@@ -79,7 +84,7 @@ namespace KseF.Pages
                 Product.Cena = Decimal.Parse(ProductPriceEntry.Text);
                 Product.Kategoria = ProductCategoryEntry.Text;
                 Product.JednostkaMiary = (EnumLibrary.JednostkaMiary)ProductUnitPicker.SelectedIndex;
-                Product.StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker).Value;
+                Product.StawkaPodatku = DataLoadingService.GetEnumValueFromPicker<EnumLibrary.StawkiPodatkuPL>(ProductTaxRatePicker)!.Value;
                 Product.RodzajPozycji = (EnumLibrary.RodzajPozycji)ProductTypeOfPositionPicker.SelectedIndex;
                 Product.GTU = ProductGtuPicker.SelectedIndex;
 

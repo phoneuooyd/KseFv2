@@ -24,7 +24,11 @@ public partial class MyClientsPage : ContentPage
         BindingContext = _viewModel;
     }
 
-	private async void OnAddClientEntityButtonClicked(object sender, EventArgs e)
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
+    private async void OnAddClientEntityButtonClicked(object sender, EventArgs e)
 	{
 		var newClientPage = new AddClientEntityPage(_dbService, _viewModel); // Przeka¿ ViewModel do nowej strony
 		newClientPage.ClientAdded += OnClientAdded; // Zarejestruj handler eventu

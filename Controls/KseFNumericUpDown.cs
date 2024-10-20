@@ -97,8 +97,8 @@ namespace KseF.Controls
                 },
                 CornerRadius = 5, // Zaokrąglenie rogów
                 BackgroundColor = Color.FromHex("#512BD4"), // Kolor tła
-                WidthRequest = ButtonWidth / 2,
-                HeightRequest = ButtonHeight / 2,
+                WidthRequest = ButtonWidth / 1.88,
+                HeightRequest = ButtonHeight / 1.88,
                 Padding = -7, // Bez wypełnienia wewnętrznego
                 HasShadow = false
             };
@@ -118,8 +118,8 @@ namespace KseF.Controls
                 },
                 CornerRadius = 5, // Zaokrąglenie rogów
                 BackgroundColor = Color.FromHex("#512BD4"), // Kolor tła
-                WidthRequest = ButtonWidth / 2,
-                HeightRequest = ButtonHeight / 2,
+                WidthRequest = ButtonWidth / 1.88,
+                HeightRequest = ButtonHeight / 1.88,
                 Padding = -8, // Bez wypełnienia wewnętrznego
                 HasShadow = false
             };

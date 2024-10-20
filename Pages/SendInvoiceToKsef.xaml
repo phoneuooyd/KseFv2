@@ -13,7 +13,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Powrót" 
+        <ToolbarItem Text="&lt;-" 
                      IconImageSource="back_arrow_icon.png"
                      Clicked="OnBackButtonClicked"/>
     </ContentPage.ToolbarItems>
@@ -28,7 +28,7 @@
                    Margin="10">
                 <VerticalStackLayout 
                     Margin="10">
-                    
+
                     <!-- Sekcja Podmiot1 (Sprzedawca) -->
                     <Label Text="Dane Sprzedawcy" FontAttributes="Bold" FontSize="Medium" Margin="0,0,0,15"/>
 
@@ -57,7 +57,7 @@
                     <Label Text="Kod kraju"/>
                     <Picker x:Name="krajSprzedawcaPicker"/>
                     -->
-                    
+
                     <Label Text="Email"/>
                     <Entry x:Name="EmailSprzedawcy" Placeholder="Email" Margin="5"/>
 
@@ -69,7 +69,7 @@
 
             <Frame 
                    Padding="5"
-                   Margin="10"> 
+                   Margin="10">
                 <VerticalStackLayout Margin="10">
 
                     <!-- Sekcja Podmiot2 (Nabywca) -->
@@ -82,7 +82,7 @@
                         ItemDisplayBinding="{Binding NazwaSkrocona}"
                         SelectedItem="{Binding SelectedClient}" 
                         SelectedIndexChanged="OnClientChanged"
-                        Margin="0,0,0,15"/>  
+                        Margin="0,0,0,15"/>
 
                     <Label Text="Nip"/>
                     <Entry x:Name="NipNabywcy" Placeholder="NIP Nabywcy" Margin="5"/>
@@ -105,7 +105,7 @@
                     <Label Text="Kod pocztowy"/>
                     <Entry x:Name="kodPocztowyNabywcy" Placeholder="Kod Pocztowy" Margin="5"/>
 
-                   <!--
+                    <!--
                      <Label Text="Kod kraju"/>
                     <Picker x:Name="krajNabywcaPicker" />
                     -->
@@ -117,8 +117,6 @@
                     <Entry x:Name="TelefonNabywcy" Placeholder="Telefon" Margin="5"/>
                 </VerticalStackLayout>
             </Frame>
-
-            <!-- Podobnie jak dla sprzedawcy, dodaj wszystkie pola adresowe i kontaktowe -->
 
             <!-- Sekcja Faktury (Fa) -->
             <Frame
@@ -187,6 +185,7 @@
                                 FontSize="12"
                                 Margin="0,10,0,0"/>
                     </Grid>
+                    
                 </VerticalStackLayout>
             </Frame>
             
@@ -194,5 +193,4 @@
             
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

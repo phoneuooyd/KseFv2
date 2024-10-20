@@ -6,6 +6,7 @@ namespace KseF
     {
 		public App(AppShell appShell)
         {
+            UserAppTheme = Microsoft.Maui.ApplicationModel.AppTheme.Light;
             InitializeComponent();
             MainPage = appShell;
         }

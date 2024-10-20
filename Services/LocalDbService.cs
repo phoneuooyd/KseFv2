@@ -103,7 +103,7 @@ namespace KseF.Services
                     Id = Guid.NewGuid(),
                     NazwaSkrocona = "Test1",
                     NazwaPelna = "Test1",
-                    Nip = "1234567890",
+                    Nip = "9513128170",
                     Ulica = "Test",
                     NrDomu = "1",
                     KodPocztowy = "00-000",
@@ -131,7 +131,7 @@ namespace KseF.Services
                     Id = Guid.NewGuid(),
                     NazwaSkrocona = "Test2",
                     NazwaPelna = "Test2",
-                    Nip = "9876543210",
+                    Nip = "9513128170",
                     Ulica = "Test",
                     NrDomu = "1",
                     KodPocztowy = "00-000",
@@ -165,7 +165,7 @@ namespace KseF.Services
                         IsPodmiot = true,
                         NazwaPelna = "Test1",
                         NazwaSkrocona = "Test1",
-                        NrKlienta = "123456789",
+                        NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
                         Nip = "1234567890",
@@ -186,7 +186,7 @@ namespace KseF.Services
                         IsPodmiot = true,
                         NazwaPelna = "Test2",
                         NazwaSkrocona = "Test2",
-                        NrKlienta = "123456789",
+                        NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
                         Nip = "1234567890",
@@ -207,7 +207,7 @@ namespace KseF.Services
                         IsPodmiot = true,
                         NazwaPelna = "Test3",
                         NazwaSkrocona = "Test3",
-                        NrKlienta = "123456789",
+                        NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
                         Nip = "1234567890",
@@ -240,6 +240,7 @@ namespace KseF.Services
                     JednostkaMiary = EnumLibrary.JednostkaMiary.Szt,
                     RodzajPozycji = EnumLibrary.RodzajPozycji.Towar,
                     StawkaPodatku = EnumLibrary.StawkiPodatkuPL.Item23,
+                    GTU = 0
                 };
                 await SaveItemAsync<Product>(testProduct);
             }

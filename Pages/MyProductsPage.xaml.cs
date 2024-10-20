@@ -22,7 +22,12 @@ public partial class MyProductsPage : ContentPage
         BindingContext = _viewModel;
 	}
 
-	private async void OnAddProductButtonClicked(object sender, EventArgs e)
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
+
+    private async void OnAddProductButtonClicked(object sender, EventArgs e)
 	{
 		var newProductPage = new AddProductPage(_dbService, _viewModel); 
 		newProductPage.ProductAdded += OnProductAdded; 

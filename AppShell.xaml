@@ -29,27 +29,27 @@
     </Shell.TitleView>
 
     <ShellContent
-        Title="Home"
+        Title="Strona główna"
         ContentTemplate="{DataTemplate pages:MainPage }"
         Route="MainPage" />
 
     <ShellContent
-        Title="My Company"
+        Title="Moje firmy"
         ContentTemplate="{DataTemplate pages:MyBusinessEntitiesPage }"
         Route="MyCompanyPage" />
 
     <ShellContent
-        Title="Clients"
+        Title="Klienci"
         ContentTemplate="{DataTemplate pages:MyClientsPage}"
         Route="MyCLientsPage" />
 
     <ShellContent
-        Title="Products"
+        Title="Produkty i usługi"
         ContentTemplate="{DataTemplate pages:MyProductsPage}"
         Route="MyProducts" />
 
     <ShellContent
-        Title="Sent Invoices"
+        Title="Wysłane faktury"
         ContentTemplate="{DataTemplate pages:InvoicesSent}"
         Route="InvoicesSentPage" />
 

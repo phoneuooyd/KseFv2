@@ -519,7 +519,7 @@ namespace KseF
 
                 //save FakturaZapis to db
                 await _dbService.SaveItemAsync(FakturaZapis);
-                await DisplayAlert("Eksport XML", "Plik XML został zapisany", "OK");
+                await DisplayAlert("Wysyłka faktury do Ksef", "Wysłano pomyślnie", "OK");
 
             }
             catch (Exception ex)

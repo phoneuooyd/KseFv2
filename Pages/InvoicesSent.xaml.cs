@@ -21,6 +21,10 @@ public partial class InvoicesSent : ContentPage
         invoices = _dbService.GetItemsAsync<BaseFaktura>().Result;
         BindingContext = _viewModel;
     }
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
 
     private void OnInvoiceAdded(object sender, BaseFaktura invoice)
     {
