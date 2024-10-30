@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KseF.Pages.MyProductsPage"
-             Title="MyProducts">
+             x:Class="KseF.Pages.InvoicesSent"
+             Title="Sent Invoices">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="&lt;-" 
@@ -12,29 +12,21 @@
 
     <ScrollView>
         <VerticalStackLayout>
-            <HorizontalStackLayout >
-                <Button Text="Dodaj Produkt" 
-                 FontSize="Large"
-                 Clicked="OnAddProductButtonClicked" 
-                 Padding="10"
-                 Margin="10"/>
-            </HorizontalStackLayout>
-
-
-            <Grid  BackgroundColor="LightGray">
+            <Grid BackgroundColor="LightGray">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Text="Nazwa" FontSize="Small" Margin="10"/>
-                <Label Grid.Column="3" Text="Cena" FontSize="Small"  Margin="10"/>
+                <Label Grid.Column="0" Text="Invoice Number" FontSize="Small" Margin="10"/>
+                <Label Grid.Column="1" Text="Date" FontSize="Small" Margin="10"/>
+                <Label Grid.Column="2" Text="Client" FontSize="Small" Margin="10"/>
             </Grid>
-
-            <ListView x:Name="ProductsListView" 
-               ItemsSource="{Binding Products}" 
-               HasUnevenRows="True" 
-               ItemTapped="OnProductTapped">
+            <ListView 
+        x:Name="InvoicesSentListView" 
+        ItemsSource="{Binding Invoices}" 
+        HasUnevenRows="True" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -42,15 +34,16 @@
                                 <SwipeView.RightItems>
                                     <SwipeItems Mode="Reveal">
                                         <SwipeItem
-                                     Text="Usuń"
-                                     BackgroundColor="Red"
-                                     Invoked="OnDeleteSwipeItemInvoked"
-                                     CommandParameter="{Binding .}"/>
+                                    Text="Usuń"
+                                    BackgroundColor="Red"
+                                    Invoked="OnDeleteSwipeItemInvoked"
+                                    CommandParameter="{Binding .}"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
 
                                 <Grid Padding="5">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
                                         <ColumnDefinition Width="2*" />
                                         <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
@@ -59,8 +52,9 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <Label Grid.Column="0" Text="{Binding Nazwa}" FontSize="Medium" Margin="10"/>
-                                    <Label Grid.Column="3" Text="{Binding Cena}" FontSize="Medium" Margin="10"/>
+                                    <Label Grid.Column="0" Text="{Binding NumerFaktury}" FontSize="Medium" Margin="10"/>
+                                    <Label Grid.Column="1" Text="{Binding DataWystawienia}" FontSize="Medium" Margin="10"/>
+                                    <Label Grid.Column="2" Text="{Binding NazwaNabywcy}" FontSize="Medium" Margin="10"/>
                                 </Grid>
                             </SwipeView>
                         </ViewCell>

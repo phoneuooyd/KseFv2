@@ -79,9 +79,17 @@ namespace KseF.Services
 			return await _dbConnection.DeleteAsync(item);
 		}
 
+        public async Task<List<ClientEntities>> GetClientsByBusinessEntityIdAsync(Guid businessEntityId)
+        {
+            return await _dbConnection.Table<ClientEntities>()
+                                      .Where(c => c.MyBusinessEntityId == businessEntityId)
+                                      .ToListAsync();
+        }
+
+
 #if DEBUG
 
-		public async Task AddTestData()
+        public async Task AddTestData()
 		{
 
             var MBECount = await _dbConnection.Table<MyBusinessEntities>().CountAsync();
@@ -92,9 +100,10 @@ namespace KseF.Services
 			{
                 var myBusinessEntity1 = new MyBusinessEntities
                 {
+                    Id = Guid.NewGuid(),
                     NazwaSkrocona = "Test1",
                     NazwaPelna = "Test1",
-                    Nip = "1234567890",
+                    Nip = "9513128170",
                     Ulica = "Test",
                     NrDomu = "1",
                     KodPocztowy = "00-000",
@@ -108,8 +117,6 @@ namespace KseF.Services
                     Regon = "123456789",
                     Krs = "123456789",
                     Bdo = "123456789",
-                    IsPodmiot = true,
-                    IsTP = true,
                     IsDrukujStopke = true,
                     KodUS = "123456789",
                     ImieOsFiz = "Test",
@@ -121,9 +128,10 @@ namespace KseF.Services
 
                 var myBusinessEntity2 = new MyBusinessEntities
                 {
+                    Id = Guid.NewGuid(),
                     NazwaSkrocona = "Test2",
                     NazwaPelna = "Test2",
-                    Nip = "9876543210",
+                    Nip = "9513128170",
                     Ulica = "Test",
                     NrDomu = "1",
                     KodPocztowy = "00-000",
@@ -137,8 +145,6 @@ namespace KseF.Services
                     Regon = "123456789",
                     Krs = "123456789",
                     Bdo = "123456789",
-                    IsPodmiot = true,
-                    IsTP = true,
                     IsDrukujStopke = true,
                     KodUS = "123456789",
                     ImieOsFiz = "Test",
@@ -149,14 +155,17 @@ namespace KseF.Services
                 };
                 WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity1));
                 WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity2));
+                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity1);
+                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity2);
                 if (ClientCount <= 0)
                 {
-                    var testClient = new ClientEntities
+                    var testClient1 = new ClientEntities
                     {
                         MyBusinessEntityId = myBusinessEntity1.Id,
-                        NazwaPelna = "Test",
-                        NazwaSkrocona = "Test",
-                        NrKlienta = "123456789",
+                        IsPodmiot = true,
+                        NazwaPelna = "Test1",
+                        NazwaSkrocona = "Test1",
+                        NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
                         Nip = "1234567890",
@@ -171,10 +180,53 @@ namespace KseF.Services
                         AdresEmail = "",
                         Notatki = "Test",
                     };
-                    await SaveItemAsync<ClientEntities>(testClient);
+                    var testClient2 = new ClientEntities
+                    {
+                        MyBusinessEntityId = myBusinessEntity1.Id,
+                        IsPodmiot = true,
+                        NazwaPelna = "Test2",
+                        NazwaSkrocona = "Test2",
+                        NrKlienta = "5278733163",
+                        Imie = "Test",
+                        Nazwisko = "Test",
+                        Nip = "1234567890",
+                        Ulica = "Test",
+                        NrDomu = "1",
+                        KodPocztowy = "00-000",
+                        Miejscowosc = "Test",
+                        AdresSiedziby = "Test",
+                        AdresKorespondencyjny = "Test",
+                        NrRachunku = "1234567890",
+                        NrTelefonu = "123456789",
+                        AdresEmail = "",
+                        Notatki = "Test",
+                    };
+                    var testClient3 = new ClientEntities
+                    {
+                        MyBusinessEntityId = myBusinessEntity2.Id,
+                        IsPodmiot = true,
+                        NazwaPelna = "Test3",
+                        NazwaSkrocona = "Test3",
+                        NrKlienta = "5278733163",
+                        Imie = "Test",
+                        Nazwisko = "Test",
+                        Nip = "1234567890",
+                        Ulica = "Test",
+                        NrDomu = "1",
+                        KodPocztowy = "00-000",
+                        Miejscowosc = "Test",
+                        AdresSiedziby = "Test",
+                        AdresKorespondencyjny = "Test",
+                        NrRachunku = "1234567890",
+                        NrTelefonu = "123456789",
+                        AdresEmail = "",
+                        Notatki = "Test",
+                    };
+
+                    await SaveItemAsync<ClientEntities>(testClient1);
+                    await SaveItemAsync<ClientEntities>(testClient2);
+                    await SaveItemAsync<ClientEntities>(testClient3);
                 }
-                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity1);
-                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity2);
             }
             
             if(ProductCount <= 0)
@@ -188,6 +240,7 @@ namespace KseF.Services
                     JednostkaMiary = EnumLibrary.JednostkaMiary.Szt,
                     RodzajPozycji = EnumLibrary.RodzajPozycji.Towar,
                     StawkaPodatku = EnumLibrary.StawkiPodatkuPL.Item23,
+                    GTU = 0
                 };
                 await SaveItemAsync<Product>(testProduct);
             }

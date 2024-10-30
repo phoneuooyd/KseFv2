@@ -11,7 +11,7 @@ namespace KseF.Services
 {
 	public class XmlCreationService
 	{
-		public async Task CreateDocument_FA2(BaseFaktura Faktura, MyBusinessEntities entities)
+		public async Task<BaseFaktura> CreateDocument_FA2(BaseFaktura Faktura, MyBusinessEntities entities)
 		{
 			//Copilot look at Models.Invoice_FA_2.Faktura class to assign properties
 			Models.Invoice_FA_2.Faktura FakturaKsef = new Models.Invoice_FA_2.Faktura();
@@ -318,8 +318,12 @@ namespace KseF.Services
             try
             {
 				await XmlCreationService.SendInvoiceToKsef(FakturaKsefXML, Faktura, entities);
-			}
-			catch (Exception ex)
+				Faktura.XMLFakturyKSeF = FakturaKsefXML;
+
+                return Faktura;
+
+            }
+            catch (Exception ex)
 			{
 				// Logowanie błędu
 				throw new ApplicationException("Błąd podczas wysyłania faktury do KSeF w XmlCreatinService", ex);

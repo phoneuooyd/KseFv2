@@ -24,6 +24,7 @@ namespace KseF
 			builder.Services.AddTransient<MyClientsPage>();
             builder.Services.AddTransient<MyBusinessEntitiesPage>();
             builder.Services.AddTransient<MyProductsPage>();
+            builder.Services.AddTransient<InvoicesSent>();
 			builder.Services.AddTransient<SendInvoiceToKsef>();
 			builder.Services.AddTransient<AddClientEntityPage>();
 			builder.Services.AddTransient<AddProductPage>();

@@ -15,7 +15,6 @@ namespace KseF.Models
 		public string NazwaSkrocona { get; set; } = "";
         public string? NazwaPelna { get; set; } = "";
         public string Nip { get; set; } = "";
-
 		public string Ulica { get; set; } = "";
 		public string NrDomu { get; set; } = "";
 		public string? NrLokalu { get; set; } = "";
@@ -34,9 +33,6 @@ namespace KseF.Models
 		public string? Regon { get; set; } = "";
 		public string? Krs { get; set; } = "";
 		public string? Bdo { get; set; } = "";
-
-		public bool IsPodmiot { get; set; } = false;
-		public bool IsTP { get; set; } = false;
 		public bool IsDrukujStopke { get; set; } = true;
 
 		public string? KodUS { get; set; }
@@ -45,7 +41,6 @@ namespace KseF.Models
 		public DateTime? DataUrodzeniaOF { get; set; }
 		public EnumLibrary.FormaOpodatkowania? FormaOpodatkowania { get; set; } = EnumLibrary.FormaOpodatkowania.ZasadyOgole;
 		public string? StopkaFaktury { get; set; } = "";
-
 		public string? TokenKSeF { get; set; } = "D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29";
 	}
 
@@ -57,5 +52,6 @@ namespace KseF.Models
 		public string? NrKlienta { get; set; } = "";
 		public string? Imie { get; set; } = "";
 		public string? Nazwisko { get; set; } = "";
-	}
+        public bool IsPodmiot { get; set; } = false;
+    }
 }

@@ -245,7 +245,6 @@ namespace KseF.Services
 			{
 				throw new ApplicationException("Błąd podczas zamykania sesji z KSeF.", ex);
 			}
-	
 		}
 
 		protected virtual void Dispose(bool disposing)

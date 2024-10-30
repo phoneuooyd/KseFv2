@@ -20,5 +20,7 @@ namespace KseF.Interfaces
 		Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new();
 		Task<MyBusinessEntities> SetBusinessEntityToContext(MyBusinessEntities myBusinessEntitity);
 		Task<MyBusinessEntities> GetBusinessEntityFromContext();
-	}
+		Task<List<ClientEntities>> GetClientsByBusinessEntityIdAsync(Guid businessEntityId);
+
+    }
 }

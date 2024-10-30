@@ -21,7 +21,12 @@ public partial class MyBusinessEntitiesPage : ContentPage
 		BindingContext = _viewModel;
 	}
 
-	private async void OnAddMyBusinessEntityButtonClicked(object sender, EventArgs e)
+    private async void OnBackButtonClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
+
+    private async void OnAddMyBusinessEntityButtonClicked(object sender, EventArgs e)
 	{
 		var newBusinessEntityPage = new AddMyBusinessEntityPage(_dbService, _viewModel); // Przeka¿ ViewModel do nowej strony
 		newBusinessEntityPage.BusinessEntityAdded += OnBusinessEntityAdded; // Zarejestruj handler eventu

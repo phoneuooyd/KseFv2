@@ -4,60 +4,70 @@
              x:Class="KseF.Pages.MyClientsPage"
              Title="My Clients">
 
-    <VerticalStackLayout>
-        <!-- Button to navigate to AddClientEntityPage -->
-        <HorizontalStackLayout>
-            <Button Text="Dodaj Klienta"
-                    FontSize="Large"
-                    Clicked="OnAddClientEntityButtonClicked"
-                    Padding="10"
-                    Margin="10"/>
-        </HorizontalStackLayout>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Powrót" 
+                     IconImageSource="back_arrow_icon.png"
+                     Clicked="OnBackButtonClicked"/>
+    </ContentPage.ToolbarItems>
 
-        <Grid  BackgroundColor="LightGray">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- Button to navigate to AddClientEntityPage -->
+            <HorizontalStackLayout>
+                <Button Text="Dodaj Klienta"
+                FontSize="Large"
+                Clicked="OnAddClientEntityButtonClicked"
+                Padding="10"
+                Margin="10"/>
+            </HorizontalStackLayout>
 
-            <Label Grid.Column="0" Text="Nazwa skrócona" FontSize="Small" Margin="10"/>
-            <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
-        </Grid>
+            <Grid  BackgroundColor="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
 
-        <ListView x:Name="ClientsListView"
-              ItemsSource="{Binding ClientEntities}"
-              HasUnevenRows="True"
-              ItemTapped="OnClientTapped">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItems Mode="Reveal">
-                                    <SwipeItem
-                                        Text="Usuń"
-                                        BackgroundColor="Red"
-                                        Invoked="OnDeleteSwipeItemInvoked"
-                                        CommandParameter="{Binding .}"/>
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            
-                            <Grid Padding="5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Text="Nazwa skrócona" FontSize="Small" Margin="10"/>
+                <Label Grid.Column="1" Text="NIP" FontSize="Small"  Margin="10"/>
+            </Grid>
 
-                                <Label Grid.Column="0" Text="{Binding NazwaSkrocona}" FontSize="Medium" Margin="10"/>
-                                <Label Grid.Column="1" Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
-                            </Grid>
-                        </SwipeView>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+            <ListView 
+        x:Name="ClientsListView"
+        ItemsSource="{Binding ClientEntities}"
+        HasUnevenRows="True"
+        ItemTapped="OnClientTapped">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem
+                                    Text="Usuń"
+                                    BackgroundColor="Red"
+                                    Invoked="OnDeleteSwipeItemInvoked"
+                                    CommandParameter="{Binding .}"/>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+
+                                <Grid Padding="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding NazwaSkrocona}" FontSize="Medium" Margin="10"/>
+                                    <Label Grid.Column="1" Text="{Binding Nip}" FontSize="Medium" Margin="10"/>
+                                </Grid>
+                            </SwipeView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

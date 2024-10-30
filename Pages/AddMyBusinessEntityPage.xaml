@@ -77,16 +77,16 @@
 
                     <Label Text="Dane osobowe i kontaktowe" FontAttributes="Bold"  FontSize="Medium" Padding="0,0,0,20"/>
 
-                    <Label Text="Imię osoby fizycznej" />
-                    <Entry Placeholder="Wprowadź imię OF" x:Name="ImieOFEntry"/>
+                    <Label Text="Imię osoby na FV" />
+                    <Entry Placeholder="Wprowadź imię" x:Name="ImieOFEntry"/>
 
-                    <Label Text="Nazwisko osoby fizycznej" />
-                    <Entry Placeholder="Wprowadź nazwisko OF" x:Name="NazwiskoOFEntry"/>
+                    <Label Text="Nazwisko osoby na FV" />
+                    <Entry Placeholder="Wprowadź nazwisko" x:Name="NazwiskoOFEntry"/>
 
-                    <Label Text="Data Urodzenia osoby fizycznej" />
+                    <Label Text="Data urodzenia osoby na FV" />
                     <DatePicker x:Name="DataUrodzeniaOFPicker"/>
 
-                    <Label Text="Nr Telefonu" />
+                    <Label Text="Numer telefonu" />
                     <Entry Placeholder="Wprowadź nr telefonu" x:Name="NrTelefonuEntry"/>
 
                     <Label Text="Adres Email" />
@@ -121,12 +121,6 @@
 
                     <Label Text="BDO" />
                     <Entry Placeholder="Wprowadź BDO" x:Name="BdoEntry"/>
-
-                    <Label Text="Czy Podmiot?" />
-                    <Switch x:Name="IsPodmiotSwitch" />
-
-                    <Label Text="Czy TP?" />
-                    <Switch x:Name="IsTPSwitch" />
                 </VerticalStackLayout>
             </Frame>
             <Frame 

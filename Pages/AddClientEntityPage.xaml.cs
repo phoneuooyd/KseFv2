@@ -8,6 +8,7 @@ using Microsoft.Maui;
 using Models;
 using System.Net;
 
+
 namespace KseF.Pages
 {
 	public partial class AddClientEntityPage : ContentPage
@@ -25,6 +26,7 @@ namespace KseF.Pages
 			_viewModel = viewModel;
 
 			Client = new();
+			IsPodmiotSwitch.IsToggled = true;
 		}
 
 		public AddClientEntityPage(ILocalDbService dbService, MyClientsViewModel viewModel, ClientEntities client)
@@ -35,7 +37,8 @@ namespace KseF.Pages
 
 			Client = client;
 
-			NazwaSkroconaEntry.Text = client.NazwaSkrocona;
+            IsPodmiotSwitch.IsToggled = client.IsPodmiot;
+            NazwaSkroconaEntry.Text = client.NazwaSkrocona;
 			NazwaPelnaEntry.Text = client.NazwaPelna;
 			NipEntry.Text = client.Nip;
 			UlicaEntry.Text = client.Ulica;
@@ -54,9 +57,19 @@ namespace KseF.Pages
 			NazwiskoEntry.Text = client.Nazwisko;
 		}
 
-		private async void OnBackButtonClicked(object sender, EventArgs e)
+        private void OnIsPodmiotSwitchToggled(object sender, ToggledEventArgs e)
+        {
+            bool isPodmiot = e.Value;
+
+            // Ustawienie w³aœciwoœci IsEnabled dla kontrolek na podstawie stanu Switch
+            NazwaSkroconaEntry.IsEnabled = isPodmiot;
+            NazwaPelnaEntry.IsEnabled = isPodmiot;
+            NipEntry.IsEnabled = isPodmiot;
+        }
+
+        private async void OnBackButtonClicked(object sender, EventArgs e)
 		{
-			await Shell.Current.GoToAsync("//MainPage");
+			await Shell.Current.GoToAsync("//MyClientsPage");
 		}
 
 		private async void OnSaveButtonClicked(object sender, EventArgs e)
@@ -65,10 +78,11 @@ namespace KseF.Pages
            
             if (check is null)
 			{
-                await DisplayAlert(Title, $"typ {check} dupa ", "OK");
                 var newClient = new ClientEntities
-				{
-					NazwaSkrocona = NazwaSkroconaEntry.Text,
+                {
+
+                    IsPodmiot = IsPodmiotSwitch.IsToggled,
+                    NazwaSkrocona = NazwaSkroconaEntry.Text,
 					NazwaPelna = NazwaPelnaEntry.Text,
 					Nip = NipEntry.Text,
 					Ulica = UlicaEntry.Text,
@@ -84,8 +98,9 @@ namespace KseF.Pages
 					Notatki = NotatkiEditor.Text,
 					NrKlienta = NrKlientaEntry.Text,
 					Imie = ImieEntry.Text,
-					Nazwisko = NazwiskoEntry.Text
-				};
+					Nazwisko = NazwiskoEntry.Text,
+					MyBusinessEntityId = _dbService.GetBusinessEntityFromContext().Result.Id
+                };
 
 				try { await _dbService.SaveItemAsync<ClientEntities>(newClient); ClientAdded?.Invoke(this, newClient); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
@@ -93,7 +108,7 @@ namespace KseF.Pages
 			}
 			else
 			{
-                await DisplayAlert(Title, $"typ {check.GetType()} dupa ", "OK");
+				Client.IsPodmiot = IsPodmiotSwitch.IsToggled;
                 Client.NazwaSkrocona = NazwaSkroconaEntry.Text;
 				Client.NazwaPelna = NazwaPelnaEntry.Text;
 				Client.Nip = NipEntry.Text;
@@ -111,8 +126,9 @@ namespace KseF.Pages
 				Client.NrKlienta = NrKlientaEntry.Text;
 				Client.Imie = ImieEntry.Text;
 				Client.Nazwisko = NazwiskoEntry.Text;
+				Client.MyBusinessEntityId = _dbService.GetBusinessEntityFromContext().Result.Id;
 
-				try { await _dbService.EditItemAsync<ClientEntities>(Client); }
+                try { await _dbService.EditItemAsync<ClientEntities>(Client); }
 				catch (Exception ex) { await DisplayAlert("Error", ex.Message, "OK"); }
 				await DisplayAlert($"Sukces", $"Edytowano firmê {Client.NazwaSkrocona}", "OK");
 			}

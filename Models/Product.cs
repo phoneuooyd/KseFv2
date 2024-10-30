@@ -14,10 +14,10 @@ namespace KseF.Models.Invoice_FA_2
 		public string? Opis { get; set; }
 		public decimal Cena { get; set; }
 		public string Kategoria { get; set; }
-		public EnumLibrary.JednostkaMiary JednostkaMiary { get; set; }
-		public EnumLibrary.RodzajPozycji RodzajPozycji { get; set; }
+		public EnumLibrary.JednostkaMiary? JednostkaMiary { get; set; }
+		public EnumLibrary.RodzajPozycji? RodzajPozycji { get; set; }
 		public EnumLibrary.StawkiPodatkuPL StawkaPodatku { get; set; }
-		public Invoice_FA_2.TGTU GTU { get; set; }
+		public int? GTU { get; set; }
 
     }
 }
