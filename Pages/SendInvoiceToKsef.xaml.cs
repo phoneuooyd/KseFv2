@@ -43,7 +43,8 @@ namespace KseF
             _viewModel = new SendInvioceViewModel(_dbService);
             Invoice = new BaseFaktura();
             MyBusinessEntity =  _dbService.GetBusinessEntityFromContext().Result;
-            Clients = _dbService.GetItemsAsync<ClientEntities>().Result;
+            var loadingClients = _dbService.GetItemsAsync<ClientEntities>().Result;
+            Clients = loadingClients;
             Products = _dbService.GetItemsAsync<Product>().Result;
             DateTime dataWystawienia = DateTime.Now;
 
@@ -199,7 +200,7 @@ namespace KseF
                     grossPriceEntry.Text = cenaBrutto.ToString("F2");
                 }
             }
-            await DisplayAlert("Produkt", $"Wybrano produkt: {selectedProduct.Nazwa}", "OK");
+            //await DisplayAlert("Produkt", $"Wybrano produkt: {selectedProduct.Nazwa}", "OK");
         }
 
         private void UpdateCLientRows()
@@ -407,12 +408,13 @@ namespace KseF
             }
         }
 
-        public List<PozycjeFaktury> GetPozycjeFaktury()
+        public (List<PozycjeFaktury>, decimal) GetPozycjeFaktury()
         {
             var pozycjeFakturyList = new List<PozycjeFaktury>();
             var nrPozycji = 1;
+            decimal sumaCalkowita = 0;
 
-			foreach (var rowPair in rowElementsMap)
+            foreach (var rowPair in rowElementsMap)
             {
                 var rowGuid = rowPair.Key;
                 var rowElements = rowPair.Value;
@@ -434,7 +436,7 @@ namespace KseF
                 {
                     NazwaTowaruUslugi = pozycjaItem.Nazwa,
                     Opis = pozycjaItem.Opis!,
-                    TowarId = nrPozycji + 10000,
+                    TowarId = nrPozycji,
 					IloscTowaruUslugi = (decimal)quantityEntry.Value,
                     CenaJednostkowaNetto = decimal.TryParse(priceEntry.Text, NumberStyles.Any, culture, out decimal priceNetto) ? priceNetto : 0,
                     Vat = MapujPodatekVat(vatPicker.SelectedItem),
@@ -446,17 +448,17 @@ namespace KseF
                     NrPozycji = nrPozycji
                 };
 
+                sumaCalkowita += pozycja.WartoscBrutto;
                 pozycjeFakturyList.Add(pozycja);
 				nrPozycji++;
 			}
-
-            return pozycjeFakturyList;
+            return (pozycjeFakturyList, sumaCalkowita);
         }
 
-        public List<Rata> GetRaty()
+        public List<Rata> GetRaty(decimal sumaCalkowita)
         {
             var ratyList = new List<Rata>();
-            var raty = new Rata { DataZapłatyRaty = DateTime.Now.Date, KwotaRaty = 123, RataId = Guid.NewGuid(), FakturaId = Guid.NewGuid() };
+            var raty = new Rata { DataZapłatyRaty = DateTime.Now.Date, KwotaRaty = sumaCalkowita, RataId = Guid.NewGuid(), FakturaId = Guid.NewGuid() };
             ratyList.Add(raty);
             return ratyList;
         }
@@ -472,6 +474,7 @@ namespace KseF
 
                 myCompany.Nip = "9513128170";
                 myClient.Nip = "5278733163";
+                decimal sumaCalkowita = 0;
 
                 Invoice.DataWystawienia = DateTime.Now.Date;
 
@@ -506,8 +509,8 @@ namespace KseF
                 // Dane FV
                 Invoice.NrKlienta = "1";
                 Invoice.KodWaluty = "PLN";
-                Invoice.PozycjeFaktury = GetPozycjeFaktury();
-                Invoice.ZaplaconeRaty = GetRaty();
+                (Invoice.PozycjeFaktury, sumaCalkowita) = GetPozycjeFaktury();
+                Invoice.ZaplaconeRaty = GetRaty(sumaCalkowita);
                 Invoice.DoZapłatyPozostało = 0;
                 Invoice.TypFaktury = EnumLibrary.TypFaktury.Sprzedaz;
                 Invoice.FormaPlatnosci = "Przelew";
