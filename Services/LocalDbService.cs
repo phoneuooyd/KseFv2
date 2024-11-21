@@ -91,7 +91,6 @@ namespace KseF.Services
 
         public async Task AddTestData()
 		{
-
             var MBECount = await _dbConnection.Table<MyBusinessEntities>().CountAsync();
             var ClientCount = await _dbConnection.Table<ClientEntities>().CountAsync();
             var ProductCount = await _dbConnection.Table<Product>().CountAsync();
@@ -126,37 +125,9 @@ namespace KseF.Services
                     StopkaFaktury = "Test",
                 };
 
-                var myBusinessEntity2 = new MyBusinessEntities
-                {
-                    Id = Guid.NewGuid(),
-                    NazwaSkrocona = "Test2",
-                    NazwaPelna = "Test2",
-                    Nip = "9513128170",
-                    Ulica = "Test",
-                    NrDomu = "1",
-                    KodPocztowy = "00-000",
-                    Miejscowosc = "Test",
-                    AdresSiedziby = "Test",
-                    AdresKorespondencyjny = "Test",
-                    NrRachunku = "1234567890",
-                    NrTelefonu = "123456789",
-                    AdresEmail = "",
-                    Notatki = "Test",
-                    Regon = "123456789",
-                    Krs = "123456789",
-                    Bdo = "123456789",
-                    IsDrukujStopke = true,
-                    KodUS = "123456789",
-                    ImieOsFiz = "Test",
-                    NazwiskoOsFiz = "Test",
-                    DataUrodzeniaOF = DateTime.Now,
-                    FormaOpodatkowania = EnumLibrary.FormaOpodatkowania.PodatekLiniowy,
-                    StopkaFaktury = "Test",
-                };
                 WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity1));
-                WeakReferenceMessenger.Default.Send(new MessageSender<MyBusinessEntities>(myBusinessEntity2));
                 await SaveItemAsync<MyBusinessEntities>(myBusinessEntity1);
-                await SaveItemAsync<MyBusinessEntities>(myBusinessEntity2);
+
                 if (ClientCount <= 0)
                 {
                     var testClient1 = new ClientEntities
@@ -168,7 +139,7 @@ namespace KseF.Services
                         NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
-                        Nip = "1234567890",
+                        Nip = "5278733163",
                         Ulica = "Test",
                         NrDomu = "1",
                         KodPocztowy = "00-000",
@@ -189,7 +160,7 @@ namespace KseF.Services
                         NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
-                        Nip = "1234567890",
+                        Nip = "5278733163",
                         Ulica = "Test",
                         NrDomu = "1",
                         KodPocztowy = "00-000",
@@ -203,14 +174,14 @@ namespace KseF.Services
                     };
                     var testClient3 = new ClientEntities
                     {
-                        MyBusinessEntityId = myBusinessEntity2.Id,
+                        MyBusinessEntityId = myBusinessEntity1.Id,
                         IsPodmiot = true,
                         NazwaPelna = "Test3",
                         NazwaSkrocona = "Test3",
                         NrKlienta = "5278733163",
                         Imie = "Test",
                         Nazwisko = "Test",
-                        Nip = "1234567890",
+                        Nip = "5278733163",
                         Ulica = "Test",
                         NrDomu = "1",
                         KodPocztowy = "00-000",

@@ -24,7 +24,6 @@ namespace KseF
         private Dictionary<Guid, List<View>> rowElementsMap = new Dictionary<Guid, List<View>>();
         
         MyBusinessEntities MyBusinessEntity { get; set; }
-        public KodyWalut currencyCode { get; set; }
         public BaseFaktura Invoice { get; set; }
         public List<ClientEntities> Clients { get; set; }
         public List<Product> Products { get; set; }
@@ -248,7 +247,6 @@ namespace KseF
 
             rowCount++;
 
-            //LoadEnumValues<KodyWalut>(currencyPicker, "Złoty polski");
             LoadEnumValues<StawkiPodatkuPL>(vatPicker);
             nameEntry.ItemsSource = Products;
             nameEntry.ItemDisplayBinding = new Binding("Nazwa");
@@ -364,7 +362,6 @@ namespace KseF
                     throw new ArgumentOutOfRangeException(nameof(rowGuid), "Invalid GUID");
                 }
 
-                // Pobierz elementy wiersza do usunięcia
                 var childrenToRemove = rowElementsMap[rowGuid];
 
                 foreach (var child in childrenToRemove)
@@ -379,7 +376,6 @@ namespace KseF
                 rowElementsMap.Remove(rowGuid);
                 rowCount--;
 
-                // Dodaj przycisk "Usuń" do nowego ostatniego wiersza (jeśli istnieje)
                 if (transakcjaGrid.Children.Count >= 13) //Ilosc elementow w gridzie
                 {
                     var lastRowGuid = rowGuidMap.FirstOrDefault(x => x.Value == rowCount - 1).Key;
@@ -468,12 +464,8 @@ namespace KseF
             {
                 exportButton.IsEnabled = false;
 
-                var selectedVatRate = stawkaVatPicker.SelectedIndex >= 0 ? stawkaVatPicker.Items[stawkaVatPicker.SelectedIndex] : null;
-                MyBusinessEntities myCompany = new MyBusinessEntities();
-                ClientEntities myClient = new ClientEntities();
-
-                myCompany.Nip = "9513128170";
-                myClient.Nip = "5278733163";
+               //myCompany.Nip = NipSprzedawcy.Text;//"9513128170";
+               // myClient.Nip = NipNabywcy.Text;//"5278733163";
                 decimal sumaCalkowita = 0;
 
                 Invoice.DataWystawienia = DateTime.Now.Date;
@@ -493,7 +485,7 @@ namespace KseF
                 Invoice.TelefonSprzedawcy = TelefonSprzedawcy.Text;
 
                 // Nabywca
-                Invoice.NipNabywcy = "5278733163";
+                Invoice.NipNabywcy = NipNabywcy.Text;
                 Invoice.NazwaNabywcy = NazwaNabywcy.Text;
                 Invoice.NabywcaAdresL1 = ulicaNabywcy.Text + " " + nrDomuNabywcy.Text + " " + nrLokaluNabywcy.Text;
                 Invoice.NabywcaAdresL2 = kodPocztowyNabywcy.Text + " " + miejscowoscNabywcy.Text;
@@ -516,19 +508,18 @@ namespace KseF
                 Invoice.FormaPlatnosci = "Przelew";
                 Invoice.NumerFaktury = NrFaktury.Text;
 
-                XmlCreationService xmlCreationService = new XmlCreationService();
+                XmlCreationService xmlCreationService = new XmlCreationService(_dbService);
+                BaseFaktura FakturaZapis = await xmlCreationService.CreateDocument_FA2(Invoice);
 
-                BaseFaktura FakturaZapis = await xmlCreationService.CreateDocument_FA2(Invoice, myCompany);
-
-                //save FakturaZapis to db
                 await _dbService.SaveItemAsync(FakturaZapis);
                 await DisplayAlert("Wysyłka faktury do Ksef", "Wysłano pomyślnie", "OK");
-
             }
+
             catch (Exception ex)
             {
-                await DisplayAlert("Błąd", $"Wystąpił błąd podczas eksportu: {ex.Message}", "OK");
+                await DisplayAlert("Błąd", $"Wystąpił błąd podczas eksportu: {ex.Message}, {ex.InnerException}, {ex.TargetSite}", "OK");
             }
+
             finally
             {
                 exportButton.IsEnabled = true;
@@ -581,27 +572,5 @@ namespace KseF
                 WysokośćPodatku = wysokoscPodatku
             };
         }
-
-        /* TO DO LATER
-	  private void OnCountrySelected(object sender, EventArgs e)
-	  {
-		  var selectedCountryIndex = krajSprzedawcaPicker.SelectedIndex;
-		  if (selectedCountryIndex >= 0)
-		  {
-			  countryCode = (CountryCodes)selectedCountryIndex;
-		  }
-
-		  DisplayAlert("Kraj", $"Wybrano kraj: {countryCode}", "OK");
-	  }
-
-        
-        void OnCurrencySelected(object sender, EventArgs e)
-        {
-            var selectedCurrencyIndex = currencyPicker.SelectedIndex;
-            if (selectedCurrencyIndex >= 0)
-            {
-                currencyCode = (KodyWalut)selectedCurrencyIndex;
-            }
-        }*/
     }
 }

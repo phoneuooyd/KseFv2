@@ -67,12 +67,20 @@ namespace KseF.Services
 
 		public async Task AuthenticateAsync(string nip, string authorisationToken)
 		{
-			(var challenge, var timestamp) = await AuthorisationChallengeAsync(nip);
-			var sessionToken = await InitTokenAsync(nip, authorisationToken, challenge, timestamp);
-			httpClient.DefaultRequestHeaders.Add("SessionToken", sessionToken);
-			isActiveConnection = true;
-			await Task.Delay(1000); 
-		}
+			try
+			{
+                (var challenge, var timestamp) = await AuthorisationChallengeAsync(nip);
+                var sessionToken = await InitTokenAsync(nip, authorisationToken, challenge, timestamp);
+                httpClient.DefaultRequestHeaders.Add("SessionToken", sessionToken);
+                isActiveConnection = true;
+                await Task.Delay(1000);
+            }
+            catch (Exception ex)
+			{
+				throw new ApplicationException("Błąd podczas autoryzacji z KSeF.", ex);
+            }
+
+        }
 
 		private async Task<string> InitTokenAsync(string nip, string authorisationToken, string challenge, DateTime timestamp)
 		{
@@ -178,21 +186,6 @@ namespace KseF.Services
 				invoiceHeader.Currency = PropertyOrNull(invoiceHeaderListElement, "currency")?.GetString();
 				invoiceHeader.Type = PropertyOrNull(invoiceHeaderListElement, "invoiceType")?.GetString();
 				invoices.Add(invoiceHeader);
-			}
-			return invoices;
-		}
-
-		public async Task<IReadOnlyCollection<Models.InvoiceHeader>> GetInvoicesAsync(string type, string subject, DateTime dateFrom, DateTime dateTo)
-		{
-			var pageSize = 100;
-			var pageOffset = 0;
-			var invoices = new List<Models.InvoiceHeader>();
-			while (true)
-			{
-				var page = await GetInvoicesAsync(type, subject, dateFrom, dateTo, pageSize, pageOffset);
-				invoices.AddRange(page);
-				pageOffset += page.Count;
-				if (page.Count < pageSize) break;
 			}
 			return invoices;
 		}

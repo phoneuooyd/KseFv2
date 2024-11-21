@@ -1,4 +1,5 @@
-﻿using KseF.Models;
+﻿using KseF.Interfaces;
+using KseF.Models;
 using KseF.Models.Invoice_FA_2;
 using Models;
 using System.Text;
@@ -11,7 +12,15 @@ namespace KseF.Services
 {
 	public class XmlCreationService
 	{
-		public async Task<BaseFaktura> CreateDocument_FA2(BaseFaktura Faktura, MyBusinessEntities entities)
+		private MyBusinessEntities entities;
+        private readonly ILocalDbService _dbService;
+        public XmlCreationService(ILocalDbService dbService) 
+		{
+            _dbService = dbService;
+            var MBE = _dbService.GetBusinessEntityFromContext().Result;
+			entities = MBE;
+        }
+		public async Task<BaseFaktura> CreateDocument_FA2(BaseFaktura Faktura)
 		{
 			//Copilot look at Models.Invoice_FA_2.Faktura class to assign properties
 			Models.Invoice_FA_2.Faktura FakturaKsef = new Models.Invoice_FA_2.Faktura();
@@ -112,50 +121,11 @@ namespace KseF.Services
 			}
 			if (Faktura.KorektaDoFaktury != null)
 			{
-				FakturaKsef.Fa.PrzyczynaKorekty = Faktura.KorektaDoFaktury.PrzyczynaKorekty;
-				FakturaKsef.Fa.TypKorekty = TTypKorekty.Item2;
-				FakturaKsef.Fa.TypKorektySpecified = true;
-				FakturaKsef.Fa.DaneFaKorygowanej = new[] { new FakturaFADaneFaKorygowanej() };
-				FakturaKsef.Fa.DaneFaKorygowanej[0].DataWystFaKorygowanej = Faktura.KorektaDoFaktury.DataWystawienia;
-				FakturaKsef.Fa.DaneFaKorygowanej[0].NrFaKorygowanej = Faktura.KorektaDoFaktury.NumerFaktury;
-				if (String.IsNullOrEmpty(Faktura.KorektaDoFaktury.NrFakturyKSeF))
-				{
-					FakturaKsef.Fa.DaneFaKorygowanej[0].Items = new[] { (object)(sbyte)1 };
-					FakturaKsef.Fa.DaneFaKorygowanej[0].ItemsElementName = new[] { ItemsChoiceType6.NrKSeFN };
-				}
-				else
-				{
-					FakturaKsef.Fa.DaneFaKorygowanej[0].Items = new[] { (object)(sbyte)1, Faktura.KorektaDoFaktury.NrFakturyKSeF };
-					FakturaKsef.Fa.DaneFaKorygowanej[0].ItemsElementName = new[] { ItemsChoiceType6.NrKSeF, ItemsChoiceType6.NrKSeFFaKorygowanej };
-				}
+                //Korekty nie będą obsługiwane
+				throw new ApplicationException("Korekty nie są obsługiwane");
+            }
 
-				if (Faktura.KorektaDoFaktury.NazwaSprzedawcy != Faktura.NazwaSprzedawcy || Faktura.KorektaDoFaktury.DaneSprzedawcy != Faktura.DaneSprzedawcy)
-				{
-					FakturaKsef.Fa.Podmiot1K = new FakturaFAPodmiot1K();
-					FakturaKsef.Fa.Podmiot1K.DaneIdentyfikacyjne = new TPodmiot1();
-					FakturaKsef.Fa.Podmiot1K.DaneIdentyfikacyjne.Nazwa = Faktura.KorektaDoFaktury.NazwaSprzedawcy;
-					FakturaKsef.Fa.Podmiot1K.DaneIdentyfikacyjne.NIP = Faktura.KorektaDoFaktury.NipSprzedawcy;
-					FakturaKsef.Fa.Podmiot1K.Adres = new TAdres();
-					FakturaKsef.Fa.Podmiot1K.Adres.KodKraju = TKodKraju.PL;
-					FakturaKsef.Fa.Podmiot1K.Adres.AdresL1 = Faktura.KorektaDoFaktury.SprzedawcaAdresL1;
-					FakturaKsef.Fa.Podmiot1K.Adres.AdresL2 = Faktura.KorektaDoFaktury.SprzedawcaAdresL2;
-				}
-
-				if (Faktura.KorektaDoFaktury.NazwaNabywcy != Faktura.NazwaNabywcy || Faktura.KorektaDoFaktury.DaneNabywcy != Faktura.DaneNabywcy)
-				{
-					FakturaKsef.Fa.Podmiot2K = new[] { new FakturaFAPodmiot2K() };
-					FakturaKsef.Fa.Podmiot2K[0].DaneIdentyfikacyjne = new TPodmiot2();
-					FakturaKsef.Fa.Podmiot2K[0].DaneIdentyfikacyjne.Nazwa = Faktura.KorektaDoFaktury.NazwaNabywcy;
-					FakturaKsef.Fa.Podmiot2K[0].DaneIdentyfikacyjne.Items = FakturaKsef.Podmiot2.DaneIdentyfikacyjne.Items;
-					FakturaKsef.Fa.Podmiot2K[0].DaneIdentyfikacyjne.ItemsElementName = FakturaKsef.Podmiot2.DaneIdentyfikacyjne.ItemsElementName;
-					FakturaKsef.Fa.Podmiot2K[0].Adres = new TAdres();
-					FakturaKsef.Fa.Podmiot2K[0].Adres.KodKraju = TKodKraju.PL;
-					FakturaKsef.Fa.Podmiot2K[0].Adres.AdresL1 = Faktura.KorektaDoFaktury.NabywcaAdresL1;
-					FakturaKsef.Fa.Podmiot2K[0].Adres.AdresL2 = Faktura.KorektaDoFaktury.NabywcaAdresL1;
-				}
-			}
-
-			var faWiersze = new List<FakturaFAFaWiersz>();
+            var faWiersze = new List<FakturaFAFaWiersz>();
 			foreach (var pozycja in Faktura.PozycjeFaktury)
 			{
 				var fa2Wiersz = new FakturaFAFaWiersz();
@@ -172,23 +142,6 @@ namespace KseF.Services
                 fa2Wiersz.P_11ASpecified = true;
                 fa2Wiersz.P_11Vat = Math.Abs(pozycja.WartoscVat);
                 fa2Wiersz.P_11VatSpecified = true;
-
-                /*
-                if (pozycja.CzyWedlugCenBrutto)
-                {
-                    fa2Wiersz.P_9B = pozycja.CenaJednostkowaBrutto;
-                    fa2Wiersz.P_9BSpecified = true;
-                    fa2Wiersz.P_11A = Math.Abs(pozycja.WartoscBrutto);
-                    fa2Wiersz.P_11ASpecified = true; 
-                }
-                else            do pozniejszej implementacji
-                {
-                    fa2Wiersz.P_9A = pozycja.CenaNetto;
-                    fa2Wiersz.P_9ASpecified = true;
-                    fa2Wiersz.P_11 = Math.Abs(pozycja.WartoscNetto);
-                    fa2Wiersz.P_11Specified = true;
-                }
-                */
 
                 if (pozycja.GTU > 0)
 				{
@@ -281,47 +234,14 @@ namespace KseF.Services
 			FakturaKsef.Fa.FaWiersz = faWiersze.ToArray();
             FakturaKsef.Stopka = new FakturaStopka();
 			
-			if(entities.IsDrukujStopke)
-			{
-				if(!String.IsNullOrEmpty(entities.StopkaFaktury))
-				{
-					FakturaKsef.Stopka.Informacje = new[] { new FakturaStopkaInformacje() { StopkaFaktury = entities.StopkaFaktury } };
-				}
-				if(!String.IsNullOrEmpty(entities.Krs) || !String.IsNullOrEmpty(entities.Regon) || !String.IsNullOrEmpty(entities.Bdo))
-				{
-					FakturaKsef.Stopka.Rejestry = new[] { new FakturaStopkaRejestry() };
-					if (!String.IsNullOrEmpty(entities.Krs))
-					{
-						FakturaKsef.Stopka.Rejestry[0].KRS = entities.Krs;
-					}
-					if (!String.IsNullOrEmpty(entities.Regon))
-					{
-						FakturaKsef.Stopka.Rejestry[0].REGON = entities.Regon;
-					}
-					if (!String.IsNullOrEmpty(entities.Bdo))
-					{
-						FakturaKsef.Stopka.Rejestry[0].BDO = entities.Bdo;
-					}
-				}
-			}
-
-			
 			string FakturaKsefXML = await CreateReadyXml(FakturaKsef);
-            /*
-			string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "faktura.xml");
-			using (StreamWriter sw = new StreamWriter(filePath))
-			{
-				await sw.WriteAsync(FakturaKsefXML);
-			} 
-			*/
-
+			
             try
             {
 				await XmlCreationService.SendInvoiceToKsef(FakturaKsefXML, Faktura, entities);
 				Faktura.XMLFakturyKSeF = FakturaKsefXML;
 
                 return Faktura;
-
             }
             catch (Exception ex)
 			{
@@ -357,8 +277,8 @@ namespace KseF.Services
 		{
 			try
 			{
-				entities.TokenKSeF = "D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29";
-				entities.Nip = "9513128170";
+				//entities.TokenKSeF = "D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29";
+				//entities.Nip = "9513128170";
 
 				using var api = new KsefApiService();
 				var cts = new CancellationTokenSource();
