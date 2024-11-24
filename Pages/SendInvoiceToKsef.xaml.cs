@@ -14,6 +14,7 @@ using KseF.Interfaces;
 using KseF.Models.ViewModels;
 using KseF.Controls;
 using System.Globalization;
+using Microsoft.Maui;
 
 namespace KseF
 {
@@ -460,6 +461,42 @@ namespace KseF
         }
         public async void OnCreateDocumentClicked(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(NipSprzedawcy.Text) || string.IsNullOrWhiteSpace(NipNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole NIP jest wymagane.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(EmailSprzedawcy.Text) || string.IsNullOrWhiteSpace(EmailNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole Email jest wymagane.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(miejscowoscSprzedawcy.Text) || string.IsNullOrWhiteSpace(miejscowoscNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole miejscowość jest wymagane.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(ulicaSprzedawcy.Text) || string.IsNullOrWhiteSpace(ulicaNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole ulica jest wymagane.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(kodPocztowySprzedawcy.Text) || string.IsNullOrWhiteSpace(kodPocztowyNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole kod pocztowy jest wymagane.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(NazwaSprzedawcy.Text) || string.IsNullOrWhiteSpace(NazwaNabywcy.Text))
+            {
+                DisplayAlert("Błąd", "Pole nazwa sprzedawcy/nabywcy jest wymagane.", "OK");
+                return;
+            }
+
             try
             {
                 exportButton.IsEnabled = false;
