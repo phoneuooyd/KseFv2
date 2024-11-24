@@ -216,6 +216,5 @@ namespace KseF.Services
                 await SaveItemAsync<Product>(testProduct);
             }
 #endif
-        }
-	}
+    }
 }
