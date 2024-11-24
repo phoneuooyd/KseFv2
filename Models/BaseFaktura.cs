@@ -81,6 +81,8 @@ namespace KseF.Models
         public string NrFakturyKSeF { get; set; } = "";
         public string URLFakturyKSeF { get; set; } = "";
         public string XMLFakturyKSeF { get; set; } = "";
+        public string NumerReferencyjnyKSeF { get; set; } = "";
+        public int? StatusKSeF { get; set; }
         public DateTime? DataFakturyKSeF { get; set; }
 
     }
