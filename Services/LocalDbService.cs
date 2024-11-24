@@ -14,70 +14,70 @@ using KseF.Models.ViewModels;
 
 namespace KseF.Services
 {
-	public class LocalDbService : ILocalDbService
-	{
-		private const string DB_NAME = "KseF.db3";
-		private readonly SQLiteAsyncConnection _dbConnection;
-		public MyBusinessEntities MyBusinessEntitityInContext { get; set; }
+    public class LocalDbService : ILocalDbService
+    {
+        private const string DB_NAME = "KseF.db3";
+        private readonly SQLiteAsyncConnection _dbConnection;
+        public MyBusinessEntities MyBusinessEntitityInContext { get; set; }
 
-		public LocalDbService()
-		{
-			_dbConnection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
-			_dbConnection.CreateTableAsync<MyBusinessEntities>();
-			_dbConnection.CreateTableAsync<ClientEntities>();
-			_dbConnection.CreateTableAsync<BaseFaktura>();
-			_dbConnection.CreateTableAsync<Product>();
+        public LocalDbService()
+        {
+            _dbConnection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
+            _dbConnection.CreateTableAsync<MyBusinessEntities>();
+            _dbConnection.CreateTableAsync<ClientEntities>();
+            _dbConnection.CreateTableAsync<BaseFaktura>();
+            _dbConnection.CreateTableAsync<Product>();
 #if DEBUG
             AddTestData();
 #endif
         }
 
         public async Task<string> GetDbName()
-		{
-			return DB_NAME;
-		}
+        {
+            return DB_NAME;
+        }
 
-		public async Task<MyBusinessEntities> SetBusinessEntityToContext(MyBusinessEntities myBusinessEntitity)
-		{
-			MyBusinessEntitityInContext = myBusinessEntitity;
+        public async Task<MyBusinessEntities> SetBusinessEntityToContext(MyBusinessEntities myBusinessEntitity)
+        {
+            MyBusinessEntitityInContext = myBusinessEntitity;
 
-			return MyBusinessEntitityInContext;
-		}
+            return MyBusinessEntitityInContext;
+        }
 
-		public async Task<MyBusinessEntities> GetBusinessEntityFromContext()
-		{
-			return MyBusinessEntitityInContext;
-		}
+        public async Task<MyBusinessEntities> GetBusinessEntityFromContext()
+        {
+            return MyBusinessEntitityInContext;
+        }
 
-		public async Task<SQLiteAsyncConnection> GetDbConnection()
-		{
-			return _dbConnection;
-		}
+        public async Task<SQLiteAsyncConnection> GetDbConnection()
+        {
+            return _dbConnection;
+        }
 
-		public async Task<List<T>> GetItemsAsync<T>() where T : DbRecord, new()
-		{
-			return _dbConnection.Table<T>().ToListAsync().Result;
-		}
+        public async Task<List<T>> GetItemsAsync<T>() where T : DbRecord, new()
+        {
+            return _dbConnection.Table<T>().ToListAsync().Result;
+        }
 
-		public async Task<T> GetItemAsyncById<T>(Guid id) where T : DbRecord, new()
-		{
-			return await _dbConnection.FindAsync<T>(id);
-		}
+        public async Task<T> GetItemAsyncById<T>(Guid id) where T : DbRecord, new()
+        {
+            return await _dbConnection.FindAsync<T>(id);
+        }
 
-		public async Task SaveItemAsync<T>(T item) where T : DbRecord, new()
-		{
-			await _dbConnection.InsertAsync(item);
-		}
+        public async Task SaveItemAsync<T>(T item) where T : DbRecord, new()
+        {
+            await _dbConnection.InsertAsync(item);
+        }
 
-		public async Task EditItemAsync<T>(T item) where T : DbRecord, new()
-		{
-			await _dbConnection.UpdateAsync(item);
-		}
+        public async Task EditItemAsync<T>(T item) where T : DbRecord, new()
+        {
+            await _dbConnection.UpdateAsync(item);
+        }
 
-		public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
-		{
-			return await _dbConnection.DeleteAsync(item);
-		}
+        public async Task<int> DeleteItemAsync<T>(T item) where T : DbRecord, new()
+        {
+            return await _dbConnection.DeleteAsync(item);
+        }
 
         public async Task<List<ClientEntities>> GetClientsByBusinessEntityIdAsync(Guid businessEntityId)
         {
@@ -90,13 +90,13 @@ namespace KseF.Services
 #if DEBUG
 
         public async Task AddTestData()
-		{
+        {
             var MBECount = await _dbConnection.Table<MyBusinessEntities>().CountAsync();
             var ClientCount = await _dbConnection.Table<ClientEntities>().CountAsync();
             var ProductCount = await _dbConnection.Table<Product>().CountAsync();
 
-			if (MBECount <= 0)
-			{
+            if (MBECount <= 0)
+            {
                 var myBusinessEntity1 = new MyBusinessEntities
                 {
                     Id = Guid.NewGuid(),
@@ -111,7 +111,7 @@ namespace KseF.Services
                     AdresKorespondencyjny = "Test",
                     NrRachunku = "1234567890",
                     NrTelefonu = "123456789",
-                    AdresEmail = "",
+                    AdresEmail = "test@test.pl",
                     Notatki = "Test",
                     Regon = "123456789",
                     Krs = "123456789",
@@ -148,7 +148,7 @@ namespace KseF.Services
                         AdresKorespondencyjny = "Test",
                         NrRachunku = "1234567890",
                         NrTelefonu = "123456789",
-                        AdresEmail = "",
+                        AdresEmail = "test@test.pl2",
                         Notatki = "Test",
                     };
                     var testClient2 = new ClientEntities
@@ -169,7 +169,7 @@ namespace KseF.Services
                         AdresKorespondencyjny = "Test",
                         NrRachunku = "1234567890",
                         NrTelefonu = "123456789",
-                        AdresEmail = "",
+                        AdresEmail = "T@t.pl",
                         Notatki = "Test",
                     };
                     var testClient3 = new ClientEntities
@@ -190,7 +190,7 @@ namespace KseF.Services
                         AdresKorespondencyjny = "Test",
                         NrRachunku = "1234567890",
                         NrTelefonu = "123456789",
-                        AdresEmail = "",
+                        AdresEmail = "a@a.pl",
                         Notatki = "Test",
                     };
 
@@ -199,8 +199,8 @@ namespace KseF.Services
                     await SaveItemAsync<ClientEntities>(testClient3);
                 }
             }
-            
-            if(ProductCount <= 0)
+
+            if (ProductCount <= 0)
             {
                 var testProduct = new Product
                 {
@@ -216,5 +216,6 @@ namespace KseF.Services
                 await SaveItemAsync<Product>(testProduct);
             }
 #endif
+        }
     }
 }

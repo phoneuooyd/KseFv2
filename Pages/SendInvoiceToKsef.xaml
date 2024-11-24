@@ -32,25 +32,25 @@
                     <!-- Sekcja Podmiot1 (Sprzedawca) -->
                     <Label Text="Dane Sprzedawcy" FontAttributes="Bold" FontSize="Medium" Margin="0,0,0,15"/>
 
-                    <Label Text="Nip"/>
+                    <Label Text="Nip*"/>
                     <Entry x:Name="NipSprzedawcy" Placeholder="NIP Sprzedawcy" Margin="5"/>
 
-                    <Label Text="Nazwa sprzedawcy"/>
+                    <Label Text="Nazwa sprzedawcy*"/>
                     <Entry x:Name="NazwaSprzedawcy" Placeholder="Pełna Nazwa Sprzedawcy" Margin="5"/>
 
-                    <Label Text="Ulica" />
+                    <Label Text="Ulica*" />
                     <Entry x:Name="ulicaSprzedawcy" Placeholder="Ulica" Margin="5"/>
 
-                    <Label Text="Numer domu"/>
+                    <Label Text="Numer domu*"/>
                     <Entry x:Name="nrDomuSprzedawcy" Placeholder="Nr Domu" Margin="5"/>
 
                     <Label Text="Numer lokalu"/>
                     <Entry x:Name="nrLokaluSprzedawcy" Placeholder="Nr Lokalu (opcjonalnie)" Margin="5"/>
 
-                    <Label Text="Miejscowość"/>
+                    <Label Text="Miejscowość*"/>
                     <Entry x:Name="miejscowoscSprzedawcy" Placeholder="Miejscowość" Margin="5"/>
 
-                    <Label Text="Kod pocztowy"/>
+                    <Label Text="Kod pocztowy*"/>
                     <Entry x:Name="kodPocztowySprzedawcy" Placeholder="Kod Pocztowy" Margin="5"/>
 
                     <!--
@@ -58,10 +58,10 @@
                     <Picker x:Name="krajSprzedawcaPicker"/>
                     -->
 
-                    <Label Text="Email"/>
+                    <Label Text="Email*"/>
                     <Entry x:Name="EmailSprzedawcy" Placeholder="Email" Margin="5"/>
 
-                    <Label Text="Telefon"/>
+                    <Label Text="Telefon*"/>
                     <Entry x:Name="TelefonSprzedawcy" Placeholder="Telefon" Margin="5"/>
                 </VerticalStackLayout>
             </Frame>
@@ -86,25 +86,25 @@
                         SelectedIndexChanged="OnClientChanged"
                         Margin="0,0,0,15"/>
 
-                    <Label Text="Nip"/>
+                    <Label Text="Nip*"/>
                     <Entry x:Name="NipNabywcy" Placeholder="NIP Nabywcy" Margin="5"/>
 
-                    <Label Text="Nazwa nabywcy"/>
+                    <Label Text="Nazwa nabywcy*"/>
                     <Entry x:Name="NazwaNabywcy" Placeholder="Pełna Nazwa Nabywcy" Margin="5"/>
 
-                    <Label Text="Ulica"/>
+                    <Label Text="Ulica*"/>
                     <Entry x:Name="ulicaNabywcy" Placeholder="Ulica" Margin="5" />
 
-                    <Label Text="Numer domu"/>
+                    <Label Text="Numer domu*"/>
                     <Entry x:Name="nrDomuNabywcy" Placeholder="Nr Domu" Margin="5" />
 
                     <Label Text="Numer lokalu"/>
                     <Entry x:Name="nrLokaluNabywcy" Placeholder="Nr Lokalu (opcjonalnie)" Margin="5"/>
 
-                    <Label Text="Miejscowość"/>
+                    <Label Text="Miejscowość*"/>
                     <Entry x:Name="miejscowoscNabywcy" Placeholder="Miejscowość" Margin="5"/>
 
-                    <Label Text="Kod pocztowy"/>
+                    <Label Text="Kod pocztowy*"/>
                     <Entry x:Name="kodPocztowyNabywcy" Placeholder="Kod Pocztowy" Margin="5"/>
 
                     <!--
@@ -112,10 +112,10 @@
                     <Picker x:Name="krajNabywcaPicker" />
                     -->
 
-                    <Label Text="Email"/>
+                    <Label Text="Email*"/>
                     <Entry x:Name="EmailNabywcy" Placeholder="Email" Margin="5"/>
 
-                    <Label Text="Telefon"/>
+                    <Label Text="Telefon*"/>
                     <Entry x:Name="TelefonNabywcy" Placeholder="Telefon" Margin="5"/>
                 </VerticalStackLayout>
             </Frame>
