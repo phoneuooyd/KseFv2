@@ -6,8 +6,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="&lt;-" 
-                     IconImageSource="back_arrow_icon.png"
-                     Clicked="OnBackButtonClicked"/>
+                     IconImageSource="back_arrow_icon.png"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -24,9 +23,10 @@
                 <Label Grid.Column="2" Text="Client" FontSize="Small" Margin="10"/>
             </Grid>
             <ListView 
-        x:Name="InvoicesSentListView" 
-        ItemsSource="{Binding Invoices}" 
-        HasUnevenRows="True" >
+                x:Name="InvoicesSentListView" 
+                ItemsSource="{Binding Invoices}" 
+                ItemTapped="OnInvoiceTapped"
+                HasUnevenRows="True" >  
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

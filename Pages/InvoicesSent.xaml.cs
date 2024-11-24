@@ -4,12 +4,14 @@ using KseF.Interfaces;
 using KseF.Models;
 using KseF.Models.ViewModels;
 using System;
+using System.Threading;
 
 namespace KseF.Pages;
 
 public partial class InvoicesSent : ContentPage
 {
     private readonly ILocalDbService _dbService;
+    private KsefApiService _apiService;
     private List<BaseFaktura> invoices;
     private InvoicesSentViewModel _viewModel;
 
@@ -21,19 +23,42 @@ public partial class InvoicesSent : ContentPage
         invoices = _dbService.GetItemsAsync<BaseFaktura>().Result;
         BindingContext = _viewModel;
     }
-    private async void OnBackButtonClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//MainPage");
-    }
-
-    private void OnInvoiceAdded(object sender, BaseFaktura invoice)
-    {
-       // _viewModel.Invoices.Add(invoice);
-    }
 
     private async void OnInvoiceTapped(object sender, ItemTappedEventArgs e)
     {
+        var ksefToken = "";
+        var invoice = e.Item as BaseFaktura;
+        if (invoice != null)
+        {
+            bool isConfirmed = await DisplayAlert("Potwierdzenie",
+                "Chcesz sprawdziæ status tej faktury?", "Tak", "Nie");
 
+            if (isConfirmed)
+            {
+                if (invoice.StatusKSeF != null)
+                {
+                    await DisplayAlert("Status dla faktury", $"faktra o numerze {invoice.NrFakturyKSeF} posiada status {invoice.StatusKSeF}", "OK");
+                }
+                else
+                {
+                    try
+                    {
+                        ksefToken = _dbService.GetBusinessEntityFromContext().Result.TokenKSeF;
+                        using var api = new KsefApiService();
+                        var cancellationToken = new CancellationTokenSource();
+                        await api.AuthenticateAsync(invoice.NipSprzedawcy, ksefToken);
+                        (int status, string ksefReferenceNumber, DateTime acquisitionTimestamp) = await api.GetInvoiceStatusAsync(invoice.NumerReferencyjnyKSeF);
+
+                       await DisplayAlert("Status dla faktury", $"faktra o numerze {invoice.NrFakturyKSeF} posiada status {status}", "OK");
+                        await api.Terminate();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ApplicationException("B³¹d podczas wysy³ania faktury do KSeF", ex);
+                    }
+                }
+            }
+        }
     }
 
     private async void OnDeleteSwipeItemInvoked(object sender, EventArgs e)

@@ -238,14 +238,13 @@ namespace KseF.Services
 			
             try
             {
-				await XmlCreationService.SendInvoiceToKsef(FakturaKsefXML, Faktura, entities);
+				Faktura = await XmlCreationService.SendInvoiceToKsef(FakturaKsefXML, Faktura, entities);
 				Faktura.XMLFakturyKSeF = FakturaKsefXML;
 
                 return Faktura;
             }
             catch (Exception ex)
 			{
-				// Logowanie błędu
 				throw new ApplicationException("Błąd podczas wysyłania faktury do KSeF w XmlCreatinService", ex);
 			} 
 		}
@@ -273,26 +272,24 @@ namespace KseF.Services
 			return xml.ToString();
 		}
 
-		public static async Task SendInvoiceToKsef(string FakturaKsef, BaseFaktura faktura, MyBusinessEntities entities)
+		public static async Task<BaseFaktura> SendInvoiceToKsef(string FakturaKsef, BaseFaktura faktura, MyBusinessEntities entities)
 		{
 			try
 			{
-				//entities.TokenKSeF = "D4A0E2EDD1E74E13C693F143338FFA142BA004FA4FCCA1276A963120A6C84B29";
-				//entities.Nip = "9513128170";
-
 				using var api = new KsefApiService();
 				var cts = new CancellationTokenSource();
-				await api.AuthenticateAsync(entities.Nip, entities.TokenKSeF);
+				await api.AuthenticateAsync(entities.Nip, entities.TokenKSeF!);
 				faktura.XMLFakturyKSeF = FakturaKsef;
-				(faktura.NrFakturyKSeF, faktura.DataFakturyKSeF, faktura.URLFakturyKSeF) = await api.SendInvoiceAsync(FakturaKsef, cts.Token);
+				(faktura.NrFakturyKSeF, faktura.DataFakturyKSeF, faktura.URLFakturyKSeF, faktura.NumerReferencyjnyKSeF, faktura.StatusKSeF) = await api.SendInvoiceAsync(FakturaKsef, cts.Token);
 
 				await api.Terminate();
+				return faktura;
 			}
 			catch (Exception ex)
 			{
-				// Logowanie błędu
-				throw new ApplicationException("Błąd podczas wysyłania faktury do KSeF", ex);
-			}
+                await Application.Current.MainPage.DisplayAlert("Wystąpił błąd w fukcj SendInvoiceToKsef", ex.Message, "OK");
+				return default!;
+            }
 		}
 	}
 }

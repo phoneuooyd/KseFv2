@@ -513,6 +513,7 @@ namespace KseF
 
                 await _dbService.SaveItemAsync(FakturaZapis);
                 await DisplayAlert("Wysyłka faktury do Ksef", "Wysłano pomyślnie", "OK");
+                await Navigation.PopAsync();
             }
 
             catch (Exception ex)
