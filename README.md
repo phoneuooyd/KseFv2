@@ -3,4 +3,5 @@
 
 ### 1. Założenia projektowe
 
-* 
+* Aplikacja pozwala z urządzeń mobilnych na:
+* -
