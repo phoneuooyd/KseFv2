@@ -39,5 +39,15 @@
 
 
 
+### 4. Podgląd wysłanej faktury 
 
+* Nalezy wejść na stronę testowego środowiska KSeF oraz się zalogować za pomocą NIPu użytego do wysyłki faktury (https://ksef-test.mf.gov.pl/)
+* Następnie przejść do panelu Lista faktur lub Historia sesji aby zobaczyć wysłane za pomocą aplikacji faktury.  
+
+    ![obraz](https://github.com/user-attachments/assets/2e85676f-e2cb-4a33-b084-eb6d96d0e6a9)
+
+    ![obraz](https://github.com/user-attachments/assets/25652e9b-678f-459c-867b-e4606d914830)
+
+
+  
 
