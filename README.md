@@ -78,23 +78,6 @@ Aplikacja wykorzystuje wzorzec MVVM z:
 - **ViewModels**: Logika prezentacji i wiązanie danych z obsługą komunikatów
 - **Services**: Warstwa usług (LocalDbService, XmlCreationService, KsefApiService)
 
-### **Struktura projektu**KseF/
-├── Models/                  # Modele danych i ViewModels
-│   ├── BusinessEntities.cs  # Encje firm i klientów
-│   ├── BaseFaktura.cs      # Model faktury
-│   ├── Product.cs          # Model produktu
-│   └── ViewModels/         # ViewModels dla MVVM
-├── Pages/                  # Strony XAML
-│   ├── MainPage.xaml       # Strona główna
-│   ├── SendInvoiceToKsef.xaml # Kreator faktury
-│   ├── MyClientsPage.xaml  # Zarządzanie klientami
-│   └── MyProductsPage.xaml # Zarządzanie produktami
-├── Services/               # Usługi aplikacji
-│   ├── LocalDbService.cs   # Obsługa bazy danych
-│   ├── XmlCreationService.cs # Tworzenie XML faktury
-│   └── KsefApiService.cs   # Komunikacja z API KSeF
-└── Controls/               # Własne kontrolki
-    └── KseFNumericUpDown.cs # Kontrolka numeryczna
 ### **Baza danych**
 - **SQLite**: Lokalna baza danych na urządzeniu
 - **sqlite-net-pcl**: ORM do zarządzania danymi
@@ -262,10 +245,6 @@ Jeśli napotkasz problemy, utwórz issue w repozytorium GitHub z:
 - Krokami do reprodukcji
 - Logami błędów (jeśli dostępne)
 - Informacjami o środowisku
-
-## 📄 Licencja
-
-Projekt został stworzony jako praca inżynierska przez Przemysława Przybyszewskiego.
 
 ## 🔗 Przydatne linki
 
