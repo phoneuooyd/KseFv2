@@ -1,4 +1,7 @@
 # 📱 KSeF Invoice App
+##For English - below ⬇️
+
+# Polish - 🇵🇱
 
 **Aplikacja mobilna do zarządzania fakturami elektronicznymi w systemie KSeF (Krajowy System e-Faktur)**
 
@@ -257,3 +260,169 @@ Jeśli napotkasz problemy, utwórz issue w repozytorium GitHub z:
 
 **⚠️ DISCLAIMER**: Aplikacja została stworzona w celach edukacyjnych. Przed użyciem w środowisku produkcyjnym zaleca się dokładne przetestowanie i konsultację z doradcą podatkowym.
 
+# English 🇬🇧
+
+## 📋 Project Description
+
+**KSeF Invoice App** is a comprehensive mobile application built using .NET MAUI technology that enables entrepreneurs and companies to:
+- 🏢 Manage their own company data (or multiple companies)
+- 👥 Maintain a customer database
+- 📦 Catalog products and services
+- 📄 Create and send electronic invoices to the KSeF system
+- 📊 Monitor the status of sent invoices
+- 🔄 Integrate with both the test and production KSeF environments
+
+**Created by Przemysław Przybyszewski** – Engineering thesis project
+
+## ⚠️ Legal Disclaimer
+
+**WARNING**: All data entered into the application **must** be correct. Using invalid data may result in errors and (when using the production KSeF services) legal consequences under Polish tax law.
+
+## ✨ Main Features
+
+### 🏢 Company Management
+- Add and edit your company's details
+- Store KSeF authorization tokens
+- Configure contact and address data
+
+### 👥 Customer Database
+- Add new customers (individuals and legal entities)
+- Edit customer data
+- Manage contact and address information
+- Delete unnecessary records
+
+### 📦 Product/Service Catalog
+- Create a database of products and services
+- Define prices and VAT rates
+- Categorize by type (product/service)
+- Set units of measure
+
+### 📄 Invoice Creation
+- Intuitive invoice wizard with dynamic item addition
+- Automatic calculation of net, gross, and VAT values
+- Support for various tax rates (23%, 8%, 5%, 0%, zw, np, oo)
+- Data validation before sending
+
+### 🚀 KSeF Integration
+- Send invoices to KSeF test and production environments
+- Monitor processing status
+- Retrieve KSeF reference numbers
+- Generate verification links for invoices
+
+### 📊 Invoice History
+- View sent invoices
+- Check real-time statuses
+- Store XMLs of sent documents
+
+## 🏗️ Application Architecture
+
+### Technologies
+- Framework: .NET MAUI (Multi-platform App UI)
+- .NET Version: 8.0
+- Database: SQLite with sqlite-net-pcl
+- Pattern: MVVM (Model-View-ViewModel)
+- DI: Built-in Dependency Injection
+- UI: XAML with Material Design
+- Messaging: CommunityToolkit.Mvvm
+
+### MVVM Pattern
+The app uses MVVM with:
+- Models: Data classes (e.g., BaseFaktura, ClientEntities, Product, MyBusinessEntities)
+- Views: XAML views defining the UI
+- ViewModels: Presentation logic and data binding with message handling
+- Services: Logic layer (e.g., LocalDbService, XmlCreationService, KsefApiService)
+
+### Database
+- SQLite: Local on-device database
+- sqlite-net-pcl: ORM for data management
+- Auto migrations: Schema creation and updates
+- Seed Data: Populated with sample data in DEBUG mode
+
+## 🚀 Getting Started
+
+### System Requirements
+
+**For Developers:**
+- Visual Studio 2022 (17.4+)
+- .NET 8.0 SDK
+- .NET MAUI Workload
+- Android SDK (API 21+)
+- Hyper-V capable processor (for emulator)
+
+**For Users:**
+- Android phone with Android 5.0+ (API 21+)
+- Minimum 50 MB free space
+- Internet connection (for invoice sending)
+
+### Developer Installation
+
+git clone https://github.com/[your-name]/KseFv2.git  
+cd KseFv2  
+dotnet restore  
+dotnet build  
+
+To run:
+
+dotnet run --framework net8.0-android  
+dotnet run --framework net8.0-windows10.0.19041.0
+
+### KSeF Environment Configuration
+
+1. Test environment (default):
+   - URL: https://ksef-test.mf.gov.pl
+   - Public key: auto-configured
+   - Requires authorization token
+
+2. Production environment (requires code change):
+   - URL: https://ksef.mf.gov.pl
+   - Production public key
+   - Valid production token
+
+## 📦 Key NuGet Packages
+
+<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.90" />
+<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.90" />
+<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+
+## 🔧 Environment Configuration
+
+ksefApiUrl = "https://ksef-test.mf.gov.pl";  
+ksefApiKey = "-----BEGIN PUBLIC KEY-----\\n[TEST_KEY]\\n-----END PUBLIC KEY-----";
+
+ksefApiUrl = "https://ksef.mf.gov.pl";  
+ksefApiKey = "-----BEGIN PUBLIC KEY-----\\n[PRODUCTION_KEY]\\n-----END PUBLIC KEY-----";
+
+## 📊 KSeF Invoice Statuses
+
+- 200–299: Invoice accepted  
+- 300–399: Invoice in processing  
+- 400+: Validation or processing errors
+
+## ⚡ Advanced Features
+
+- Numeric Control with validation and responsive design
+- Dynamic item addition with auto-calculations
+- Error handling with validation and logging
+
+## 🛠️ Development & Support
+
+Planned Features:
+- [ ] Corrective invoice support
+- [ ] PDF export
+- [ ] Cloud data backup
+- [ ] Multi-company support
+- [ ] iOS version
+
+Report issues on GitHub with steps to reproduce and error logs.
+
+## 🔗 Useful Links
+
+- https://www.podatki.gov.pl/ksef/
+- https://ksef-test.mf.gov.pl/
+- https://www.podatki.gov.pl/media/9876/specyfikacja-oprogramowania-interfejsowego.pdf
+- https://docs.microsoft.com/dotnet/maui/
+
+DISCLAIMER: This app is for educational purposes. Always test before production use.
