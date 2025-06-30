@@ -89,32 +89,10 @@ Aplikacja wykorzystuje wzorzec MVVM z:
 
 ## 🚀 Rozpoczęcie pracy
 
-### **Wymagania systemowe**
-
-**Dla deweloperów:**
-- Visual Studio 2022 (17.4+)
-- .NET 8.0 SDK
-- .NET MAUI Workload
-- Android SDK (API 21+)
-- Procesor z obsługą Hyper-V (dla emulatora)
-
 **Dla użytkowników:**
 - Telefon z systemem Android 5.0+ (API 21+)
 - Minimum 50 MB wolnego miejsca
 - Połączenie internetowe (do wysyłki faktur)
-
-### **Instalacja deweloperska**
-
-1. **Sklonuj repozytorium**git clone https://github.com/[twoja-nazwa]/KseFv2.git
-cd KseFv2
-2. **Przywróć pakiety NuGet**dotnet restore
-3. **Zbuduj projekt**dotnet build
-4. **Uruchom aplikację**# Android
-dotnet run --framework net8.0-android
-
-# Windows (jeśli dostępne)
-dotnet run --framework net8.0-windows10.0.19041.0
-### **Konfiguracja środowiska KSeF**
 
 1. **Środowisko testowe** (domyślne):
    - URL: `https://ksef-test.mf.gov.pl`
@@ -215,23 +193,6 @@ Aplikacja obsługuje wszystkie statusy określone w [specyfikacji KSeF](https://
 - **400+**: Błędy walidacji lub przetwarzania
 
 ![Statusy KSeF](https://github.com/user-attachments/assets/9d3dafea-328c-41f2-9a9d-36153653ece2)
-
-## ⚡ Funkcje zaawansowane
-
-### **Kontrolka numeryczna**
-- Własna kontrolka `KseFNumericUpDown` do precyzyjnego wprowadzania ilości
-- Walidacja minimalnej wartości (≥1)
-- Responsive design dostosowany do różnych rozmiarów ekranów
-
-### **Dynamiczne dodawanie pozycji**
-- Nieograniczona liczba pozycji na fakturze
-- Przycisk usuwania dla każdej pozycji (oprócz pierwszej)
-- Automatyczne przeliczanie sum
-
-### **Obsługa błędów**
-- Walidacja danych przed wysyłką
-- Przyjazne komunikaty błędów
-- Logowanie problemów komunikacji z API
 
 ## 🛠️ Rozwój i wsparcie
 
@@ -342,29 +303,10 @@ The app uses MVVM with:
 
 ### System Requirements
 
-**For Developers:**
-- Visual Studio 2022 (17.4+)
-- .NET 8.0 SDK
-- .NET MAUI Workload
-- Android SDK (API 21+)
-- Hyper-V capable processor (for emulator)
-
 **For Users:**
 - Android phone with Android 5.0+ (API 21+)
 - Minimum 50 MB free space
 - Internet connection (for invoice sending)
-
-### Developer Installation
-
-git clone https://github.com/[your-name]/KseFv2.git  
-cd KseFv2  
-dotnet restore  
-dotnet build  
-
-To run:
-
-dotnet run --framework net8.0-android  
-dotnet run --framework net8.0-windows10.0.19041.0
 
 ### KSeF Environment Configuration
 
